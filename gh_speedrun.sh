@@ -1,0 +1,1 @@
+git add . && git commit -m "speedy af" && git push
