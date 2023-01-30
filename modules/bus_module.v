@@ -29,6 +29,9 @@ module bus_mux (parameter word_size = 32) (
     input [4:0] select
 );
 
+endmodule
+
+module encoder_32to5 (input wire [31:0] enc_input, output reg [4:0] enc_output);
 always@(*) 
 begin
     case (encoder_in)
@@ -66,7 +69,6 @@ begin
         32'h80000000 : select = 5'b11111;
     
     endcase
-//case
-//32'(value) <= 5'[value]
+end
 
 endmodule
