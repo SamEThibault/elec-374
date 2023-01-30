@@ -1,4 +1,4 @@
-module Mux_1_32_CA (parameter word_size = 32) (
+module bus_mux (parameter word_size = 32) (
     output [word_size-1:0]  BusMuxOut,
     input [word_size-1:0]   BusMuxIn_R0,
     input [word_size-1:0]   BusMuxIn_R1,
