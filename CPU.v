@@ -7,6 +7,7 @@ module top;
     wire IR_enable;
     wire RZ_enable;
     wire MDR_enable;
+    wire MAR_enable;
 
     wire [31:0] R0_out;
     wire [31:0] R1_out;
@@ -27,6 +28,7 @@ module top;
     wire [31:0] IR_out;
     wire [31:0] RZ_out;
     wire [31:0] MDR_out;
+    wire [31:0] MAR_out;
     
     // must actually define BusMuxOut in here once bus complete
     Register32 R0(BusMuxOut, clk, clr, enable[0], R0_out);
@@ -46,6 +48,7 @@ module top;
     Register32 R14(BusMuxOut, clk, clr, enable[14], R14_out);
     Register32 R15(BusMuxOut, clk, clr, enable[15], R15_out);
     Register32 MDR(BusMuxOut, clk, clr, MDR_enable, MDR_out);
+    Register32 MAR(BusMuxOut, clk, clr, MAR_enable, MAR_out);
     Register IR(BusMuxOut, clk, clr, IR_enable, IR_out);
     Register RZ(BusMuxOut, clk, clr, RZ_enable, RZ_out);
 
