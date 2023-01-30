@@ -1,4 +1,4 @@
-`include "modules/32bit_reg.v"
+`include "modules/reg_32bit.v"
 
 module top;
     wire clk;
