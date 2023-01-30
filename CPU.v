@@ -1,10 +1,12 @@
 `include "modules/reg_32bit.v"
+`include "modules/reg_z64bit.v"
 
 module top;
     wire clk;
     wire clr;
     wire [15:0] enable;
     wire IR_enable;
+    wire RY_enable;
     wire RZ_enable;
     wire MDR_enable;
     wire MAR_enable;
@@ -28,6 +30,7 @@ module top;
     wire [31:0] R14_out;
     wire [31:0] R15_out;
     wire [31:0] IR_out;
+    wire [31:0] RY_out;
     wire [31:0] RZ_out;
     wire [31:0] MDR_out;
     wire [31:0] MAR_out;
@@ -55,7 +58,8 @@ module top;
     Register32 MAR(BusMuxOut, clk, clr, MAR_enable, MAR_out);
     Register32 LO(BusMuxOut, clk, clr, LO_enable, LO_out);
     Register32 HI(BusMuxOut, clk, clr, HI_enable, HI_out);
-    Register IR(BusMuxOut, clk, clr, IR_enable, IR_out);
-    Register RZ(BusMuxOut, clk, clr, RZ_enable, RZ_out);
+    Register32 IR(BusMuxOut, clk, clr, IR_enable, IR_out);
+    ZRegister64 RZ(BusMuxOut, clk, clr, RZ_enable, RZ_out);
+    Register32 RY(BusMuxOut, clk, clr, RY_enable, RY_out);
 
 endmodule
