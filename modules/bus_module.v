@@ -30,8 +30,8 @@ module bus_mux (parameter word_size = 32) (
 );
 
 always@(*)
-
-    case(select)
+begin
+    case (select)
         5'd0: BusMuxOut <= BusMuxIn_R0;
         5'd1: BusMuxOut <= BusMuxIn_R1;
         5'd2: BusMuxOut <= BusMuxIn_R2;
@@ -41,7 +41,7 @@ always@(*)
         5'd6: BusMuxOut <= BusMuxIn_R6;
         5'd7: BusMuxOut <= BusMuxIn_R7;
         5'd8: BusMuxOut <= BusMuxIn_R8;
-        5'd9: BusMuxOut <= BusMuxIn_R9;
+        5'd9: BusMuxOut <= BusMuxIn_R9; 
         5'd10: BusMuxOut <= BusMuxIn_R10;
         5'd11: BusMuxOut <= BusMuxIn_R11;
         5'd12: BusMuxOut <= BusMuxIn_R12;
@@ -58,7 +58,8 @@ always@(*)
         5'd23: BusMuxOut <= C_Sign_Extended;
         default:
             BusMuxOut <= 32'd0;
-
+    endcase
+end
 
 endmodule
 
@@ -98,7 +99,6 @@ begin
         32'h20000000 : select = 5'b11101;
         32'h40000000 : select = 5'b11110;
         32'h80000000 : select = 5'b11111;
-    
     endcase
 end
 
