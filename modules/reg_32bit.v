@@ -7,23 +7,13 @@ module Register32(
     output reg [31:0] q
     );
 
-always @ ((posedge clk and posedge enable) or posedge clr)
+always @(posedge clk or posedge clr)
 begin
+
     if (clr)
         q <= 0;
-    else
-        q <= d; 
+    else if (enable)
+        q <= d;
 end
 
 endmodule
-
-// to instantiate, we would do:
-/*
-module <name>;
-   [wire clock;
-   wire reset;
-   wire [31:0] data_in;
-   wire [31:0] my_register_out;
-   Register32 name_of_register(clock, reset, data_in, my_register_out);
-endmodule
-*/
