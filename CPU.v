@@ -82,7 +82,7 @@ module top(input wire clk, input wire clr, input wire Mdatain, input wire[31:0] 
 
 
     // MDR Implementation
-    mux_2_to_1 MDMux(Mdatain, BusMuxOut, MD_read, MDRMux_out);
+    mux_2_to_1 MDMux(MDRMux_out, Mdatain, BusMuxOut, MD_read);
     
     Register32 MDR(MDRMux_out, clk, clr, MDR_enable, MDR_out);
     
