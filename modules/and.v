@@ -4,12 +4,12 @@ module and_32_bit(
     output wire[31:0] RZ
 )
 
-    genvar i;
-
-    generate
-            for(i=0; i<32; i= i+1) begin: loop
-                assign Rz[i] = ((Ra[i]) & (rb[i]));
-            end
-    endgenerate
-
+// genvar i;
+always@(*) 
+begin
+            // for(i=0; i<32; i= i+1) begin: loop
+            //     assign Rz[i] = ((Ra[i]) & (rb[i]));
+            // end
+    assign Rz = Ra & Rb;
+end
 endmodule
