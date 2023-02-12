@@ -1,7 +1,7 @@
 `include "modules/reg_32bit.v"
 `include "modules/reg_z64bit.v"
 `include "modules/pc_32bit.v"
-`include "modules/bus_module.v"
+`include "modules/bus_mux.v"
 `include "modules/encoder_32_to_5.v"
 `include "modules/mux_2_to_1.v"
 
@@ -90,7 +90,7 @@ module top(input wire clk, input wire clr, input wire Mdatain, input wire[31:0] 
     bus_mux BusMux(BusMuxOut, R0_out, R1_out, R2_out, R3_out, R4_out, R5_out, R6_out, 
                     R7_out, R8_out, R9_out, R10_out, R11_out, R12_out, R13_out,
                     R14_out, R15_out, HI_out, LO_out, ZHigh_out, ZLow_out, PC_out,
-                    MDR_out);
+                    MDR_out, enc_out);
 
     // encoder input signals
     wire R0_EOut;
