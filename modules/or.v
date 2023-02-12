@@ -1,10 +1,8 @@
 
 module not(
-    output wire[31:0] RZ
+    output wire[31:0] Rz
     input wire[31:0] Ra,
     input wire[31:0] Rb, 
 	);
-	
-	integer i;
-			assign Rz[i]  = Rb[i] | Ra[i];
+			assign Rz  = Rb | Ra;
 endmodule
