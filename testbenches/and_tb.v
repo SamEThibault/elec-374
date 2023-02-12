@@ -12,11 +12,11 @@ module and_tb(input a, output b);
             Ra = 32'hFFFFFFFF;
             Rb = 32'h00000000;
             // here rz should be 0
-            #20
+            #20 //Delay for 20ns
             Ra = 32'hFFFFFFFF;
             Rb = 32'hFFFFFFFF;
             // here rz should be 1
-            #20
+            #20 //Delay for 20ns
             Ra = 32'h00000000;
             Rb = 32'h00000000;
             // here rz should be 0
