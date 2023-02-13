@@ -8,16 +8,17 @@
 module mul (
     input [31:0] multiplier;
     input [31:0] multiplicand;
-    output reg [63:0] res;
-    // split answer into high and low results
+    output reg [31:0] res_HI;
+    output reg [31:0] res_LO;
 );
     integer i;
     integer signed code;
+    reg [63:0] res; 
 
     always @(*) begin
         
         // initialize to all zeros
-        res [31:0] = 32'h00000000;
+        res [63:0] = 32'h00000000;
 
         // sign-extend the multiplicand
         reg [63:0] mutliplicand_ext = $signed(multiplicand);  
@@ -79,6 +80,9 @@ module mul (
                 res = res + twos_complement;
             end
         end
+
+        res_HI = res[63:32];
+        res_LO = res[31:0];
     end
     
 endmodule
