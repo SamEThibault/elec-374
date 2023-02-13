@@ -10,16 +10,15 @@ Verilog CPU Design Project, ELEC 374 - Digital Systems Engineering
 #To Do!
 and - done
 reg - done
+not - done
+or  - done
 neg - 
 add - 
 sub - 
-and - 
-or - 
 shr - 
-shra
+shra-
 shl - 
 ror - 
 rol - 
 mul (booth algorhithm bit pair)
 div - 
-not - 
