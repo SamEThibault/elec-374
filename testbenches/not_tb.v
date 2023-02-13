@@ -1,8 +1,8 @@
 `timescale 1ns/10ps
 module not_tb(input a, output b);
 	
-    reg[31:0] Ra;
     wire[31:0] Rz;
+    reg[31:0] Ra;
 
     not_32_bit notGate(Rz, Ra);
 

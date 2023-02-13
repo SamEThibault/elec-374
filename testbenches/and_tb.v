@@ -1,11 +1,11 @@
 `timescale 1ns/10ps
 module and_tb(input a, output b);
 	
+    wire[31:0] Rz;
     reg[31:0] Ra;
     reg[31:0] Rb;
-    wire[31:0] RZ;
 
-    and_32_bit And(Ra, Rb, RZ);
+    and_32_bit andGate(Rz, Ra, Rb);
 
 	initial
 		begin
