@@ -9,14 +9,19 @@ module mul (
     input [31:0] multiplier;
     input [31:0] multiplicand;
     output reg [63:0] res;
+    // split answer into high and low results
 );
     integer i;
     integer signed code;
 
     always @(*) begin
         
-        res [31:0] = multiplicand;
+        // initialize to all zeros
+        res [31:0] = 32'h00000000;
 
+        // sign-extend the multiplicand
+        reg [63:0] mutliplicand_ext = $signed(multiplicand);  
+        reg [63:0] twos_complement;
 
         for (i = 0; i < 15; i = i + 1) 
         begin
@@ -51,15 +56,28 @@ module mul (
             // here use the code to operate on the multiplicand
             // mostly pseudocode now until we test it:
 
-            // If 1, then add a row with the original multiplicand (sign extend to twice the size of the original multiplicand)
+            // shift left twice, add multiplicand
             if (code == 1) begin
-                res [31+i:0+i] = res[31:0] + multiplicand;
-                res [63:32+i] = res[63:32] + multiplicand[31];
+                res = res + (mutliplicand_ext << i*2);
             end
+            // shift left 3 times, add multiplicand
             else if (code == 2) begin
-                
+                res = res + (multiplicand_ext << i*2 + 1);
             end
-
+            // shift left twice, add 2's complement
+            else if (code == -1) begin
+                twos_complement[31:0] = (multiplicand << i*2);
+                twos_complement = $signed(twos_complement);
+                // then actually get two's complement of first [31:0]
+                res = res + twos_complement;
+            end
+            // shift left 3 times, add 2's complement
+            else if (code == -2) begin
+                twos_complement[31:0] = (multiplicand << i*2 + 1);
+                twos_complement = $signed(twos_complement);
+                // then actually get two's complement of first [31:0]
+                res = res + twos_complement;
+            end
         end
     end
     
