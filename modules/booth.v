@@ -69,14 +69,14 @@ module mul (
             else if (code == -1) begin
                 twos_complement[31:0] = (multiplicand << i*2);
                 twos_complement = $signed(twos_complement);
-                // then actually get two's complement of first [31:0]
+                negate_32_bit negate(twos_complement[31:0], multiplicand);
                 res = res + twos_complement;
             end
             // shift left 3 times, add 2's complement
             else if (code == -2) begin
                 twos_complement[31:0] = (multiplicand << i*2 + 1);
                 twos_complement = $signed(twos_complement);
-                // then actually get two's complement of first [31:0]
+                negate_32_bit negate(twos_complement[31:0], multiplicand);
                 res = res + twos_complement;
             end
         end
