@@ -10,21 +10,19 @@ module mul (
     output reg [31:0] res_lo,
     input [31:0] multiplicand,
     input [31:0] multiplier
-    
 );
     integer i;
-    integer code;
+    integer signed code;
     reg [63:0] res; 
-    reg [63:0] mutliplicand_ext 
-    reg [63:0] twos_complement;
 
     always @(*) begin
         
         // initialize to all zeros
-        res = 32'h00000000;
+        res [63:0] = 32'h00000000;
 
         // sign-extend the multiplicand
-        mutliplicand_ext = $signed(multiplicand);  
+        reg [63:0] mutliplicand_ext = $signed(multiplicand);  
+        reg [63:0] twos_complement;
 
         for (i = 0; i < 15; i = i + 1) 
         begin
@@ -86,4 +84,5 @@ module mul (
         res_hi = res[63:32];
         res_lo = res[31:0];
     end
+    
 endmodule
