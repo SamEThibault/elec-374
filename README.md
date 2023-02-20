@@ -12,12 +12,12 @@ and - done
 reg - done
 not - done
 or  - done
-neg - 
-add - 
-sub - 
-shr - 
-shra-
-shl - 
+neg - done
+add - done
+sub - done
+shr - done (NOT SIGNED)
+shra- done (SIGNED)
+shl - done (NOT SIGNED)
 ror - 
 rol - 
 mul (booth algorhithm bit pair)
