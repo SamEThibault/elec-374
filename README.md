@@ -18,7 +18,7 @@ sub - done
 shr - done (NOT SIGNED)
 shra- done (SIGNED)
 shl - done (NOT SIGNED)
-ror - 
-rol - 
+ror - done 
+rol - done
 mul (booth algorhithm bit pair)
-div - 
+div - done
