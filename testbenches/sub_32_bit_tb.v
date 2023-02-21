@@ -1,11 +1,12 @@
 `timescale 1ns/10ps
 module sub_32_bit_tb(input a, output b);
 	
-    wire[31:0] Rz;
+    wire[31:0] c_out;
+    wire[31:0] s_out;
     reg [31:0] Ra;
     reg [31:0] Rb;
 
-    sub_32_bit subTest(Rz, Ra, Rb);
+    sub_32_bit subTest(c_out, s_out, Ra, Rb);
 
 	initial
 		begin

@@ -1,6 +1,5 @@
 module div_32_bit(
-    output reg[31:0] quotient,
-    output reg[31:0] remainder,
+    output reg[63:0] result,
     input wire[31:0] dividend,
     input wire[31:0] divisor
 );
@@ -9,9 +8,7 @@ integer i;
 reg [31:0] Q;
 reg [31:0] M;
 reg [31:0] A;
-// wire [31:0] negDivisor;
 reg [31:0] subOutput;
-// negate_32_bit negRes(negDivisor, Q);
 
 always@(dividend or divisor)
 begin
@@ -32,7 +29,6 @@ begin
         end
     end
 
-    quotient = Q; 
-    remainder = A;
+    result = {A, Q};
 end
 endmodule

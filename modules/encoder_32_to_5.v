@@ -1,7 +1,7 @@
 module encoder_32to5 (input wire [31:0] enc_input, output reg [4:0] enc_output);
     always@(*) 
     begin
-        case (encoder_in)
+        case (enc_input)
             32'h00000001 : select = 5'b0;
             32'h00000002 : select = 5'b00001;
             32'h00000004 : select = 5'b00010;

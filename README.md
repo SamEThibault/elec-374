@@ -22,3 +22,10 @@ ror - done
 rol - done
 mul (booth algorhithm bit pair)
 div - done
+alu - done (minus sam's Multiply)
+mdr - done, not tested
+datapath - 
+encoder - done, not tested
+mux - done, not tested
+pc - done, not tested
+z - done, not tested
