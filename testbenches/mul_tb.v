@@ -1,11 +1,12 @@
 `timescale 1ns/10ps
 module mul_tb(input a, output b);
 	
-    wire[63:0] res;
+    wire[31:0] res_HI;
+	 wire[31:0] res_LO;
     reg[31:0] M;
     reg[31:0] Q;
 
-    mul mul_test(res, M, Q);
+    mul mul_test(res_HI, res_LO, M, Q);
 
 	initial
 		begin
