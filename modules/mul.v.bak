@@ -91,26 +91,26 @@
 
 module mul (
     output reg[63:0] res,
-    input[31:0] M,
-    input[31:0] Q
+    input reg[31:0] M,
+    input reg[31:0] Q
 );
     integer i;
     reg[2:0] code; 
+    res = 32'h00000000;
 
     // used to temporarily store the 16 partial products calculated in the for-loop
-    reg[63:0] partial_product;
-	
-	always @* begin
+    wire[63:0] partial_product;
+
     // finds each partial product and stores it in partial_products[i-1]
     for (i = 1; i < 17; i = i + 1)
     begin
 
         // base case where we need to concatenate a 0 to the LSB of the first 2 bits of multiplier
         if (i == 1) begin
-            assign code = {Q[1:0], 1'b0};
+            code = {b[1:0], 1'b0};
         end else begin
         // else get the 3 bits we're currently at to determine partial product
-            code = {Q[i*2-1], Q[i*2-2], Q[i*2-3]};
+            code = b[(i*2) - 1 : (i*2) - 3];
         end
 
         // determine partial product
@@ -119,7 +119,7 @@ module mul (
             3'b010: partial_product = $signed(M);       // 1 * M
             3'b001: partial_product = $signed(M);       // 1 * M
             3'b011: partial_product = $signed(M)<<<1;   // 2 * M
-            3'b111: partial_product = $signed(31'b0);   // all zeros
+            3'b111: partial_product = $signed(31'b0)    // all zeros
             3'b100:                                     // -2 * M
             begin
                 partial_product = $signed(M);
@@ -140,5 +140,4 @@ module mul (
 
         res = res + $signed(partial_product <<< ((i*2) - 2));
     end
-end
 endmodule

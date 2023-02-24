@@ -2,8 +2,8 @@
 module mul_tb(input a, output b);
 	
     wire[63:0] res;
-    reg[31:0] M;
-    reg[31:0] Q;
+    wire[31:0] M;
+    wire[31:0] Q;
 
     mul mul_test(res, M, Q);
 
