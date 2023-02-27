@@ -15,10 +15,10 @@ module get_partial_product(
             res = $signed(M) << 1;
         // M*(-2): add (-2)* 64-bit sign extended multiplicand
         end else if (code == 3'b100) begin
-            res = $signed(~M+1'b1) << 1;
+            res = $signed(~M + 1'b1) << 1;
         // M*(-1): add (-1)* 64-bit sign extended multiplicand
         end else if (code == 3'b101 || code == 3'b110) begin
-            res = $signed(~M+1'b1);
+            res = $signed(~M + 1'b1);
         end else begin
         // for 111 or 000 codes, add a row of 64 zeros
             res = 64'b0;
@@ -63,6 +63,7 @@ module mul(
         end
     end
 
+    // split the output into hi and lo 32 bit signals
     assign res_hi = res[63:32];
     assign res_lo = res[31:0];
 endmodule
