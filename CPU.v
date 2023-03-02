@@ -4,6 +4,7 @@
 `include "modules/bus_mux.v"
 `include "modules/encoder_32_to_5.v"
 `include "modules/mux_2_to_1.v"
+`include "modules/alu.v"
 
 module top(input wire clk, input wire clr, input wire Mdatain, input wire[31:0] inPort, output wire [31:0] outPort);
     wire clk;
@@ -117,5 +118,13 @@ module top(input wire clk, input wire clr, input wire Mdatain, input wire[31:0] 
                                 R5_Eout, R6_Eout, R7_Eout, R8_Eout, R9_Eout,
                                 R10_Eout, R11_Eout, R12_Eout, R13_Eout, R14_Eout,
                                 R15_Eout}, enc_out);
+                                
+    reg [63:0] RC;
+    wire [31:0] Ra;
+    wire [31:0] Rb;
+    wire [3:0] opcode;
+    alu alu_instance(RC, Ra, rb, opcode);
 
+    Z_HI = RC[63:32];
+    Z_LO = RC[31:0];
 endmodule
