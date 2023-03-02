@@ -1,5 +1,3 @@
-`timescale 1ns/10ps
-
 module alu(
 	output reg [63:0] Rc,
 	input wire [31:0] Ra,

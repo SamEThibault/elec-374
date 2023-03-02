@@ -1,13 +1,13 @@
 `timescale 1ns/10ps
-module reg_tb(input a, output b);
+module reg_64_bit_tb(input a, output b);
 	
-	reg[31:0] d;
-	wire[31:0] q;
+	wire[63:0] q;
+	reg[63:0] d;
 	reg enable;
 	reg clr;
 	reg clk;
 	
-	Register32 register(q, d, clk, clr, enable);
+	reg_64_bit register(q, d, clk, clr, enable);
 	
 	initial
 		begin
@@ -15,7 +15,7 @@ module reg_tb(input a, output b);
 		clk = 0;
 		enable = 1;
 		clr = 0;
-		d = 32'hFFFFFFFFF;
+		d = 64'hFFFFFFFFFFFFFFFFFF;
 
 		//Delay for 20ns, set clk high to allow q <= d, q will store h'FFFFFFFFF
 		#20 
@@ -24,7 +24,7 @@ module reg_tb(input a, output b);
 		//Delay for 20ns, set clk to low so q value wont change. d and q will store h'88888888, h'FFFFFFFF respectively
 		#20 
 		clk = 0;
-		d = 32'h88888888;  
+		d = 64'h8888888888888888;  
 
 		//Delay for 20ns, clear q, q will store h'000000000
 		#20 

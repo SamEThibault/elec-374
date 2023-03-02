@@ -1,10 +1,10 @@
 // Register with posedge async clear and rising clock-edge response, pos-edge enable
-module Register32(
+module reg_32_bit(
+    output reg [31:0] q,
     input wire [31:0] d,
     input wire clk,
     input wire clr,
-    input wire enable,
-    output reg [31:0] q
+    input wire enable
     );
 
 always @(posedge clk or posedge clr)

@@ -75,7 +75,7 @@ module datapath_tb;
         T0: begin // see if you need to de-assert these signals
         PCout <= 1; MARin <= 1; IncPC <= 1; Zin <= 1;
     end
-    T1: begin
+        T1: begin
         Zlowout <= 1; PCin <= 1; Read <= 1; MDRin <= 1;
         Mdatain <= 32'h28918000; // opcode for “and R1, R2, R3”
     end

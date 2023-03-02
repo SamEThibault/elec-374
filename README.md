@@ -20,12 +20,12 @@ shra- done (SIGNED)
 shl - done (NOT SIGNED)
 ror - done 
 rol - done
-mul (booth algorhithm bit pair)
+mul - done
 div - done
 alu - done (minus sam's Multiply)
 mdr - done, not tested
-datapath - 
+datapath - FUk kms
 encoder - done, not tested
-mux - done, not tested
-pc - done, not tested
-z - done, not tested
+mux - done
+pc - done
+z - done
