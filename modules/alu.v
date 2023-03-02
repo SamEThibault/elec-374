@@ -7,8 +7,8 @@ module alu(
 	parameter Addition = 5'b00011, Subtraction = 5'b00100, Multiplication = 5'b01110, Division = 5'b01111, Shift_right = 5'b00101, Shift_left = 5'b00110, Rotate_right = 5'b00111, Rotate_left = 5'b01000, And = 5'b01001, Or = 5'b01010, Negate = 5'b10000, Not = 5'b10001,  Shift_right_arithmetic=5'b10010;
 	
     //Operation Outputs
-	wire [31:0] IncPC_out, shr_out, shl_out, shra_out, or_out, and_out, neg_out, not_out, add_sum, add_cout, sub_sum, sub_cout, rol_out, ror_out;
-	wire [63:0] mul_out, div_out;
+	wire [31:0] IncPC_out, shr_out, shl_out, shra_out, or_out, and_out, neg_out, not_out, add_sum, add_cout, sub_sum, sub_cout, rol_out, ror_out, mul_out_hi, mul_out_lo;
+	wire [63:0] div_out;
 
 	//Possible ALU Operations
 	or_32_bit or_op(or_out, Ra, Rb);
@@ -23,7 +23,7 @@ module alu(
 	shr_32_bit shr_op(shr_out, Ra, Rb);
 	shra_32_bit shra_op(shra_out, Ra, Rb);
 	div_32_bit div_op(div_out, Ra, Rb);
-	// mul_32_bit mul_op(mul_out, Ra, Rb);
+	mul mul_op(mul_out_hi, mul_out_lo, Ra, Rb);
 	
 	always @(*) // do the required job in each state
 		begin	
@@ -85,7 +85,8 @@ module alu(
 				end
 				
 				Multiplication: begin
-					Rc[63:0] = mul_out[63:0];
+					Rc[63:32] = mul_out_hi;
+					Rc[31:0] = mul_out_lo;
 				end
 				
 				Division: begin
