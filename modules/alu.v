@@ -8,7 +8,7 @@ module alu(
 	
     //Operation Outputs
 	wire [31:0] IncPC_out, shr_out, shl_out, shra_out, or_out, and_out, neg_out, not_out, add_sum, add_cout, sub_sum, sub_cout, rol_out, ror_out, mul_out_hi, mul_out_lo;
-	wire [63:0] div_out;
+	wire [63:0] div_out, mul_out;
 
 	//Possible ALU Operations
 	or_32_bit or_op(or_out, Ra, Rb);

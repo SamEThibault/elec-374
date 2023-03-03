@@ -6,6 +6,6 @@ module shra_32_bit(
 
 always@(*) 
 begin
-    Rz = Ra >>> ShiftBits;
+    Rz = (Ra >>> ShiftBits);
 end
 endmodule

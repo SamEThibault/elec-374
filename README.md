@@ -25,7 +25,7 @@ div - done
 alu - done (minus sam's Multiply)
 mdr - done, not tested
 datapath - FUk kms
-encoder - done, not tested
+encoder - done
 mux - done
 pc - done
 z - done

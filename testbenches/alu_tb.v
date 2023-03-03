@@ -14,20 +14,21 @@ module alu_tb (input a, input b);
 
     initial 
         begin
-            Ra = 32'hFFFFFFF5;
+            Ra = 32'h01111111;
 			Rb = 32'b10;
-            //opcode = Addition; //Add - Works
+            // opcode = Addition; //Add - Works
 			// opcode = Subtraction; //Sub - Works 
 			// opcode = And; //And - Works 
 			// opcode = Or; //Or - Works
 			// opcode = Shift_right; //Shr - Works
 			// opcode = Shift_left; //Shl - Works
-			opcode = Shift_right_arithmetic; //Shra - 
+			// opcode = Shift_right_arithmetic; //Shra - works
 			// opcode = Rotate_right; //Ror - Works
 			// opcode = Rotate_left; //Rol - Works
-			//opcode = Multiplication; //Mul - Waiting for sam
+			// opcode = Multiplication; //Mul - Works
 			// opcode = Division; //Div - Works
 			// opcode = Negate; //Neg - Works 
 			// opcode = Not; //Not - Works
+
         end
 endmodule
