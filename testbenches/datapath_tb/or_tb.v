@@ -1,17 +1,17 @@
 `timescale 1ns/10ps
 module or_tb;
-    reg PCout, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, R_out, In_port_out; 
+    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, R_out, In_port_out; 
     reg R0_out, R1_out, R2_out, R3_out, R4_out, R5_out;
     reg R6_out, R7_out, R8_out, R9_out, R10_out, R11_out;
     reg R12_out, R13_out, R14_out, R15_out;
-    reg [31:0] MDRout;
+    reg [31:0] MDR_out;
     reg MAR_enable, Z_enable, PC_enable, MDR_enable, IR_enable, Y_enable;
     reg IncPC, Read;
     reg R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable;
     reg R6_enable, R7_enable, R8_enable, R9_enable, R10_enable, R11_enable;
     reg R12_enable, R13_enable, R14_enable, R15_enable;
     reg [4:0] opcode;
-    reg Clock;
+    reg Clock, clr;
     reg [31:0] Mdatain;
 
     parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
@@ -54,6 +54,7 @@ module or_tb;
      .Read(Read), 
 	 .IncPC(IncPC), 
 	 .clk(Clock), 
+     .clr(clr),
 	 .opcode(opcode), 
      .R0_enable(R0_enable), 
 	 .R1_enable(R1_enable), 
@@ -101,7 +102,8 @@ module or_tb;
         begin
             case (Present_state) // assert the required signals in each clock cycle
                 Default: begin
-                    PCout <= 0; ZLow_out <= 0; MDRout <= 0; // initialize the signals
+                    PC_out <= 0; ZLow_out <= 0; MDR_out <= 0; // initialize the signals
+                    clr<=0;
                     MAR_enable <= 0; Z_enable <= 0;
                     PC_enable <=0; MDR_enable <= 0; IR_enable= 0; Y_enable= 0;
                     IncPC <= 0; Read <= 0; opcode <= 0;
@@ -119,52 +121,53 @@ module or_tb;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load1b: begin 
-                    #10 MDRout <= 1; R2_enable <= 1;
-                    // #10 MDRout <= 0; R2_enable <= 0; // initialize R2 with the value 12
+                    #10 MDR_out <= 1; R2_enable <= 1;
+                    #10 MDR_out <= 0; R2_enable <= 0; // initialize R2 with the value 12
                 end
-                // Reg_load2a: begin
-                //     Mdatain <= 32'h00000014;
-                //     #10 Read <= 1; MDR_enable <= 1;
-                //     #10 Read <= 0; MDR_enable <= 0;
-                // end
-                // Reg_load2b: begin 
-                //     #10 MDRout <= 1; R3_enable <= 1;
-                //     #10 MDRout <= 0; R3_enable <= 0; // initialize R3 with the value 14
-                // end
-                // Reg_load3a: begin
-                //     Mdatain <= 32'h00000018;
-                //     #10 Read <= 1; MDR_enable <= 1;
-                //     #10 Read <= 0; MDR_enable <= 0;
-                // end
-                // Reg_load3b: begin 
-                //     #10 MDRout <= 1; R1_enable <= 1;
-                //     #10 MDRout <= 0; R1_enable <= 0; // initialize R1 with the value 18
-                // end
-                // T0: begin
-                //     #10 PCout <= 1; MAR_enable <= 1; Z_enable <= 1; IncPC <= 1; 
-				// 	#10 PCout <= 0; MAR_enable <= 0; Z_enable <= 0;
-                // end
-                // T1: begin
-				// 	Mdatain <= 32'h30918000; // opcode for or R1, R2, R3
-				// 	#10 ZLow_out <= 1; PC_enable <= 1; Read <= 1; MDR_enable <= 1;
-				// 	#10 ZLow_out <= 0; PC_enable <= 0; Read<= 0; MDR_enable <= 0; IncPC <= 0; 
-                // end
-                // T2: begin
-                //     #10 MDRout <= 1; IR_enable= 1; 
-				// 	#10 MDRout <= 0; IR_enable= 0;
-                // end
-                // T3: begin
-				// 	#10 R2_out <= 1; Y_enable= 1; 
-				// 	#10 R2_out <= 0; Y_enable= 0; 
-                // end
-                // T4: begin
-                //     #10 R3_out <= 1;  Z_enable <= 1; opcode <= 5'b00110; //OR R3 and Y(R2) then store in Z_enable (10110)
-				// 	#10 R3_out <= 0;  Z_enable <= 0;
-                // end
-                // T5: begin
-                //     #10 ZLow_out <= 1; R1_enable <= 1;
-				// 	#10 ZLow_out <= 0; R1_enable <= 0;
-                // end
+                Reg_load2a: begin
+                    Mdatain <= 32'h00000014;
+                    #10 Read <= 1; MDR_enable <= 1;
+                    #10 Read <= 0; MDR_enable <= 0;
+                end
+                Reg_load2b: begin 
+                    #10 MDR_out <= 1; R3_enable <= 1;
+                    #10 MDR_out <= 0; R3_enable <= 0; // initialize R3 with the value 14
+                end
+                Reg_load3a: begin
+                    Mdatain <= 32'h00000018;
+                    #10 Read <= 1; MDR_enable <= 1;
+                    #10 Read <= 0; MDR_enable <= 0;
+                end
+                Reg_load3b: begin 
+                    #10 MDR_out <= 1; R1_enable <= 1;
+                    #10 MDR_out <= 0; R1_enable <= 0; // initialize R1 with the value 18
+                end
+                T0: begin
+                    #10 PC_out <= 1; MAR_enable <= 1; Z_enable <= 1; IncPC <= 1; 
+					#10 PC_out <= 0; MAR_enable <= 0; Z_enable <= 0;
+                end
+                T1: begin
+					Mdatain <= 32'h30918000; // opcode for or R1, R2, R3
+					#10 ZLow_out <= 1; PC_enable <= 1; Read <= 1; MDR_enable <= 1;
+					#10 ZLow_out <= 0; PC_enable <= 0; Read <= 0; MDR_enable <= 0; IncPC <= 0; 
+                end
+                T2: begin
+                    #10 MDR_out <= 1; IR_enable= 1; 
+					#10 MDR_out <= 0; IR_enable= 0;
+                end
+                T3: begin
+					#10 R2_out <= 1; Y_enable= 1; 
+					// #10 Y_enable = 0; R2_out <= 0; //Y_enable= 0; 
+                end
+                T4: begin
+					#10 Y_enable = 0; R2_out <= 0; //Y_enable= 0;  //This is temp fix
+
+                    #10 R3_out <= 1;  Z_enable <= 1; opcode <= 5'b01010; //OR R3 and Y(R2) then store in Z_enable (10110)
+                end
+                T5: begin
+					//  #10 R3_out <= 0;  Z_enable <= 0;  ZLow_out <= 1; R1_enable <= 1;
+					// #10 ZLow_out <= 0; R1_enable <= 0;
+                end
             endcase
         end
 endmodule

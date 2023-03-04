@@ -13,7 +13,7 @@ module z( output reg[31:0] z_high_out,
 
 	always@(*)
 begin
-	 z_high_out = temp_z_out[31:0];
+	 z_high_out = temp_z_out[63:32];
 	 z_low_out = temp_z_out[31:0];
 end
 endmodule

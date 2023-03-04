@@ -47,33 +47,34 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
     wire[4:0] enc_out;
     wire [63:0] C_data_out;
 
+
     
     // Instantiating the 16 registers
-    reg_32_bit R0(R0_data_out, clk, clr, R0_enable, MuxOut);
-    reg_32_bit R1(R1_data_out, clk, clr, R1_enable, MuxOut);
-    reg_32_bit R2(R2_data_out, clk, clr, R2_enable, MuxOut);
-    reg_32_bit R3(R3_data_out, clk, clr, R3_enable, MuxOut);
-    reg_32_bit R4(R4_data_out, clk, clr, R4_enable, MuxOut);
-    reg_32_bit R5(R5_data_out, clk, clr, R5_enable, MuxOut);
-    reg_32_bit R6(R6_data_out, clk, clr, R6_enable, MuxOut);
-    reg_32_bit R7(R7_data_out, clk, clr, R7_enable, MuxOut);
-    reg_32_bit R8(R8_data_out, clk, clr, R8_enable, MuxOut);
-    reg_32_bit R9(R9_data_out, clk, clr, R9_enable, MuxOut);
-    reg_32_bit R10(R10_data_out, clk, clr, r10_enable, MuxOut);
-    reg_32_bit R11(R11_data_out, clk, clr, r11_enable, MuxOut);
-    reg_32_bit R12(R12_data_out, clk, clr, r12_enable, MuxOut);
-    reg_32_bit R13(R13_data_out, clk, clr, r13_enable, MuxOut);
-    reg_32_bit R14(R14_data_out, clk, clr, r14_enable, MuxOut);
-    reg_32_bit R15(R15_data_out, clk, clr, r15_enable, MuxOut);
+    reg_32_bit R0(R0_data_out, MuxOut, clk, clr, R0_enable);
+    reg_32_bit R1(R1_data_out, MuxOut, clk, clr, R1_enable);
+    reg_32_bit R2(R2_data_out, MuxOut, clk, clr, R2_enable);
+    reg_32_bit R3(R3_data_out, MuxOut, clk, clr, R3_enable);
+    reg_32_bit R4(R4_data_out, MuxOut, clk, clr, R4_enable);
+    reg_32_bit R5(R5_data_out, MuxOut, clk, clr, R5_enable);
+    reg_32_bit R6(R6_data_out, MuxOut, clk, clr, R6_enable);
+    reg_32_bit R7(R7_data_out, MuxOut, clk, clr, R7_enable);
+    reg_32_bit R8(R8_data_out, MuxOut, clk, clr, R8_enable);
+    reg_32_bit R9(R9_data_out, MuxOut, clk, clr, R9_enable);
+    reg_32_bit R10(R10_data_out, MuxOut, clk, clr, R10_enable);
+    reg_32_bit R11(R11_data_out, MuxOut, clk, clr, R11_enable);
+    reg_32_bit R12(R12_data_out, MuxOut, clk, clr, R12_enable);
+    reg_32_bit R13(R13_data_out, MuxOut, clk, clr, R13_enable);
+    reg_32_bit R14(R14_data_out, MuxOut, clk, clr, R14_enable);
+    reg_32_bit R15(R15_data_out, MuxOut, clk, clr, R15_enable);
     
     // Instantiating special registers
-    reg_32_bit HI(HI_data_out, clk, clr, HI_enable, MuxOut);
-    reg_32_bit LO(LO_data_out, clk, clr, LO_enable, MuxOut);
-    reg_32_bit RY(Y_data_out, clk, clr, Y_enable, MuxOut);
-    reg_32_bit IR(IR_data_out, clk, clr, IR_enable, MuxOut);
-    reg_32_bit MAR(MAR_data_out, clk, clr, MAR_enable, MuxOut);
-    pc PC(PC_data_out, clk, PC_increment, PC_enable, MuxOut);
-    z Z_reg(ZHigh_data_out, ZLow_data_out, clk, clr, RZ_enable, MuxOut);
+    reg_32_bit HI(HI_data_out,  MuxOut, clk, clr, HI_enable);
+    reg_32_bit LO(LO_data_out, MuxOut, clk, clr, LO_enable);
+    reg_32_bit RY(Y_data_out, MuxOut, clk, clr, Y_enable);
+    reg_32_bit IR(IR_data_out, MuxOut, clk, clr, IR_enable);
+    reg_32_bit MAR(MAR_data_out, MuxOut, clk, clr, MAR_enable);
+    pc PC(PC_data_out,clk, PC_increment, PC_enable, MuxOut);
+    z Z_reg(ZHigh_data_out, ZLow_data_out, C_data_out, clk, clr, Z_enable);
     mdr MDR(MDR_data_out, MuxOut, Mdatain, Read, clk, clr, MDR_enable);
 
 
@@ -82,7 +83,7 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
                                {{8{1'b0}},
                                 C_out, 
                                 In_port_out,
-                                MDRout, 
+                                MDR_out, 
                                 PC_out,
                                 ZLow_out,
                                 ZHigh_out,
