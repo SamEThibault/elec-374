@@ -22,9 +22,9 @@ ror - done
 rol - done
 mul - done
 div - done
-alu - done (minus sam's Multiply)
+alu - done 
 mdr - done, not tested
-datapath - FUk kms
+datapath - Should be done (just need to test)
 encoder - done
 mux - done
 pc - done
