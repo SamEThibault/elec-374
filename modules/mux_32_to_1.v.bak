@@ -1,4 +1,4 @@
-module mux_32_to_1(
+module module_32_to_1(
     output reg [31:0] BusMuxOut,
     input [31:0] BusMuxIn_R0,
     input [31:0] BusMuxIn_R1,

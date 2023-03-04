@@ -1,11 +1,11 @@
-module cpu(
+module Datapath(
 input PC_out, ZHigh_out, ZLow_out, HI_out, LO_out, In_port_out, C_out,
 input [31:0] MDR_out, Mdatain, 
 input MDR_enable, MAR_enable, Z_enable, Y_enable, IR_enable, PC_enable, CON_enable, LO_enable, 
       HI_enable, Read, clr, clk, InPort, IncPC,
 input [4:0] opcode,
-input R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, 
-      R10out, R11out, R12out, R13out, R14out, R15out,
+input R_0out, R1_out, R2_out, R3_out, R4_out, R5_out, R6_out, R7_out, R8_out, R9_out, 
+      R10_out, R11_out, R12_out, R13_out, R14_out, R15_out,
 input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enable, 
       R7_enable, R8_enable, R9_enable, R10_enable, R11_enable, R12_enable, R13_enable, 
       R14_enable, R15_enable
@@ -45,7 +45,6 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
     
     //MDR
     wire[4:0] enc_out;
-
     wire [63:0] C_data_out;
 
     
@@ -104,7 +103,7 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
                                 R3_out, 
                                 R2_out, 
                                 R1_out, 
-                                R0_out, 
+                                R0_out 
                                 } 
                                 );
 

@@ -1,6 +1,6 @@
-module half_adder( output reg c_out, output reg s_out, input wire x_in, input wire y_in);
+module half_adder( output wire c_out, output wire s_out, input wire x_in, input wire y_in);
 
-    s_out = x_in ^ y_in;
-    c_out = x_in & y_in;
+   assign s_out = x_in ^ y_in;
+   assign c_out = x_in & y_in;
 
 endmodule
