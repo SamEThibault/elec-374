@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module or_tb;
+module ror_tb;
     reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, R_out, In_port_out; 
     reg R0_out, R1_out, R2_out, R3_out, R4_out, R5_out;
     reg R6_out, R7_out, R8_out, R9_out, R10_out, R11_out;
@@ -147,7 +147,7 @@ module or_tb;
 					#10 PC_out <= 0; MAR_enable <= 0; Z_enable <= 0;
                 end
                 T1: begin
-					Mdatain <= 32'h30918000; // opcode for or R1, R2, R3
+					Mdatain <= 32'h50918000; // opcode for ror R1, R2, R3
 					#10 ZLow_out <= 1; PC_enable <= 1; Read <= 1; MDR_enable <= 1;
 					#10 ZLow_out <= 0; PC_enable <= 0; Read <= 0; MDR_enable <= 0; IncPC <= 0; 
                 end
@@ -160,31 +160,14 @@ module or_tb;
 					// #10 Y_enable = 0; R2_out <= 0; //Y_enable= 0; 
                 end
                 T4: begin
-					#10 Y_enable = 0; R2_out <= 0; //Y_enable= 0;  //THIS NEEDS TO BE FIXED
+					#10 Y_enable = 0; R2_out <= 0; //Y_enable= 0;  //This is temp fix
 
-                    #10 R3_out <= 1;  Z_enable <= 1; opcode <= 5'b00110; //OR R3 and Y(R2) then store in Z_enable (10110)
+                    #10 R3_out <= 1;  Z_enable <= 1; opcode <= 5'b01010; //ROR R3 and Y(R2) then store in Z_enable (10110)
                 end
                 T5: begin
-					//  #10 R3_out <= 0;  Z_enable <= 0;  //THIS NEEDS TO BE FIXED
-                    #10 ZLow_out <= 1; R1_enable <= 1;
+					//  #10 R3_out <= 0;  Z_enable <= 0;  ZLow_out <= 1; R1_enable <= 1;
 					// #10 ZLow_out <= 0; R1_enable <= 0;
                 end
             endcase
         end
 endmodule
-	
-    // reg[31:0] Ra;
-    // reg[31:0] Rb;
-    // wire[31:0] Rz;
-
-    // or_32bit OR(Ra, Rb, Rz);
-
-	// initial
-	// 	begin
-    //         Ra = 32'b10101010;
-    //         Rb = 32'b00110110;
-    //         #20
-    //         Ra = 32'b00000000;
-    //         Rb = 32'b11111111;
-	// 	end
-//endmodule
