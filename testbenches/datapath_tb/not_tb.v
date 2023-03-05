@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module add_tb;
+module not_tb;
     reg PCout, Zlowout, Zhighout, HIout, LOout, C_out, Rout, InPortout; 
     reg R0out, R1out, R2out, R3out, R4out, R5out;
     reg R6out, R7out, R8out, R9out, R10out, R11out;
@@ -115,39 +115,21 @@ module add_tb;
                     R12out <= 0; R13out <= 0; R14out <= 0; R15out <= 0; 
                 end
                 Reg_load1a: begin
-                    Mdatain <= 32'h00000012; //
+                    Mdatain <= 32'h00000000; 
                     Read = 0; MDRin = 0; // the first zero is there for completeness
                     #10 Read <= 1; MDRin <= 1;
                     #10 Read <= 0; MDRin <= 0;
                 end
                 Reg_load1b: begin 
                     #10 MDRout <= 1; R4in <= 1;
-                    #10 MDRout <= 0; R4in <= 0; // initialize R2 with the value $12
-                end
-                Reg_load2a: begin
-                    Mdatain <= 32'h00000014; //These are the values
-                    #10 Read <= 1; MDRin <= 1;
-                    #10 Read <= 0; MDRin <= 0;
-                end
-                Reg_load2b: begin 
-                    #10 MDRout <= 1; R5in <= 1;
-                    #10 MDRout <= 0; R5in <= 0; // initialize R3 with the value $14
-                end
-                Reg_load3a: begin
-                    Mdatain <= 32'h00000018;
-                    #10 Read <= 1; MDRin <= 1;
-                    #10 Read <= 0; MDRin <= 0;
-                end
-                    Reg_load3b: begin 
-                        #10 MDRout <= 1; R0in <= 1;
-                        #10 MDRout <= 0; R0in <= 0; // initialize R1 with the value $18
+                    #10 MDRout <= 0; R4in <= 0; 
                 end
                 T0: begin // see if you need to de-assert these signals
                           #10 PCout <= 1; MARin <= 1; Zin <= 1; IncPC <= 1;
 						  #10 PCout <= 0; MARin <= 0; Zin <= 0;
                 end
                 T1: begin
-						Mdatain <= 32'h18228000; // opcode for add R0, R4, R5
+						Mdatain <= 32'h90080000; // opcode for not R0, R1
 						#10 Zlowout <= 1; PCin <= 1; Read <= 1; MDRin <= 1;
 						#10 Zlowout <= 0; PCin <= 0; Read <= 0; MDRin <= 0; IncPC <= 0;
                 end
@@ -160,7 +142,7 @@ module add_tb;
 						  #10 R4out <= 0; Yin <= 0;
                 end
                 T4: begin
-                          #10 R5out <= 1; Zin <= 1; opcode <= 5'b00011;  
+                          #10 R5out <= 1; Zin <= 1; opcode <= 5'b10010;  
 						  #10 R5out <= 0; Zin <= 0;
                 end
                 T5: begin
@@ -170,19 +152,3 @@ module add_tb;
             endcase
         end
 endmodule
-//    reg[31:0] Ra;
-//    reg[31:0] Rb;
-//    wire[31:0] out;
-// 	wire [31:0]c_out;
-// 	reg c_in;
-	
-//    add_32bit add_instance(Ra, Rb, c_in, out, c_out);
-
-//     initial begin
-//         Ra = 4;
-// 		  Rb = 2;
-// 		  c_in = 0;
-		  
-        
-//     end
-// endmodule
