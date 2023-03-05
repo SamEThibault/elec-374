@@ -55,3 +55,7 @@ Datapath Tests:
 - ror : Complete (TEST)
 - rol : Complete (TEST)
 - neg : In Progress (TEST)
+
+2023/03/05 -- Notes:
+
+- Always put a delay between enabling a register and changing BusMuxOut value.

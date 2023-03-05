@@ -115,14 +115,14 @@ module or_tb;
                     R12_out <= 0; R13_out <= 0; R14_out <= 0; R15_out <= 0; 
                 end
                 Reg_load1a: begin 
-                    Mdatain <= 32'h00000012;
+                    Mdatain <= 32'h00000012; 
                     Read = 0; MDR_enable = 0;
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load1b: begin 
                     #10 MDR_out <= 1; R2_enable <= 1;
-                    #10 MDR_out <= 0; R2_enable <= 0; // initialize R2 with the value 12
+                    #10 MDR_out <= 0; R2_enable <= 0; // initialize R2 with the value 12 in hex
                 end
                 Reg_load2a: begin
                     Mdatain <= 32'h00000014;
@@ -131,7 +131,7 @@ module or_tb;
                 end
                 Reg_load2b: begin 
                     #10 MDR_out <= 1; R3_enable <= 1;
-                    #10 MDR_out <= 0; R3_enable <= 0; // initialize R3 with the value 14
+                    #10 MDR_out <= 0; R3_enable <= 0; // initialize R3 with the value 14 in hex
                 end
                 Reg_load3a: begin
                     Mdatain <= 32'h00000018;
@@ -140,8 +140,8 @@ module or_tb;
                 end
                 Reg_load3b: begin 
                     #10 MDR_out <= 1; R1_enable <= 1;
-                    #10 MDR_out <= 0; R1_enable <= 0; // initialize R1 with the value 18
-                end //EVERYTHING WORKS HERE
+                    #10 MDR_out <= 0; R1_enable <= 0; // initialize R1 with the value 18 in hex
+                end
                 T0: begin
                     // #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  //DOUBLE CHECK PC reG
 					// #10 PC_out <= 0; MAR_enable <= 0;
@@ -160,10 +160,14 @@ module or_tb;
                     #10
                     R3_out <= 0;
                     ZLow_out <= 1;
+                    #10
                     R1_enable <= 1;
                     #10 
-                    ZLow_out <= 0;
                     R1_enable <= 0;
+                    #10
+                    ZLow_out <= 0;
+                    Z_enable <= 0;
+
 
 					// Mdatain <= 32'h30918000; // opcode for or R1, R2, R3
 					// #10 ZLow_out <= 1; PC_enable <= 1; Read <= 1; MDR_enable <= 1;
