@@ -162,7 +162,7 @@ module or_tb;
                 T4: begin
 					#10 Y_enable = 0; R2_out <= 0; //Y_enable= 0;  //This is temp fix
 
-                    #10 R3_out <= 1;  Z_enable <= 1; opcode <= 5'b01010; //OR R3 and Y(R2) then store in Z_enable (10110)
+                    #10 R3_out <= 1;  Z_enable <= 1; opcode <= 5'b00110; //OR R3 and Y(R2) then store in Z_enable (10110)
                 end
                 T5: begin
 					//  #10 R3_out <= 0;  Z_enable <= 0;  ZLow_out <= 1; R1_enable <= 1;
