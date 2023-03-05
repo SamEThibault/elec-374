@@ -141,52 +141,43 @@ module or_tb;
                 Reg_load3b: begin 
                     #10 MDR_out <= 1; R1_enable <= 1;
                     #10 MDR_out <= 0; R1_enable <= 0; // initialize R1 with the value 18
-                end //EVERYTHING WORKS HERE
+                end 
                 T0: begin
-                    // #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  //DOUBLE CHECK PC reG
+                    #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  //DOUBLE CHECK PC reg
 					// #10 PC_out <= 0; MAR_enable <= 0;
-                    #10 Z_enable <= 1;
-                    #10 Z_enable <= 0;
+                    //#10 Z_enable <= 1;
+                    // #10 Z_enable <= 0;
                 end
                 T1: begin
-                    #10
-                    R2_out <= 1; Y_enable <= 1;
-                    #10
-                    R2_out <= 0; Y_enable <= 0;
-                    #10
-                    R3_out <= 1;
-                    opcode <= 5'b00110;
-                    Z_enable <= 1;
-                    #10
-                    R3_out <= 0;
-                    ZLow_out <= 1;
-                    R1_enable <= 1;
-                    #10 
-                    ZLow_out <= 0;
-                    R1_enable <= 0;
-
-					// Mdatain <= 32'h30918000; // opcode for or R1, R2, R3
-					// #10 ZLow_out <= 1; PC_enable <= 1; Read <= 1; MDR_enable <= 1;
-					// #10 ZLow_out <= 0; PC_enable <= 0; Read <= 0; MDR_enable <= 0; IncPC <= 0; 
+                    //ZLow_out <= 1;
+                    #10 PC_enable <= 1;
+                    MDR_enable <= 1;
+                    Read <= 1;
+                    Mdatain <= 32'h30918000; // opcode for or R1, R2, R3
                 end
-                // T2: begin
-                //     #10 MDR_out <= 1; IR_enable= 1; 
-				// 	#10 MDR_out <= 0; IR_enable= 0;
-                // end
-                // T3: begin
-				// 	#10 R2_out <= 1; Y_enable= 1; 
-				// 	// #10 Y_enable = 0; R2_out <= 0; //Y_enable= 0; 
-                // end
-                // T4: begin
-				// 	#10 Y_enable = 0; R2_out <= 0; //Y_enable= 0;  //THIS NEEDS TO BE FIXED
-
-                //     #10 R3_out <= 1;  Z_enable <= 1; opcode <= 5'b00110; //OR R3 and Y(R2) then store in Z_enable (10110)
-                // end
-                // T5: begin
-				// 	//  #10 R3_out <= 0;  Z_enable <= 0;  //THIS NEEDS TO BE FIXED
-                //     #10 ZLow_out <= 1; R1_enable <= 1;
-				// 	// #10 ZLow_out <= 0; R1_enable <= 0;
-                // end
+                T2: begin
+                    #10 MDR_out <= 1; IR_enable= 1; 
+                    #10 MDR_out <= 0;
+                end
+                T3: begin
+					#10 R2_out <= 1; 
+                    #10 Y_enable <= 1; 
+                    #10 
+                    R2_out <= 0;
+                    Y_enable <= 0;
+                end
+                T4: begin
+                    #10 R3_out <= 1; 
+                    opcode <= 5'b00110; //OR R3 and Y(R2) then store in Z_enable
+                    Z_enable <= 1; 
+                    #10 R3_out <= 0;
+                end
+                T5: begin
+				    //Z_enable <= 0;
+                    ZLow_out <= 1; 
+                    R1_enable <= 1;
+					#10 ZLow_out <= 0; R1_enable <= 0;
+                end
             endcase
         end
 endmodule
