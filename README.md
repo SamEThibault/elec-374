@@ -34,6 +34,7 @@ pc - done
 z - done
 
 2023/03/04 -- Sam Notes:
+- Never perform two operations on the same register in the same state
 
 - Compilation of datapath TB only successful when adding module example(input a, input b);
 - Infinite loop of clock cycles: Z output is not visible when simulating
