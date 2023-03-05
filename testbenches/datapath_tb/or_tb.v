@@ -157,9 +157,13 @@ module or_tb;
                     R3_out <= 1;
                     opcode <= 5'b00110;
                     Z_enable <= 1;
-                    //#10
-                    // R3_out <= 0;
-                    
+                    #10
+                    R3_out <= 0;
+                    ZLow_out <= 1;
+                    R1_enable <= 1;
+                    #10 
+                    ZLow_out <= 0;
+                    R1_enable <= 0;
 
 					// Mdatain <= 32'h30918000; // opcode for or R1, R2, R3
 					// #10 ZLow_out <= 1; PC_enable <= 1; Read <= 1; MDR_enable <= 1;
