@@ -93,7 +93,7 @@ module alu(
 					Rc[63:0] = div_out[63:0];
 				end
 
-				default: Rc[63:0] = 0;
+				default: RC[63:0] = 0;
 
 			endcase
 	end

@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module and_tb(input a, input b);
+module and_tb;
     reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, R_out, In_port_out; 
     reg R0_out, R1_out, R2_out, R3_out, R4_out, R5_out;
     reg R6_out, R7_out, R8_out, R9_out, R10_out, R11_out;
