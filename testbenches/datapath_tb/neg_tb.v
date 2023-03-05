@@ -108,14 +108,14 @@ module neg_tb;
                     PC_enable <=0; MDR_enable <= 0; IR_enable= 0; Y_enable= 0;
                     IncPC <= 0; Read <= 0; opcode <= 0;
                     R1_enable <= 0; R2_enable <= 0; R3_enable <= 0; Mdatain <= 32'h00000000;
-                    ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; In_port_out <= 0;
+                ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; In_port_out <= 0;
                     //Out Registers
                     R0_out <= 0; R1_out <= 0; R2_out <= 0; R3_out <= 0; R4_out <= 0; R5_out <= 0;
                     R6_out <= 0; R7_out <= 0; R8_out <= 0; R9_out <= 0; R10_out <= 0; R11_out <= 0;
                     R12_out <= 0; R13_out <= 0; R14_out <= 0; R15_out <= 0; 
                 end
-                Reg_load1a: begin
-                    Mdatain <= 32'h00000012;
+                Reg_load1a: begin 
+                    Mdatain <= 32'h00000012; //In binary 10010
                     Read = 0; MDR_enable = 0;
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
@@ -125,7 +125,7 @@ module neg_tb;
                     #10 MDR_out <= 0; R2_enable <= 0; // initialize R2 with the value 12
                 end
                 Reg_load2a: begin
-                    Mdatain <= 32'h00000014;
+                    Mdatain <= 32'h00000014; //10100
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
@@ -134,39 +134,31 @@ module neg_tb;
                     #10 MDR_out <= 0; R3_enable <= 0; // initialize R3 with the value 14
                 end
                 Reg_load3a: begin
-                    Mdatain <= 32'h00000018;
+                    Mdatain <= 32'h01010101; //11000
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load3b: begin 
                     #10 MDR_out <= 1; R1_enable <= 1;
                     #10 MDR_out <= 0; R1_enable <= 0; // initialize R1 with the value 18
-                end
+                end 
                 T0: begin
-                    #10 PC_out <= 1; MAR_enable <= 1; Z_enable <= 1; IncPC <= 1; 
-					#10 PC_out <= 0; MAR_enable <= 0; Z_enable <= 0;
+                    #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  
+					#10 PC_out <= 0; MAR_enable <= 0; IncPC <= 0; PC_enable <= 0;
                 end
                 T1: begin
-					Mdatain <= 32'h88900000; // opcode for neg R1, R2
-					#10 ZLow_out <= 1; PC_enable <= 1; Read <= 1; MDR_enable <= 1;
-					#10 ZLow_out <= 0; PC_enable <= 0; Read <= 0; MDR_enable <= 0; IncPC <= 0; 
+                    // PC_out <= 0;
+                    MDR_enable <= 1;
+                    Read <= 1;
+                    Mdatain <= 32'h88900000; // opcode for not R1, R2, R3
                 end
                 T2: begin
                     #10 MDR_out <= 1; IR_enable= 1; 
-					#10 MDR_out <= 0; IR_enable= 0;
+                    #10 MDR_out <= 0; IR_enable= 0;
                 end
                 T3: begin
-					#10 R2_out <= 1; Y_enable= 1; 
-					// #10 Y_enable = 0; R2_out <= 0; //Y_enable= 0; 
-                end
-                T4: begin
-					#10 Y_enable = 0; R2_out <= 0; //Y_enable= 0;  //This is temp fix
-
-                    #10 R3_out <= 1;  Z_enable <= 1; opcode <= 5'b01011; //NEG R3 and Y(R2) then store in Z_enable (10110)
-                end
-                T5: begin
-					//  #10 R3_out <= 0;  Z_enable <= 0;  ZLow_out <= 1; R1_enable <= 1;
-					// #10 ZLow_out <= 0; R1_enable <= 0;
+                    opcode <= 5'b10001; //OR R3 and Y(R2) then store in Z_enable
+					#10 R1_out <= 1; Z_enable <= 1; 
                 end
             endcase
         end
