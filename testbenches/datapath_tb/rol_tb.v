@@ -170,10 +170,9 @@ module rol_tb;
                 end
                 T5: begin
 				    Z_enable <= 0;
-                    ZLow_out <= 1; 
-                    #10 LO_enable <= 1;
-					#10 ZLow_out <= 0; 
-                    LO_enable <= 0;
+                    ZLow_out <= 1; R6_enable <=1;
+                    #10 LO_enable <= 1; R6_enable <= 1;
+					#10 ZLow_out <= 0; LO_enable <= 0; R6_enable <= 0;
                 end
             endcase
         end

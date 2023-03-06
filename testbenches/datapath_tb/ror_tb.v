@@ -124,8 +124,8 @@ module ror_tb;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load1b: begin 
-                    #10 MDR_out <= 1; R4_enable <= 1;
-                    #10 MDR_out <= 0; R4_enable <= 0; // initialize R2 with the value 12
+                    #10 MDR_out <= 1; R6_enable <= 1;
+                    #10 MDR_out <= 0; R6_enable <= 0; // initialize R2 with the value 12
                 end
                 Reg_load2a: begin
                     Mdatain <= 32'h00000005; //10100
@@ -133,8 +133,8 @@ module ror_tb;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load2b: begin 
-                    #10 MDR_out <= 1; R6_enable <= 1;
-                    #10 MDR_out <= 0; R6_enable <= 0; // initialize R3 with the value 14
+                    #10 MDR_out <= 1; R4_enable <= 1;
+                    #10 MDR_out <= 0; R4_enable <= 0; // initialize R3 with the value 14
                 end
                 Reg_load3a: begin
                     Mdatain <= 32'h00000018; //11000
@@ -169,17 +169,10 @@ module ror_tb;
                     #10 R4_out <= 0;
                 end
                 T5: begin
-				    Z_enable <= 0;
+				    Z_enable <= 0; 
                     ZLow_out <= 1; 
-                    #10 LO_enable <= 1;
-					#10 ZLow_out <= 0; 
-                    LO_enable <= 0;
-                end
-                T6: begin
-                    ZHigh_out <= 1;
-                    #10 HI_enable <= 1;
-                    #10 ZHigh_out <= 0;
-                    HI_enable <= 0;
+                    #10 LO_enable <= 1; R6_enable <= 1;
+					#10 ZLow_out <= 0; LO_enable <= 0; R6_enable <=0;
                 end
             endcase
         end
