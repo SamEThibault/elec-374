@@ -135,14 +135,14 @@ module mul_tb;
                     #10 MDR_out <= 0; R7_enable <= 0; // initialize R7 with the value 14
                 end
                 T0: begin
-                    #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  //DOUBLE CHECK PC reg
+                    #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;
 					#10 PC_out <= 0; MAR_enable <= 0;
                 end
                 T1: begin
                     PC_out <= 0;
                     MDR_enable <= 1;
                     Read <= 1;
-                    Mdatain <= 32'h30918000; //CHANGE TO MUL opcode for: mul R6, R7// opcode for or R1, R2, R3
+                    Mdatain <= 32'h7B380000; //opcode for: mul R6, R7
                 end
                 T2: begin
                     #10 MDR_out <= 1; IR_enable= 1; 

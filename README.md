@@ -34,6 +34,7 @@ pc - done
 z - done
 
 2023/03/04 -- Sam Notes:
+
 - Never perform two operations on the same register in the same state
 
 - Compilation of datapath TB only successful when adding module example(input a, input b);
@@ -43,16 +44,16 @@ z - done
 
 Datapath Tests:
 
-- or : Complete
-- and : Complete (TEST)
-- add : Complete (TEST)
+- or : COMPLETE
+- and : COMPLETE
+- add : COMPLETE
 - not : In Progress (TEST)
-- sub : Complete (TEST)
-- mul : In Progress (TEST)
-- div : Complete (TEST)
-- shr : Complete (TEST)
+- sub : COMPLETE
+- mul : COMPLETE
+- div : COMPLETE
+- shr : COMPLETE
 - shra : Complete (TEST)
-- shl : Complete (TEST)
+- shl : COMPLETE
 - ror : Complete (TEST)
 - rol : Complete (TEST)
 - neg : In Progress (TEST)
