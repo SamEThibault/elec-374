@@ -34,7 +34,11 @@ pc - done
 z - done
 
 2023/03/04 -- Sam Notes:
-- Never perform two operations on the same register in the same state
+- Always remember to enable your registers in the same line as when you send signal to encoder:
+                T3: begin
+					#10 R2_out <= 1; Y_enable <= 1;
+                    #10 R2_out <= 0; Y_enable <= 0;
+                end
 
 - Compilation of datapath TB only successful when adding module example(input a, input b);
 - Infinite loop of clock cycles: Z output is not visible when simulating

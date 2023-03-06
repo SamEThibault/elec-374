@@ -134,7 +134,7 @@ module neg_tb;
                     #10 MDR_out <= 0; R3_enable <= 0; // initialize R3 with the value 14
                 end
                 Reg_load3a: begin
-                    Mdatain <= 32'h01010101; //11000
+                    Mdatain <= 32'h00000018; //11000
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
@@ -150,7 +150,7 @@ module neg_tb;
                     // PC_out <= 0;
                     MDR_enable <= 1;
                     Read <= 1;
-                    Mdatain <= 32'h88900000; // opcode for not R1, R2, R3
+                    Mdatain <= 32'h88900000; // opcode for neg R1, R2, R3
                 end
                 T2: begin
                     #10 MDR_out <= 1; IR_enable= 1; 
