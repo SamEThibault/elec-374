@@ -121,8 +121,8 @@ module neg_tb;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load1b: begin 
-                    #10 MDR_out <= 1; R2_enable <= 1;
-                    #10 MDR_out <= 0; R2_enable <= 0; // initialize R2 with the value 12
+                    #10 MDR_out <= 1; R0_enable <= 1;
+                    #10 MDR_out <= 0; R0_enable <= 0; // initialize R2 with the value 12
                 end
                 Reg_load2a: begin
                     Mdatain <= 32'h00000014; //10100
@@ -130,8 +130,8 @@ module neg_tb;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load2b: begin 
-                    #10 MDR_out <= 1; R3_enable <= 1;
-                    #10 MDR_out <= 0; R3_enable <= 0; // initialize R3 with the value 14
+                    #10 MDR_out <= 1; R1_enable <= 1;
+                    #10 MDR_out <= 0; R1_enable <= 0; // initialize R3 with the value 14
                 end
                 Reg_load3a: begin
                     Mdatain <= 32'h00000018; //11000
@@ -157,8 +157,13 @@ module neg_tb;
                     #10 MDR_out <= 0; IR_enable= 0;
                 end
                 T3: begin
-                    opcode <= 5'b10001; //OR R3 and Y(R2) then store in Z_enable
-					#10 R1_out <= 1; Z_enable <= 1; 
+                    opcode <= 5'b10001; // store in Z_enable
+					#10 R1_out <= 1; Z_enable <= 1;
+					#10 R1_out <= 0; Z_enable <= 0;
+                end
+                T4: begin
+                    #10 ZLow_out <=1; R0_enable <=1;
+                    #10 ZLow_out<=0; R0_enable <=0;
                 end
             endcase
         end

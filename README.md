@@ -49,16 +49,34 @@ z - done
 
 Datapath Tests:
 
-- or : COMPLETE
-- and : COMPLETE
+- or : COMPLETE -
+- and : COMPLETE -
 - add : COMPLETE
-- not : In Progress (TEST)
-- sub : COMPLETE
-- mul : COMPLETE
-- div : COMPLETE
-- shr : COMPLETE
+- not : In Progress (TEST) -
+- sub : COMPLETE -
+- mul : COMPLETE -
+- div : COMPLETE -
+- shr : COMPLETE -
 - shra : Complete (TEST)
-- shl : COMPLETE
-- ror : Complete (TEST)
-- rol : Complete (TEST)
-- neg : In Progress (TEST)
+- shl : COMPLETE -
+- ror : Complete (TEST) -
+- rol : Complete (TEST) -
+- neg : In Progress (TEST) -
+
+
+Tests
+
+- and : Good
+- or : Good
+- sub :  Good
+- add : Good
+- mul : Good
+- div : Good
+- shr : Good
+- not : Good
+- shra : Good
+- shl : Good
+- ror :  Good
+- rol :  Good
+- neg : Good
+

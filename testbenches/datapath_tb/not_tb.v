@@ -159,6 +159,11 @@ module not_tb;
                 T3: begin
                     opcode <= 5'b10010; //OR R3 and Y(R2) then store in Z_enable
 					#10 R1_out <= 1; Z_enable <= 1; 
+					#10 R1_out <= 0; Z_enable <= 0; 
+                end
+                T4: begin
+                    #10 ZLow_out <=1; R0_enable <=1;
+                    #10 ZLow_out<=0; R0_enable <=0;
                 end
             endcase
         end

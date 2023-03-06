@@ -1,4 +1,5 @@
 `timescale 1ns/10ps
+// shr might be switched in terms of operands, so shr R1, R3, R5 would behave like shr R1, R5, R3 (r3 being the number of times we shift)
 module shra_tb;
     reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, R_out, In_port_out; 
     reg R0_out, R1_out, R2_out, R3_out, R4_out, R5_out;
@@ -108,65 +109,70 @@ module shra_tb;
                     PC_enable <=0; MDR_enable <= 0; IR_enable= 0; Y_enable= 0;
                     IncPC <= 0; Read <= 0; opcode <= 0;
                     R1_enable <= 0; R2_enable <= 0; R3_enable <= 0; Mdatain <= 32'h00000000;
-                    ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; In_port_out <= 0;
+                ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; In_port_out <= 0;
                     //Out Registers
                     R0_out <= 0; R1_out <= 0; R2_out <= 0; R3_out <= 0; R4_out <= 0; R5_out <= 0;
                     R6_out <= 0; R7_out <= 0; R8_out <= 0; R9_out <= 0; R10_out <= 0; R11_out <= 0;
                     R12_out <= 0; R13_out <= 0; R14_out <= 0; R15_out <= 0; 
                 end
-                Reg_load1a: begin
-                    Mdatain <= 32'h00000012;
+                Reg_load1a: begin 
+                    Mdatain <= 32'h80000004; // 0100
                     Read = 0; MDR_enable = 0;
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load1b: begin 
-                    #10 MDR_out <= 1; R2_enable <= 1;
-                    #10 MDR_out <= 0; R2_enable <= 0; // initialize R2 with the value 12
+                    #10 MDR_out <= 1; R3_enable <= 1;
+                    #10 MDR_out <= 0; R3_enable <= 0; // initialize R3 with the value 100
                 end
                 Reg_load2a: begin
-                    Mdatain <= 32'h00000014;
+                    Mdatain <= 32'h00000002; // 010
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load2b: begin 
-                    #10 MDR_out <= 1; R3_enable <= 1;
-                    #10 MDR_out <= 0; R3_enable <= 0; // initialize R3 with the value 14
+                    #10 MDR_out <= 1; R5_enable <= 1;
+                    #10 MDR_out <= 0; R5_enable <= 0; // initialize R5 with the value 1
                 end
                 Reg_load3a: begin
-                    Mdatain <= 32'h00000018;
+                    Mdatain <= 32'h00000003; // 0011
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load3b: begin 
                     #10 MDR_out <= 1; R1_enable <= 1;
-                    #10 MDR_out <= 0; R1_enable <= 0; // initialize R1 with the value 18
-                end
+                    #10 MDR_out <= 0; R1_enable <= 0; // initialize R1 with the value 3
+                end 
                 T0: begin
-                    #10 PC_out <= 1; MAR_enable <= 1; Z_enable <= 1; IncPC <= 1; 
-					#10 PC_out <= 0; MAR_enable <= 0; Z_enable <= 0;
+                    #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  //DOUBLE CHECK PC reg
+					#10 PC_out <= 0; MAR_enable <= 0;
                 end
                 T1: begin
-					Mdatain <= 32'h40090000; // opcode for shra R0, R1, R2
-					#10 ZLow_out <= 1; PC_enable <= 1; Read <= 1; MDR_enable <= 1;
-					#10 ZLow_out <= 0; PC_enable <= 0; Read <= 0; MDR_enable <= 0; IncPC <= 0; 
+                    PC_out <= 0;
+                    MDR_enable <= 1;
+                    Read <= 1;
+                    Mdatain <= 32'h40090000; // opcode for shr R1, R3, R5
                 end
                 T2: begin
                     #10 MDR_out <= 1; IR_enable= 1; 
-					#10 MDR_out <= 0; IR_enable= 0;
+                    #10 MDR_out <= 0;
                 end
                 T3: begin
-					#10 R2_out <= 1; Y_enable= 1; 
-					// #10 Y_enable = 0; R2_out <= 0; //Y_enable= 0; 
+					#10 R3_out <= 1; Y_enable <= 1;
+                    #10 R3_out <= 0; Y_enable <= 0;
                 end
                 T4: begin
-					#10 Y_enable = 0; R2_out <= 0; //Y_enable= 0;  //This is temp fix
-
-                    #10 R3_out <= 1;  Z_enable <= 1; opcode <= 5'b01000; //SHRA R3 and Y(R2) then store in Z_enable (10110)
+                    #10 R5_out <= 1; 
+                    opcode <= 5'b01000; // shr R3 by Y(R5) then store in Z
+                    Z_enable <= 1; 
+                    #10 R5_out <= 0;
                 end
                 T5: begin
-					//  #10 R3_out <= 0;  Z_enable <= 0;  ZLow_out <= 1; R1_enable <= 1;
-					// #10 ZLow_out <= 0; R1_enable <= 0;
+				    Z_enable <= 0;
+                    ZLow_out <= 1; 
+                    #10 R1_enable <= 1;
+					#10 ZLow_out <= 0; 
+                    R1_enable <= 0;
                 end
             endcase
         end

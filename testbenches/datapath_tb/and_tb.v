@@ -115,7 +115,8 @@ module and_tb;
                     R12_out <= 0; R13_out <= 0; R14_out <= 0; R15_out <= 0; 
                 end
                 Reg_load1a: begin 
-                    Mdatain <= 32'h00000012; //In binary 10010
+                    // Mdatain <= 32'h00000012; //In binary 10010
+                    Mdatain <= 32'hFFFFFFFF; 
                     Read = 0; MDR_enable = 0;
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
@@ -125,7 +126,8 @@ module and_tb;
                     #10 MDR_out <= 0; R2_enable <= 0; // initialize R2 with the value 12
                 end
                 Reg_load2a: begin
-                    Mdatain <= 32'h00000014; //10100
+                    // Mdatain <= 32'h00000014; //10100
+                    Mdatain <= 32'h11111111; //
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end

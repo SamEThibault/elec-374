@@ -115,7 +115,7 @@ module shl_tb;
                     R12_out <= 0; R13_out <= 0; R14_out <= 0; R15_out <= 0; 
                 end
                 Reg_load1a: begin 
-                    Mdatain <= 32'h00000001; // 0001
+                    Mdatain <= 32'h00000004; // 0100
                     Read = 0; MDR_enable = 0;
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
