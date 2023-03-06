@@ -13,8 +13,8 @@ module alu(
 	//Possible ALU Operations
 	or_32_bit or_op(or_out, Ra, Rb);
 	and_32_bit and_op(and_out, Ra, Rb);
-	negate_32_bit negate_op(neg_out, Ra);
-	not_32_bit not_op(not_out, Ra);
+	negate_32_bit negate_op(neg_out, Rb);
+	not_32_bit not_op(not_out, Rb);
 	add_32_bit add_op(add_cout, add_sum, Ra, Rb, 32'h00000000);
 	sub_32_bit sub_op(sub_cout, sub_sum, Ra, Rb);
 	ror_32_bit ror_op(ror_out, Ra, Rb);

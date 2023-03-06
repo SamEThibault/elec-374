@@ -121,33 +121,32 @@ module not_tb;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load1b: begin 
-                    #10 MDR_out <= 1; R2_enable <= 1;
-                    #10 MDR_out <= 0; R2_enable <= 0; // initialize R2 with the value 12
+                    #10 MDR_out <= 1; R1_enable <= 1;
+                    #10 MDR_out <= 0; R1_enable <= 0; // initialize R2 with the value 12
                 end
                 Reg_load2a: begin
-                    Mdatain <= 32'h00000014; //10100
+                    Mdatain <= 32'h00000000; 
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load2b: begin 
-                    #10 MDR_out <= 1; R3_enable <= 1;
-                    #10 MDR_out <= 0; R3_enable <= 0; // initialize R3 with the value 14
+                    #10 MDR_out <= 1; R0_enable <= 1;
+                    #10 MDR_out <= 0; R0_enable <= 0; // initialize R3 with the value 14
                 end
                 Reg_load3a: begin
-                    Mdatain <= 32'h00000018; //11000
+                    Mdatain <= 32'h00000000; //11000
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load3b: begin 
-                    #10 MDR_out <= 1; R1_enable <= 1;
-                    #10 MDR_out <= 0; R1_enable <= 0; // initialize R1 with the value 18
+                    #10 MDR_out <= 1; R3_enable <= 1;
+                    #10 MDR_out <= 0; R3_enable <= 0; // initialize R1 with the value 18
                 end 
                 T0: begin
                     #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  
 					#10 PC_out <= 0; MAR_enable <= 0; IncPC <= 0; PC_enable <= 0;
                 end
                 T1: begin
-                    // PC_out <= 0;
                     MDR_enable <= 1;
                     Read <= 1;
                     Mdatain <= 32'h90080000; // opcode for not R1, R2, R3

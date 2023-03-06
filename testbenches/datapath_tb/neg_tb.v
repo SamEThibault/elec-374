@@ -115,23 +115,23 @@ module neg_tb;
                     R12_out <= 0; R13_out <= 0; R14_out <= 0; R15_out <= 0; 
                 end
                 Reg_load1a: begin 
-                    Mdatain <= 32'h00000012; //In binary 10010
+                    Mdatain <= 32'h00000014; //In binary 10010
                     Read = 0; MDR_enable = 0;
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load1b: begin 
-                    #10 MDR_out <= 1; R0_enable <= 1;
-                    #10 MDR_out <= 0; R0_enable <= 0; // initialize R2 with the value 12
+                    #10 MDR_out <= 1; R1_enable <= 1;
+                    #10 MDR_out <= 0; R1_enable <= 0; // initialize R2 with the value 12
                 end
                 Reg_load2a: begin
-                    Mdatain <= 32'h00000014; //10100
+                    Mdatain <= 32'h00000000; //10100
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load2b: begin 
-                    #10 MDR_out <= 1; R1_enable <= 1;
-                    #10 MDR_out <= 0; R1_enable <= 0; // initialize R3 with the value 14
+                    #10 MDR_out <= 1; R0_enable <= 1;
+                    #10 MDR_out <= 0; R0_enable <= 0; // initialize R3 with the value 14
                 end
                 Reg_load3a: begin
                     Mdatain <= 32'h00000018; //11000
@@ -139,8 +139,8 @@ module neg_tb;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load3b: begin 
-                    #10 MDR_out <= 1; R1_enable <= 1;
-                    #10 MDR_out <= 0; R1_enable <= 0; // initialize R1 with the value 18
+                    #10 MDR_out <= 1; R3_enable <= 1;
+                    #10 MDR_out <= 0; R3_enable <= 0; // initialize R1 with the value 18
                 end 
                 T0: begin
                     #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  
