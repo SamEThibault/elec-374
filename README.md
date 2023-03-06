@@ -40,6 +40,8 @@ z - done
                     #10 R2_out <= 0; Y_enable <= 0;
                 end
 
+- Never perform two operations on the same register in the same state
+
 - Compilation of datapath TB only successful when adding module example(input a, input b);
 - Infinite loop of clock cycles: Z output is not visible when simulating
 - Need to modify state machine for 2-register operations
@@ -47,16 +49,16 @@ z - done
 
 Datapath Tests:
 
-- or : Complete
-- and : Complete (TEST)
-- add : Complete (TEST)
+- or : COMPLETE
+- and : COMPLETE
+- add : COMPLETE
 - not : In Progress (TEST)
-- sub : Complete (TEST)
-- mul : In Progress (TEST)
-- div : Complete (TEST)
-- shr : Complete (TEST)
+- sub : COMPLETE
+- mul : COMPLETE
+- div : COMPLETE
+- shr : COMPLETE
 - shra : Complete (TEST)
-- shl : Complete (TEST)
+- shl : COMPLETE
 - ror : Complete (TEST)
 - rol : Complete (TEST)
 - neg : In Progress (TEST)

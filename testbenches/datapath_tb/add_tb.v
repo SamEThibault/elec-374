@@ -1,17 +1,17 @@
 `timescale 1ns/10ps
 module add_tb;
-    reg PCout, Zlowout, Zhighout, HIout, LOout, C_out, Rout, InPortout; 
-    reg R0out, R1out, R2out, R3out, R4out, R5out;
-    reg R6out, R7out, R8out, R9out, R10out, R11out;
-    reg R12out, R13out, R14out, R15out;
-    reg [31:0] MDRout;
-    reg MARin, Zin, PCin, MDRin, IRin, Yin;
+    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, R_out, In_port_out; 
+    reg R0_out, R1_out, R2_out, R3_out, R4_out, R5_out;
+    reg R6_out, R7_out, R8_out, R9_out, R10_out, R11_out;
+    reg R12_out, R13_out, R14_out, R15_out;
+    reg [31:0] MDR_out;
+    reg MAR_enable, Z_enable, PC_enable, MDR_enable, IR_enable, Y_enable;
     reg IncPC, Read;
-    reg R0in, R1in, R2in, R3in, R4in, R5in;
-    reg R6in, R7in, R8in, R9in, R10in, R11in;
-    reg R12in, R13in, R14in, R15in;
+    reg R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable;
+    reg R6_enable, R7_enable, R8_enable, R9_enable, R10_enable, R11_enable;
+    reg R12_enable, R13_enable, R14_enable, R15_enable;
     reg [4:0] opcode;
-    reg Clock;
+    reg Clock, clr;
     reg [31:0] Mdatain;
 
     parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
@@ -20,58 +20,58 @@ module add_tb;
     reg [3:0] Present_state = Default;
 
     Datapath DUT(
-	 .PCout(PCout), 
-     .Zhighout(Zhighout),
-	 .Zlowout(Zlowout), 
-	 .MDRout(MDRout),
-     .HIout(HIout),
-     .LOout(LOout),
+	 .PC_out(PC_out), 
+     .ZHigh_out(ZHigh_out),
+	 .ZLow_out(ZLow_out), 
+	 .MDR_out(MDR_out),
+     .HI_out(HI_out),
+     .LO_out(LO_out),
      .C_out(C_out),
-     .InPortout(InPortout),
-     .Rout(Rout),
-     .R0out(R0out),
-     .R1out(R1out),
-	 .R2out(R2out),
-     .R3out(R3out),
-     .R4out(R4out),
-     .R5out(R5out),
-     .R6out(R6out), 
-     .R7out(R7out),
-     .R8out(R8out),
-     .R9out(R9out),
-     .R10out(R10out),
-     .R11out(R11out),
-	 .R12out(R12out), 
-     .R13out(R13out), 
-     .R14out(R14out), 
-     .R15out(R15out), 
-     .MARin(MARin), 
-	 .Zin(Zin), 
-	 .PCin(PCin), 
-	 .MDRin(MDRin), 
-	 .IRin(IRin), 
-	 .Yin(Yin), 
+     .In_port_out(In_port_out),
+     .R0_out(R0_out),
+     .R1_out(R1_out),
+	 .R2_out(R2_out),
+     .R3_out(R3_out),
+     .R4_out(R4_out),
+     .R5_out(R5_out),
+     .R6_out(R6_out), 
+     .R7_out(R7_out),
+     .R8_out(R8_out),
+     .R9_out(R9_out),
+     .R10_out(R10_out),
+     .R11_out(R11_out),
+	.R12_out(R12_out), 
+     .R13_out(R13_out), 
+     .R14_out(R14_out), 
+     .R15_out(R15_out), 
+	  .Mdatain(Mdatain),
+	  .MDR_enable(MDR_enable), 
+     .MAR_enable(MAR_enable), 
+	  .Z_enable(Z_enable), 
+	 .Y_enable(Y_enable), 
+	 .IR_enable(IR_enable), 
+	 .PC_enable(PC_enable), 
+     .Read(Read), 
 	 .IncPC(IncPC), 
-    .Read(Read), 
-	 .opcode(opcode), 
-     .R0in(R0in), 
-	 .R1in(R1in), 
-	 .R2in(R2in), 
-	 .R3in(R3in), 
-     .R4in(R4in), 
-	 .R5in(R5in), 
-	 .R6in(R6in), 
-     .R7in(R7in), 
-	 .R8in(R8in), 
-	 .R9in(R9in), 
-     .R10in(R10in), 
-	 .R11in(R11in), 
-	 .R12in(R12in), 
-     .R13in(R13in), 
-	 .R14in(R14in), 
-	 .R15in(R15in), 
 	 .clk(Clock), 
-	 .Mdatain(Mdatain)
+     .clr(clr),
+	 .opcode(opcode), 
+     .R0_enable(R0_enable), 
+	 .R1_enable(R1_enable), 
+	 .R2_enable(R2_enable), 
+	 .R3_enable(R3_enable), 
+     .R4_enable(R4_enable), 
+	 .R5_enable(R5_enable), 
+	 .R6_enable(R6_enable), 
+     .R7_enable(R7_enable), 
+	 .R8_enable(R8_enable), 
+	 .R9_enable(R9_enable), 
+     .R10_enable(R10_enable), 
+	 .R11_enable(R11_enable), 
+	 .R12_enable(R12_enable), 
+     .R13_enable(R13_enable), 
+	 .R14_enable(R14_enable), 
+	 .R15_enable(R15_enable) 
     );
 
     initial
@@ -102,87 +102,77 @@ module add_tb;
         begin
             case (Present_state) // assert the required signals in each clock cycle
                 Default: begin
-                    PCout <= 0; Zlowout <= 0; MDRout <= 0; // initialize the signals
-                    MARin <= 0; Zin <= 0;
-                    PCin <=0; MDRin <= 0; IRin <= 0; Yin <= 0;
+                    PC_out <= 0; ZLow_out <= 0; MDR_out <= 0; // initialize the signals
+                    clr<=0;
+                    MAR_enable <= 0; Z_enable <= 0;
+                    PC_enable <=0; MDR_enable <= 0; IR_enable= 0; Y_enable= 0;
                     IncPC <= 0; Read <= 0; opcode <= 0;
-                    R0in <= 0; R4in <= 0; R5in <= 0; Mdatain <= 32'h00000000;
-                    Zhighout <= 0; HIout <= 0; LOout <= 0; C_out <= 0; InPortout <= 0;
-                    
+                    R1_enable <= 0; R2_enable <= 0; R3_enable <= 0; Mdatain <= 32'h00000000;
+                ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; In_port_out <= 0;
                     //Out Registers
-                    R0out <= 0; R1out <= 0; R2out <= 0; R3out <= 0; R4out <= 0; R5out <= 0;
-                    R6out <= 0; R7out <= 0; R8out <= 0; R9out <= 0; R10out <= 0; R11out <= 0;
-                    R12out <= 0; R13out <= 0; R14out <= 0; R15out <= 0; 
+                    R0_out <= 0; R1_out <= 0; R2_out <= 0; R3_out <= 0; R4_out <= 0; R5_out <= 0;
+                    R6_out <= 0; R7_out <= 0; R8_out <= 0; R9_out <= 0; R10_out <= 0; R11_out <= 0;
+                    R12_out <= 0; R13_out <= 0; R14_out <= 0; R15_out <= 0; 
                 end
-                Reg_load1a: begin
-                    Mdatain <= 32'h00000012; //
-                    Read = 0; MDRin = 0; // the first zero is there for completeness
-                    #10 Read <= 1; MDRin <= 1;
-                    #10 Read <= 0; MDRin <= 0;
+                Reg_load1a: begin 
+                    Mdatain <= 32'h00000003; // 0011
+                    Read = 0; MDR_enable = 0;
+                    #10 Read <= 1; MDR_enable <= 1;
+                    #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load1b: begin 
-                    #10 MDRout <= 1; R4in <= 1;
-                    #10 MDRout <= 0; R4in <= 0; // initialize R2 with the value $12
+                    #10 MDR_out <= 1; R4_enable <= 1;
+                    #10 MDR_out <= 0; R4_enable <= 0; // initialize R4 with the value 3
                 end
                 Reg_load2a: begin
-                    Mdatain <= 32'h00000014; //These are the values
-                    #10 Read <= 1; MDRin <= 1;
-                    #10 Read <= 0; MDRin <= 0;
+                    Mdatain <= 32'h00000002; // 0010
+                    #10 Read <= 1; MDR_enable <= 1;
+                    #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load2b: begin 
-                    #10 MDRout <= 1; R5in <= 1;
-                    #10 MDRout <= 0; R5in <= 0; // initialize R3 with the value $14
+                    #10 MDR_out <= 1; R5_enable <= 1;
+                    #10 MDR_out <= 0; R5_enable <= 0; // initialize R5 with the value 2
                 end
                 Reg_load3a: begin
-                    Mdatain <= 32'h00000018;
-                    #10 Read <= 1; MDRin <= 1;
-                    #10 Read <= 0; MDRin <= 0;
+                    Mdatain <= 32'h00000003; // 0011
+                    #10 Read <= 1; MDR_enable <= 1;
+                    #10 Read <= 0; MDR_enable <= 0;
                 end
-                    Reg_load3b: begin 
-                        #10 MDRout <= 1; R0in <= 1;
-                        #10 MDRout <= 0; R0in <= 0; // initialize R1 with the value $18
-                end
-                T0: begin // see if you need to de-assert these signals
-                          #10 PCout <= 1; MARin <= 1; Zin <= 1; IncPC <= 1;
-						  #10 PCout <= 0; MARin <= 0; Zin <= 0;
+                Reg_load3b: begin 
+                    #10 MDR_out <= 1; R0_enable <= 1;
+                    #10 MDR_out <= 0; R0_enable <= 0; // initialize R0 with the value 3
+                end 
+                T0: begin
+                    #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  //DOUBLE CHECK PC reg
+					#10 PC_out <= 0; MAR_enable <= 0;
                 end
                 T1: begin
-						Mdatain <= 32'h18228000; // opcode for add R0, R4, R5
-						#10 Zlowout <= 1; PCin <= 1; Read <= 1; MDRin <= 1;
-						#10 Zlowout <= 0; PCin <= 0; Read <= 0; MDRin <= 0; IncPC <= 0;
+                    PC_out <= 0;
+                    MDR_enable <= 1;
+                    Read <= 1;
+                    Mdatain <= 32'h18228000; // opcode for add R0, R4, R5
                 end
                 T2: begin
-                         #10 MDRout <= 1; IRin <= 1;
-						 #10 MDRout <= 0; IRin <= 0;
+                    #10 MDR_out <= 1; IR_enable= 1; 
+                    #10 MDR_out <= 0;
                 end
                 T3: begin
-						  #10 R4out <= 1; Yin <= 1;
-						  #10 R4out <= 0; Yin <= 0;
+					#10 R4_out <= 1; Y_enable <= 1;
+                    #10 R4_out <= 0; Y_enable <= 0;
                 end
                 T4: begin
-                          #10 R5out <= 1; Zin <= 1; opcode <= 5'b00011;  
-						  #10 R5out <= 0; Zin <= 0;
+                    #10 R5_out <= 1; 
+                    opcode <= 5'b00011; // add R5 and Y(R4) then store in Z_enable
+                    Z_enable <= 1; 
+                    #10 R5_out <= 0;
                 end
                 T5: begin
-                          #10 Zlowout <= 1; R0in <= 1; //Store first 32 bits of Z in R0
-						  #10 Zlowout <= 0; R0in <= 0;
+				    Z_enable <= 0;
+                    ZLow_out <= 1; 
+                    #10 R0_enable <= 1;
+					#10 ZLow_out <= 0; 
+                    R0_enable <= 0;
                 end
             endcase
         end
 endmodule
-//    reg[31:0] Ra;
-//    reg[31:0] Rb;
-//    wire[31:0] out;
-// 	wire [31:0]c_out;
-// 	reg c_in;
-	
-//    add_32bit add_instance(Ra, Rb, c_in, out, c_out);
-
-//     initial begin
-//         Ra = 4;
-// 		  Rb = 2;
-// 		  c_in = 0;
-		  
-        
-//     end
-// endmodule
