@@ -73,12 +73,12 @@ Tests
 - mul : Good
 - div : Good
 - shr : Good
-- not : Good
 - shra : Good
 - shl : Good
 - ror : Good
 - rol : Good
 - neg : Good
+- not : Good
 
 Wave Viewer Requirements:
 

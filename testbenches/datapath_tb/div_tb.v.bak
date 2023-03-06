@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module ror_tb;
+module div_tb;
     reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, R_out, In_port_out; 
     reg R0_out, R1_out, R2_out, R3_out, R4_out, R5_out;
     reg R6_out, R7_out, R8_out, R9_out, R10_out, R11_out;
@@ -89,9 +89,7 @@ module ror_tb;
                 Reg_load1a : Present_state = Reg_load1b;
                 Reg_load1b : Present_state = Reg_load2a;
                 Reg_load2a : Present_state = Reg_load2b;
-                Reg_load2b : Present_state = Reg_load3a;
-                Reg_load3a : Present_state = Reg_load3b;
-                Reg_load3b : Present_state = T0;
+                Reg_load2b : Present_state = T0;
                 T0 : Present_state = T1;
                 T1 : Present_state = T2;
                 T2 : Present_state = T3;
@@ -118,61 +116,60 @@ module ror_tb;
                     R12_out <= 0; R13_out <= 0; R14_out <= 0; R15_out <= 0; 
                 end
                 Reg_load1a: begin 
-                    Mdatain <= 32'h00000001; //In binary 10010
+                    Mdatain <= 32'h800000100; //In binary 0010
                     Read = 0; MDR_enable = 0;
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load1b: begin 
                     #10 MDR_out <= 1; R6_enable <= 1;
-                    #10 MDR_out <= 0; R6_enable <= 0; // initialize R2 with the value 12
+                    #10 MDR_out <= 0; R6_enable <= 0; // initialize R6 with the value 2
                 end
                 Reg_load2a: begin
-                    Mdatain <= 32'h00000005; //10100
+                    Mdatain <= 32'h00000002; // 0010
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
                 Reg_load2b: begin 
-                    #10 MDR_out <= 1; R4_enable <= 1;
-                    #10 MDR_out <= 0; R4_enable <= 0; // initialize R3 with the value 14
+                    #10 MDR_out <= 1; R7_enable <= 1;
+                    #10 MDR_out <= 0; R7_enable <= 0; // initialize R7 with the value 2
                 end
-                Reg_load3a: begin
-                    Mdatain <= 32'h00000018; //11000
-                    #10 Read <= 1; MDR_enable <= 1;
-                    #10 Read <= 0; MDR_enable <= 0;
-                end
-                Reg_load3b: begin 
-                    #10 MDR_out <= 1;
-                    #10 MDR_out <= 0; // initialize R1 with the value 18
-                end 
                 T0: begin
-                    #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  //MOVE PC down to T1 in the future
-					#10 PC_out <= 0; MAR_enable <= 0; IncPC <= 0; PC_enable <= 0;
+                    #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;
+					#10 PC_out <= 0; MAR_enable <= 0;
                 end
                 T1: begin
+                    PC_out <= 0;
                     MDR_enable <= 1;
                     Read <= 1;
-                    Mdatain <= 32'h50918000; //CHANGE TO MUL opcode for: mul R6, R7// opcode for or R1, R2, R3
+                    Mdatain <= 32'h83380000; // opcode for: div R6, R7
                 end
                 T2: begin
                     #10 MDR_out <= 1; IR_enable= 1; 
-                    #10 MDR_out <= 0; IR_enable= 0;
+                    #10 MDR_out <= 0;
                 end
                 T3: begin
 					#10 R6_out <= 1; Y_enable <= 1;
                     #10 R6_out <= 0; Y_enable <= 0;
                 end
                 T4: begin
-                    #10 R4_out <= 1; 
-                    opcode <= 5'b01010; // ROR opcode
+                    #10 R7_out <= 1; 
+                    opcode <= 5'b10000; // DIV opcode
                     Z_enable <= 1; 
-                    #10 R4_out <= 0;
+                    #10 R7_out <= 0;
                 end
                 T5: begin
-				    Z_enable <= 0; 
+				    Z_enable <= 0;
                     ZLow_out <= 1; 
-                    #10 LO_enable <= 1; R6_enable <= 1;
-					#10 ZLow_out <= 0; LO_enable <= 0; R6_enable <=0;
+                    #10 LO_enable <= 1;
+					#10 ZLow_out <= 0; 
+                    LO_enable <= 0;
+                end
+                T6: begin
+                    ZHigh_out <= 1;
+                    #10 HI_enable <= 1;
+                    #10 ZHigh_out <= 0;
+                    HI_enable <= 0;
                 end
             endcase
         end
