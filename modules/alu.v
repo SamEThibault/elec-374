@@ -17,12 +17,12 @@ module alu(
 	not_32_bit not_op(not_out, Ra);
 	add_32_bit add_op(add_cout, add_sum, Ra, Rb, 32'h00000000);
 	sub_32_bit sub_op(sub_cout, sub_sum, Ra, Rb);
-	ror_32_bit ror_op(ror_out, Rb, Ra);
-	rol_32_bit rol_op(rol_out, Rb, Ra);
-	shl_32_bit shl_op(shl_out, Rb, Ra);
-	shr_32_bit shr_op(shr_out, Rb, Ra);
-	shra_32_bit shra_op(shra_out, Rb, Ra);
-	div_32_bit div_op(div_out, Rb, Ra);
+	ror_32_bit ror_op(ror_out, Ra, Rb);
+	rol_32_bit rol_op(rol_out, Ra, Rb);
+	shl_32_bit shl_op(shl_out, Ra, Rb);
+	shr_32_bit shr_op(shr_out, Ra, Rb);
+	shra_32_bit shra_op(shra_out, Ra, Rb);
+	div_32_bit div_op(div_out, Ra, Rb);
 	mul mul_op(mul_out_hi, mul_out_lo, Ra, Rb);
 	
 	always @(*) // do the required job in each state

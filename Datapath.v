@@ -139,5 +139,5 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
                        enc_out
                        );
 
-    alu alu_instance(C_data_out, MuxOut, Y_data_out, opcode);
+    alu alu_instance(C_data_out, Y_data_out, MuxOut, opcode);
 endmodule
