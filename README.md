@@ -34,11 +34,12 @@ pc - done
 z - done
 
 2023/03/04 -- Sam Notes:
+
 - Always remember to enable your registers in the same line as when you send signal to encoder:
-                T3: begin
-					#10 R2_out <= 1; Y_enable <= 1;
-                    #10 R2_out <= 0; Y_enable <= 0;
-                end
+  T3: begin
+  #10 R2_out <= 1; Y_enable <= 1;
+  #10 R2_out <= 0; Y_enable <= 0;
+  end
 
 - Never perform two operations on the same register in the same state
 
@@ -63,12 +64,11 @@ Datapath Tests:
 - rol : Complete (TEST) -
 - neg : In Progress (TEST) -
 
-
 Tests
 
 - and : Good
 - or : Good
-- sub :  Good
+- sub : Good
 - add : Good
 - mul : Good
 - div : Good
@@ -76,7 +76,17 @@ Tests
 - not : Good
 - shra : Good
 - shl : Good
-- ror :  Good
-- rol :  Good
+- ror : Good
+- rol : Good
 - neg : Good
 
+Wave Viewer Requirements:
+
+- Z_low
+- Z_Hi (if used)
+- Relevant Registers (q outputs)
+- MuxOut
+
+Optional?
+- MDR
+- IR
