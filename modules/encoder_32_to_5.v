@@ -34,7 +34,7 @@
 //             32'h20000000 : enc_output <= 5'b11101;
 //             32'h40000000 : enc_output <= 5'b11110;
 //             32'h80000000 : enc_output <= 5'b11111;
-//             default: enc_output <= 5'b00000;
+//             default: enc_output <= 5'b11111;
 //         endcase
 //     end
 // endmodule
