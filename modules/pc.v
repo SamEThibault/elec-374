@@ -1,4 +1,4 @@
-module pc ( output reg[31:0] PC_data_out, input clk, input incPC, input enable);
+module pc (output reg[31:0] PC_data_out, input clk, input incPC, input enable, input MuxOut);
 // add muxout as a final parameter for jump instructions
 initial
 begin
@@ -8,9 +8,8 @@ always@(posedge clk)
     begin
         if(incPC == 1 && enable == 1)
             PC_data_out <= PC_data_out + 1;
-            // for branch instructions
-        // else if(enable == 1)
-        //     PC_data_out <= inputPC;
+        else if(enable == 1)
+            PC_data_out <= MuxOut;
     end
 
 endmodule

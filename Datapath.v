@@ -47,8 +47,6 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
     wire[4:0] enc_out;
     wire [63:0] C_data_out;
 
-
-    
     // Instantiating the 16 registers
     reg_32_bit R0(R0_data_out, MuxOut, clk, clr, R0_enable);
     reg_32_bit R1(R1_data_out, MuxOut, clk, clr, R1_enable);
@@ -73,9 +71,9 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
     reg_32_bit RY(Y_data_out, MuxOut, clk, clr, Y_enable);
     reg_32_bit IR(IR_data_out, MuxOut, clk, clr, IR_enable);
     reg_32_bit MAR(MAR_data_out, MuxOut, clk, clr, MAR_enable);
-    pc PC(PC_data_out, clk, IncPC, PC_enable);
+//     pc PC(PC_data_out, clk, IncPC, PC_enable);
     // for jump instructions:
-    //     pc PC(PC_data_out, clk, IncPC, PC_enable, MuxOut);
+        pc PC(PC_data_out, clk, IncPC, PC_enable, MuxOut);
     z Z_reg(ZHigh_data_out, ZLow_data_out, C_data_out, clk, clr, Z_enable);
     mdr MDR(MDR_data_out, MuxOut, Mdatain, Read, clk, clr, MDR_enable);
 

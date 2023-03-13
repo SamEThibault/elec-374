@@ -82,11 +82,17 @@ Tests
 
 Wave Viewer Requirements:
 
-- Z_low
 - Z_Hi (if used)
+- Z_low
 - Relevant Registers (q outputs)
 - MuxOut
 
 Optional?
 - MDR
 - IR
+
+Kevin:
+Not 
+Neg
+Rol
+Ror
