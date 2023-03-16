@@ -142,4 +142,19 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
                        );
 
     alu alu_instance(C_data_out, Y_data_out, MuxOut, opcode);
+
+    // CON FF cct
+    wire con_out;
+    wire con_in;  // will come from the Control Unit
+    con_ff CON_FF(con_out, IR_data_out[20:19], BusMuxOut, con_in);
+
+    // In/Out Ports cct
+    wire [31:0] in_port_out;
+    wire [31:0] in_port_in;         // "from input unit"
+    wire in_port_enable <= 1;       // no enable so just always set it to 1
+    reg_32_bit in_port(in_port_out, in_port_in, clk, clr, in_port_enable);
+
+    wire [31:0] out_port_out;       // "to output unit"
+    wire out_port_enable;           // "Out.Portin"
+    reg_32_bit out_port(out_port_out, BusMuxOut, clk, clr, out_port_enable);                
 endmodule

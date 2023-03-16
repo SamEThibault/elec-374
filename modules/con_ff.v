@@ -20,9 +20,7 @@ begin
         default: decoder_out <= 4'b0000;
     endcase
 
-    // from the figure, no idea why we would need to or the same thing 3 times
-    nor_out = ~(bus_in | bus_in | bus_in);
-
+    nor_out = ~|bus_in;
     equal_zero = decoder_out[0] & nor_out;
     not_equal_zero = decoder_out[1] & ~(nor_out);
     greater_equal_zero = decoder_out[2] & ~(bus_in[31]);
