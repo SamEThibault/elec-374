@@ -1,10 +1,10 @@
 module ram(
-    output reg [7:0] data_out
+    output reg [7:0] data_out,
     input [31:0] data_in,
     input [4:0] address,
     input wire clk,
     input write_enable,
-    input read_enable,
+    input read_enable
 );
 
 //Note the address will always be log_2(data_in_size). 

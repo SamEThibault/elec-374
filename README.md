@@ -99,8 +99,8 @@ Ror
 
 # Phase 2
 Kevin:
-- Ram
-- Select and Encode Block Diagram
+- Ram - Done (not tested)
+- Select and Encode Block Diagram ()
 - Sign extension of constant C
 - Revised Register R0
 
