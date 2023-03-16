@@ -8,7 +8,8 @@ input R0_out, R1_out, R2_out, R3_out, R4_out, R5_out, R6_out, R7_out, R8_out, R9
       R10_out, R11_out, R12_out, R13_out, R14_out, R15_out,
 input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enable, 
       R7_enable, R8_enable, R9_enable, R10_enable, R11_enable, R12_enable, R13_enable, 
-      R14_enable, R15_enable
+      R14_enable, R15_enable,
+input con_in, in_port_in, BAout, out_port_enable // "Out.Portin"
 );
 
     // General Purpose Registers
@@ -46,9 +47,12 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
     //MDR
     wire[4:0] enc_out;
     wire [63:0] C_data_out;
-
+    
+    // will be coming from the control unit
+    wire BAout;
+    
     // Instantiating the 16 registers
-    reg_32_bit R0(R0_data_out, MuxOut, clk, clr, R0_enable);
+    reg0_32_bit R0(R0_data_out, MuxOut, clk, clr, R0_enable, BAout);
     reg_32_bit R1(R1_data_out, MuxOut, clk, clr, R1_enable);
     reg_32_bit R2(R2_data_out, MuxOut, clk, clr, R2_enable);
     reg_32_bit R3(R3_data_out, MuxOut, clk, clr, R3_enable);
@@ -139,4 +143,17 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
                        );
 
     alu alu_instance(C_data_out, Y_data_out, MuxOut, opcode);
+
+    // CON FF cct
+    wire con_out;
+    wire con_in;  // will come from the Control Unit
+    con_ff CON_FF(con_out, IR_data_out[20:19], BusMuxOut, con_in);
+
+    // In/Out Ports cct
+    wire [31:0] in_port_out;
+    wire in_port_enable <= 1;       // no enable so just always set it to 1
+    reg_32_bit in_port(in_port_out, in_port_in, clk, clr, in_port_enable);
+
+    wire [31:0] out_port_out;       // "to output unit"
+    reg_32_bit out_port(out_port_out, BusMuxOut, clk, clr, out_port_enable);                
 endmodule
