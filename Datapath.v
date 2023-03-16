@@ -2,7 +2,7 @@ module Datapath(
 input PC_out, ZHigh_out, ZLow_out, HI_out, LO_out, In_port_out, C_out,
 input [31:0] MDR_out, Mdatain, 
 input MDR_enable, MAR_enable, Z_enable, Y_enable, IR_enable, PC_enable, CON_enable, LO_enable, 
-      HI_enable, Read, clr, clk, InPort, IncPC, 
+      HI_enable, Read, clr, clk, InPort, IncPC, RAM_write_enable, RAM_read_enable
 input [4:0] opcode,
 input R0_out, R1_out, R2_out, R3_out, R4_out, R5_out, R6_out, R7_out, R8_out, R9_out, 
       R10_out, R11_out, R12_out, R13_out, R14_out, R15_out,
@@ -71,12 +71,13 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
     reg_32_bit RY(Y_data_out, MuxOut, clk, clr, Y_enable);
     reg_32_bit IR(IR_data_out, MuxOut, clk, clr, IR_enable);
     reg_32_bit MAR(MAR_data_out, MuxOut, clk, clr, MAR_enable);
-//     pc PC(PC_data_out, clk, IncPC, PC_enable);
-    // for jump instructions:
-        pc PC(PC_data_out, clk, IncPC, PC_enable, MuxOut);
+
+    pc PC(PC_data_out, clk, IncPC, PC_enable, MuxOut);
     z Z_reg(ZHigh_data_out, ZLow_data_out, C_data_out, clk, clr, Z_enable);
     mdr MDR(MDR_data_out, MuxOut, Mdatain, Read, clk, clr, MDR_enable);
 
+    // RAM
+    ram RAM(.data_out(MuxOut), .data_in(MuxOut), .address(MAR_data_out), .clk(clk), .write_enable(RAM_write_enable), .read_enable(RAM_read_enable));
 
     // 32:5 Encoder
     encoder_32_to_5 BusEncoder(enc_out,
@@ -108,7 +109,7 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
                                 } 
                                 );
 
-    //Multiplexer Bus Mux 32:1
+    //Multiplexer Bus Mux 32:1 all of these inputs are the data that will be sent to "MuxOut" based on the "enc_out" selection
     mux_32_to_1 BusMux(MuxOut, 
                        R0_data_out, 
                        R1_data_out, 

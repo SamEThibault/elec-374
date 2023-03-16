@@ -96,3 +96,15 @@ Not
 Neg
 Rol
 Ror
+
+# Phase 2
+Kevin:
+- Ram
+- Select and Encode Block Diagram
+- Sign extension of constant C
+- Revised Register R0
+
+Sam: 
+- CON FF Logic
+- Computation of the conditional value CON in the CON FF LOGIC
+- Input and output port
