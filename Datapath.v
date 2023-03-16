@@ -46,9 +46,12 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
     //MDR
     wire[4:0] enc_out;
     wire [63:0] C_data_out;
-
+    
+    // will be coming from the control unit
+    wire BAout;
+    
     // Instantiating the 16 registers
-    reg_32_bit R0(R0_data_out, MuxOut, clk, clr, R0_enable);
+    reg0_32_bit R0(R0_data_out, MuxOut, clk, clr, R0_enable, BAout);
     reg_32_bit R1(R1_data_out, MuxOut, clk, clr, R1_enable);
     reg_32_bit R2(R2_data_out, MuxOut, clk, clr, R2_enable);
     reg_32_bit R3(R3_data_out, MuxOut, clk, clr, R3_enable);
