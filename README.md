@@ -100,8 +100,8 @@ Ror
 # Phase 2
 Kevin:
 - Ram - Done (not tested)
-- Select and Encode Block Diagram ()
-- Sign extension of constant C
+- Select and Encode Block Diagram - Done (tested in individual TB)
+- Sign extension of constant C - 
 - Revised Register R0
 
 Sam: 

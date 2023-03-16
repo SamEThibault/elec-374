@@ -48,9 +48,6 @@ input con_in, in_port_in, BAout, out_port_enable // "Out.Portin"
     wire[4:0] enc_out;
     wire [63:0] C_data_out;
     
-    // will be coming from the control unit
-    wire BAout;
-    
     // Instantiating the 16 registers
     reg0_32_bit R0(R0_data_out, MuxOut, clk, clr, R0_enable, BAout);
     reg_32_bit R1(R1_data_out, MuxOut, clk, clr, R1_enable);
@@ -146,12 +143,11 @@ input con_in, in_port_in, BAout, out_port_enable // "Out.Portin"
 
     // CON FF cct
     wire con_out;
-    wire con_in;  // will come from the Control Unit
     con_ff CON_FF(con_out, IR_data_out[20:19], BusMuxOut, con_in);
 
     // In/Out Ports cct
     wire [31:0] in_port_out;
-    wire in_port_enable <= 1;       // no enable so just always set it to 1
+    wire in_port_enable = 1;       // no enable so just always set it to 1. (Note we might not need to set the value here maybe just in test bench)
     reg_32_bit in_port(in_port_out, in_port_in, clk, clr, in_port_enable);
 
     wire [31:0] out_port_out;       // "to output unit"
