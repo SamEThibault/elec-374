@@ -14,23 +14,25 @@ reg [31:0] mem [511:0]; //[Size] name [quantity]
 initial begin
     // $readmemb("mem_init.mif", mem); //Read the memory contents of MIF file and initialize memory
     
-    mem[0] = 32'h0983FFFE;
-    mem[1] = 32'h0983FFFE;
-    mem[2] = 32'h00000000;
-    mem[3] = 32'h00000000;
-    mem[3] = 32'h00000000;
-    mem[4] = 32'h00000000;
-    mem[5] = 32'h00000000;
-    mem[6] = 32'h00000000;
-    mem[7] = 32'h00000000;
-    mem[8] = 32'h00000000;
-    mem[9] = 32'h00000000;
-    mem[10] = 32'h00000000;
-    mem[11] = 32'h00000000;
-    mem[12] = 32'h00000000;
-    mem[13] = 32'h00000000;
-    mem[14] = 32'h00000000;
-    mem[15] = 32'h00000000;
+    mem[0] = 32'h00800075; // ld R1, $75
+    mem[1] = 32'h00080045; // ld R0, $45(R1)
+    mem[2] = 32'h08800075; // ldi R1, $75
+    mem[3] = 32'h08080045; // ldi R0, $45(R1)
+    mem[3] = 32'h12000090; // st $90, R4
+    mem[4] = 32'h12200090; // st $90 (R4), R4
+    mem[5] = 32'h9B000019; // addi R2, R3, -3
+    mem[6] = 32'h9B000019; // ori R2, R3, $25
+    mem[7] = 32'h9B000019; //brzr R6, 25
+    mem[8] = 32'h9B080019; //brnz R6, 25
+    mem[9] = 32'h9B100019; //brpl R6, 25
+    mem[10] = 32'h9B180019; //brmi R6, 25
+    mem[11] = 32'hA1000000; //jr R2
+    mem[12] = 32'hA9000000; //jal R2
+    mem[13] = 32'hC2000000; //mfhi R4
+    mem[14] = 32'hCB000000; //mflo R6
+    mem[15] = 32'hB1800000; //in R3
+    mem[16] = 32'h00000000;
+    mem[17] = 32'h00000000;
 
 end
 

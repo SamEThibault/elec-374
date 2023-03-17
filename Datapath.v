@@ -75,6 +75,9 @@ input con_in, in_port_in, BA_out, out_port_enable // "Out.Portin"
     reg_32_bit MAR(MAR_data_out, MuxOut, clk, clr, MAR_enable);
 
     pc PC(PC_data_out, clk, IncPC, PC_enable, MuxOut);
+
+    defparam PC.INIT_VAL = 32'b0; //ld instruction
+
     z Z_reg(ZHigh_data_out, ZLow_data_out, C_data_out, clk, clr, Z_enable);
     mdr MDR(MDR_data_out, MuxOut, Mdatain, Read, clk, clr, MDR_enable);
 

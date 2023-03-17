@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
-module ram_tb; //Add name of test bench here.
-    reg RAM_data_out,
+module ld_tb; //Add name of test bench here.
+    reg RAM_data_out;
     reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, R_out, In_port_out; 
     reg R0_out, R1_out, R2_out, R3_out, R4_out, R5_out;
     reg R6_out, R7_out, R8_out, R9_out, R10_out, R11_out;
@@ -15,7 +15,7 @@ module ram_tb; //Add name of test bench here.
     reg Clock, clr;
     reg [31:0] Mdatain;
     reg con_in, in_port_in, BA_out, out_port_enable;
-    reg RAM_write_enable,
+    reg RAM_write_enable;
 
     parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
     Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, T0 = 4'b0111,
@@ -23,7 +23,7 @@ module ram_tb; //Add name of test bench here.
     reg [3:0] Present_state = Default;
 
     Datapath DUT(
-    .RAM_data_out(RAM_data_out)
+    .RAM_data_out(RAM_data_out),
 	 .PC_out(PC_out), 
      .ZHigh_out(ZHigh_out),
 	 .ZLow_out(ZLow_out), 
@@ -127,7 +127,7 @@ module ram_tb; //Add name of test bench here.
 
                     //Set all general purpose registers to w.e you need abitrary
                     //Set default values to gen reg and pc
-
+                    
                     Mdatain <= 32'h00000000; //INPUT
                     Read = 0; MDR_enable = 0;
                     #10 Read <= 1; MDR_enable <= 1;
@@ -168,31 +168,31 @@ module ram_tb; //Add name of test bench here.
                     Mdatain <= RAM_data_out; //Instruction to fetch from RAM.
                     MDR_enable <= 1;
                 end
-                // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
-                T2: begin
-                    #10 MDR_out <= 1; IR_enable= 1; 
-                    #10 MDR_out <= 0;
-                end
-                // ----------------------------------- Tbluet3 CYCLE OPERATION ----------------------------------- // 
-                T3: begin
-					#10 R2_out <= 1; Y_enable <= 1;
-                    #10 R2_out <= 0; Y_enable <= 0;
-                end
-                // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
-                T4: begin
-                    #10 R3_out <= 1; 
-                    opcode <= 5'b00110; //OPCODE for the instruction/operation
-                    Z_enable <= 1; 
-                    #10 R3_out <= 0;
-                end
-                // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
-                T5: begin
-				    Z_enable <= 0;
-                    ZLow_out <= 1; 
-                    #10 R1_enable <= 1;
-					#10 ZLow_out <= 0; 
-                    R1_enable <= 0;
-                end
+                // // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
+                // T2: begin
+                //     #10 MDR_out <= 1; IR_enable= 1; 
+                //     #10 MDR_out <= 0;
+                // end
+                // // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
+                // T3: begin
+				// 	#10 R2_out <= 1; Y_enable <= 1;
+                //     #10 R2_out <= 0; Y_enable <= 0;
+                // end
+                // // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
+                // T4: begin
+                //     #10 R3_out <= 1; 
+                //     opcode <= 5'b00110; //OPCODE for the instruction/operation
+                //     Z_enable <= 1; 
+                //     #10 R3_out <= 0;
+                // end
+                // // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
+                // T5: begin
+				//     Z_enable <= 0;
+                //     ZLow_out <= 1; 
+                //     #10 R1_enable <= 1;
+				// 	#10 ZLow_out <= 0; 
+                //     R1_enable <= 0;
+                // end
             endcase
         end
 endmodule
