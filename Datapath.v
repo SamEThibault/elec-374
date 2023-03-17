@@ -1,15 +1,16 @@
 module Datapath(
+output RAM_data_out,
 input PC_out, ZHigh_out, ZLow_out, HI_out, LO_out, In_port_out, C_out,
 input [31:0] MDR_out, Mdatain, 
 input MDR_enable, MAR_enable, Z_enable, Y_enable, IR_enable, PC_enable, CON_enable, LO_enable, 
-      HI_enable, Read, clr, clk, InPort, IncPC, RAM_write_enable, RAM_read_enable,
+      HI_enable, clr, clk, InPort, IncPC, RAM_write_enable, Read,
 input [4:0] opcode,
 input R0_out, R1_out, R2_out, R3_out, R4_out, R5_out, R6_out, R7_out, R8_out, R9_out, 
       R10_out, R11_out, R12_out, R13_out, R14_out, R15_out,
 input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enable, 
       R7_enable, R8_enable, R9_enable, R10_enable, R11_enable, R12_enable, R13_enable, 
       R14_enable, R15_enable,
-input con_in, in_port_in, BAout, out_port_enable // "Out.Portin"
+input con_in, in_port_in, BA_out, out_port_enable // "Out.Portin"
 );
 
     // General Purpose Registers
@@ -49,7 +50,7 @@ input con_in, in_port_in, BAout, out_port_enable // "Out.Portin"
     wire [63:0] C_data_out;
     
     // Instantiating the 16 registers
-    reg0_32_bit R0(R0_data_out, MuxOut, clk, clr, R0_enable, BAout);
+    reg0_32_bit R0(R0_data_out, MuxOut, clk, clr, R0_enable, BA_out);
     reg_32_bit R1(R1_data_out, MuxOut, clk, clr, R1_enable);
     reg_32_bit R2(R2_data_out, MuxOut, clk, clr, R2_enable);
     reg_32_bit R3(R3_data_out, MuxOut, clk, clr, R3_enable);
@@ -78,7 +79,7 @@ input con_in, in_port_in, BAout, out_port_enable // "Out.Portin"
     mdr MDR(MDR_data_out, MuxOut, Mdatain, Read, clk, clr, MDR_enable);
 
     // RAM
-    ram RAM(.data_out(MuxOut), .data_in(MuxOut), .address(MAR_data_out), .clk(clk), .write_enable(RAM_write_enable), .read_enable(RAM_read_enable));
+    ram RAM(.RAM_data_out(Mdatain), .data_in(MDR_data_out), .address(MAR_data_out[8:0]), .clk(clk), .write_enable(RAM_write_enable), .read_enable(Read));
 
     // 32:5 Encoder
     encoder_32_to_5 BusEncoder(enc_out,

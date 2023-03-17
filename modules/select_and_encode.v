@@ -86,18 +86,8 @@ end
     //For C_sign_extended<31..0>
     always@(IR)
     begin
-        if(IR[18:18] == 1)
-        begin
-            // IR[18:0] = 19'b1111 11111 11111 11111
-            // IR_out = {IR[31:19], 19'b1111111111111111111};
-            C_sign_extended_out = 32'hFFFFFFFF;
-        end
-        else 
-        begin
-            // IR[18:0] = 19'b0000 00000 00000 0000;
-            // IR_out = {IR[31:19], 19'b000000000000000000};
 
-            C_sign_extended_out = 32'h00000000;
-        end
+        C_sign_extended_out = $signed(IR[18:0]);
+
     end
 endmodule

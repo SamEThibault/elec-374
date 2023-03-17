@@ -108,3 +108,13 @@ Sam:
 - CON FF Logic
 - Computation of the conditional value CON in the CON FF LOGIC
 - Input and output port
+
+
+
+-----------------------
+
+Phase 2 To Do:
+- Fill out the rest of the instruction codes in ram
+- Set up template TB for instruction tests
+- Simulate and take screenshots
+- Assemble report
