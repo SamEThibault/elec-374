@@ -8,19 +8,19 @@ module reg0_32_bit(
     input wire BAout
     );
 
-wire [31:0] BAout_extended;
+// wire [31:0] BAout_extended;
 
 always @(posedge clk or posedge clr)
 begin
-    if (BAout == 1)
-        BAout_extended = 32'b0;
-    else
-        BAout_extended = 32'b0;
+    // if (BAout == 1)
+    //     BAout_extended = 32'b0;
+    // else
+    //     BAout_extended = 32'b0;
     
     if (clr)
-        q <= 32'b0 & ~(BAout_extended);
+        q <= 32'b0 & ~(BAout ?32'hFFFFFFFF : 32'h00000000);
     else if (enable)
-        q <= BusMuxOut & ~(BAout_extended);
+        q <= BusMuxOut & ~(BAout ?32'hFFFFFFFF : 32'h00000000);
 end
 
 endmodule

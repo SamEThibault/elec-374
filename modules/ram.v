@@ -1,4 +1,4 @@
-module ram(
+module ram#(parameter init_RAM_data_out = 0)(
     output reg [31:0] RAM_data_out,
     input [31:0] RAM_data_in,
     input [8:0] address,
@@ -34,18 +34,20 @@ initial begin
     mem[16] = 32'h00000000;
     mem[17] = 32'h00000000;
 
+    RAM_data_out = init_RAM_data_out;
+
 end
 
 
 always @(posedge clk) begin
 
     // Write the RAM_data_in to memory only when the write enable signal is on
-    if (write_enable) begin
+    if (write_enable == 1) begin
         mem[address] <= RAM_data_in;
     end
 
     //Write data out if read signal is enabled
-    if(read_enable) begin
+    if(read_enable == 1) begin
         RAM_data_out <= mem[address]; //Read data from the memory address on every clock cycle
     end
 end

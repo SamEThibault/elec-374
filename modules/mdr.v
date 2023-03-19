@@ -1,5 +1,11 @@
-module mdr(output [31:0] MDRdataout, input [31:0] BusMuxOut, Mdatain, input read_signal, clk, clr, enable);
+module mdr#(parameter init_input0=0, init_input1 = 0)(output [31:0] MDRdataout, input [31:0] BusMuxOut, Mdatain, input read_signal, clk, clr, enable);
+    // initial 
+    // begin
+    // BusMuxOut = init_input0;
+    // Mdatain = init_input1;
+    // end
+    
     wire[31:0] MDMux_out;
-    mux_2_to_1 mux_out(MDMux_out, BusMuxOut, Mdatain, read_signal);
+    mux_2_to_1 mux_out(.out(MDMux_out), .input_0(BusMuxOut), .input_1(Mdatain), .signal(read_signal));
     reg_32_bit mdr_reg(MDRdataout, MDMux_out, clk, clr, enable);
 endmodule

@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
-module ld_tb; //Add name of test bench here.
-    reg RAM_data_out;
+module load_tb; //Add name of test bench here.
+    // reg RAM_data_out;
     reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, R_out, In_port_out; 
     reg R0_out, R1_out, R2_out, R3_out, R4_out, R5_out;
     reg R6_out, R7_out, R8_out, R9_out, R10_out, R11_out;
@@ -23,7 +23,6 @@ module ld_tb; //Add name of test bench here.
     reg [3:0] Present_state = Default;
 
     Datapath DUT(
-    .RAM_data_out(RAM_data_out),
 	 .PC_out(PC_out), 
      .ZHigh_out(ZHigh_out),
 	 .ZLow_out(ZLow_out), 
@@ -44,14 +43,14 @@ module ld_tb; //Add name of test bench here.
      .R9_out(R9_out),
      .R10_out(R10_out),
      .R11_out(R11_out),
-	 .R12_out(R12_out), 
+	.R12_out(R12_out), 
      .R13_out(R13_out), 
      .R14_out(R14_out), 
      .R15_out(R15_out), 
-	 .Mdatain(Mdatain),
-	 .MDR_enable(MDR_enable), 
+	  .Mdatain(Mdatain),
+	  .MDR_enable(MDR_enable), 
      .MAR_enable(MAR_enable), 
-	 .Z_enable(Z_enable), 
+	  .Z_enable(Z_enable), 
 	 .Y_enable(Y_enable), 
 	 .IR_enable(IR_enable), 
 	 .PC_enable(PC_enable), 
@@ -76,12 +75,12 @@ module ld_tb; //Add name of test bench here.
      .R13_enable(R13_enable), 
 	 .R14_enable(R14_enable), 
 	 .R15_enable(R15_enable),
+     //Phase Two Inputs
      .con_in(con_in),
      .in_port_in(in_port_in),
      .BA_out(BA_out),
      .out_port_enable(out_port_enable),
-     .RAM_write_enable(RAM_write_enable),
-     .RAM_read_enable(RAM_read_enable)
+    .RAM_write_enable(RAM_write_enable)
     );
 
     initial
@@ -164,9 +163,9 @@ module ld_tb; //Add name of test bench here.
                 end
                 // ----------------------------------- T1 INSTRUCTION FETCH ----------------------------------- // 
                 T1: begin
-                    Read <= 1;
-                    Mdatain <= RAM_data_out; //Instruction to fetch from RAM.
-                    MDR_enable <= 1;
+                    Mdatain <= 32'hFFFFFFFF; //Instruction to fetch from RAM.
+                    #10 Read <= 1;
+                    // MDR_enable <= 1;
                 end
                 // // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
                 // T2: begin
