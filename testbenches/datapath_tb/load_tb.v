@@ -163,15 +163,15 @@ module load_tb; //Add name of test bench here.
                 end
                 // ----------------------------------- T1 INSTRUCTION FETCH ----------------------------------- // 
                 T1: begin
-                    // Mdatain <= 32'hFFFFFFFF; //Instruction to fetch from RAM.
+                     //Instruction to fetch from RAM.
                     Read <= 1;
-                    // MDR_enable <= 1;
+                    MDR_enable <= 1;
                 end
-                // // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
-                // T2: begin
-                //     #10 MDR_out <= 1; IR_enable= 1; 
-                //     #10 MDR_out <= 0;
-                // end
+                // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
+                T2: begin
+                    #10 MDR_out <= 1; IR_enable= 1; 
+                    // #10 MDR_out <= 0;
+                end
                 // // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
                 // T3: begin
 				// 	#10 R2_out <= 1; Y_enable <= 1;
