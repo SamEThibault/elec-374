@@ -35,7 +35,7 @@ module encoder_32_to_5 (output reg [4:0] enc_output, input wire [31:0] enc_input
             32'b00100000000000000000000000000000 : enc_output <= 5'b11101; //29
             32'b01000000000000000000000000000000 : enc_output <= 5'b11110; //30
             32'b10000000000000000000000000000000 : enc_output <= 5'b11111; //31
-            default: enc_output <= 5'b11111;
+            default: enc_output <= 5'b00000;
         endcase
     end
 endmodule

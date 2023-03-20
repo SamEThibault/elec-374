@@ -11,7 +11,8 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
       R14_enable, R15_enable,
 
 // Phase 2 Inputs/Outputs
-input con_in, in_port_in, BA_out, out_port_enable, RAM_write_enable  // "Out.Portin"
+input con_in, in_port_in, out_port_enable, RAM_write_enable,  // "Out.Portin"
+input Gra, Grb, Grc, R_in, R_out, BA_out
 );
 
 wire[31:0] Mdatain;
@@ -52,6 +53,7 @@ wire[31:0] Mdatain;
     wire[4:0] enc_out;
     wire [63:0] C_data_out;
     
+    
     // Instantiating the 16 registers
     reg0_32_bit R0(R0_data_out, MuxOut, clk, clr, R0_enable, BA_out);
     reg_32_bit R1(R1_data_out, MuxOut, clk, clr, R1_enable);
@@ -76,23 +78,37 @@ wire[31:0] Mdatain;
     reg_32_bit RY(Y_data_out, MuxOut, clk, clr, Y_enable);
     reg_32_bit IR(IR_data_out, MuxOut, clk, clr, IR_enable);
     reg_32_bit MAR(MAR_data_out, MuxOut, clk, clr, MAR_enable);
+    z Z_reg(ZHigh_data_out, ZLow_data_out, C_data_out, clk, clr, Z_enable);
 
+    //PHASE 2 SHIZ
+    
+    // PC
     pc PC(PC_data_out, clk, IncPC, PC_enable, MuxOut);
 
     defparam PC.INIT_VAL = 32'b110; //ld instruction
 
-    z Z_reg(ZHigh_data_out, ZLow_data_out, C_data_out, clk, clr, Z_enable);
-
     // RAM
     ram RAM(.RAM_data_out(Mdatain), .RAM_data_in(MDR_data_out), .address(MAR_data_out[8:0]), .clk(clk), .write_enable(RAM_write_enable), .read_enable(Read));
 
+    select_and_encode SELECT_AND_ENCODE(
+    .C_sign_extended_out(C_sign_extended_out), 
+    .R_enables(R_enables), 
+    .R_outs(R_outs), 
+    .Gra(Gra) , 
+    .Grb(Grb), 
+    .Grc(Grc), 
+    .R_in(R_in), 
+    .R_out(R_out), 
+    .BA_out(BA_out),
+    .IR(IR_data_out));
+    
     //MDR
     mdr MDR(.MDRdataout(MDR_data_out), .BusMuxOut(MuxOut), .Mdatain(Mdatain), .read_signal(Read), .clk(clk), .clr(clr), .enable(MDR_enable));
     
-    // 32:5 Encoder
+    // 32:5 Encoder (Goes highest to lowest in descending order) //For some reason the the the first three encoders dont work.
     encoder_32_to_5 BusEncoder(enc_out,
-                               {{8{1'b0}},
-                                C_out, 
+                               {{8{1'b0}}, 
+                                C_out,
                                 In_port_out, 
                                 MDR_out, 
                                 PC_out, 

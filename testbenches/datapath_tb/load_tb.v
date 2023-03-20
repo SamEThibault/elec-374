@@ -14,7 +14,9 @@ module load_tb; //Add name of test bench here.
     reg [4:0] opcode;
     reg Clock, clr;
     reg [31:0] Mdatain;
-    reg con_in, in_port_in, BA_out, out_port_enable;
+
+    //Phase 2 Shiz
+    reg con_in, in_port_in, BA_out,Grb, out_port_enable;
     reg RAM_write_enable;
 
     parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
@@ -164,8 +166,8 @@ module load_tb; //Add name of test bench here.
                 // ----------------------------------- T1 INSTRUCTION FETCH ----------------------------------- // 
                 T1: begin
                      //Instruction to fetch from RAM.
-                    Read <= 1;
-                    MDR_enable <= 1;
+                    #10 Read <= 1;
+                    #10 MDR_enable <= 1;
                 end
                 // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
                 T2: begin
@@ -174,17 +176,15 @@ module load_tb; //Add name of test bench here.
                 end
                 // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
                 T3: begin
-                    Grb <= 1; BA_out <= 1;
-                    //  Y_enable<=1;
+                    #10 Grb <= 1; BA_out <= 1; Y_enable <= 1; //Sends out the data of $75 to the bus
+                    #10 Grb <= 0; BA_out <= 0; Y_enable <= 0;
                 end
                 // // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
                 T4: begin
-                    #10 R3_out <= 1; 
-                    opcode <= 5'b00110; //OPCODE for the instruction/operation
-                    Z_enable <= 1; 
-                    #10 R3_out <= 0;
+                    #10 PC_out<= 1;
+                    // #10 C_out<= 0; Z_enable <= 0; 
                 end
-                // // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
+                // // // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
                 // T5: begin
 				//     Z_enable <= 0;
                 //     ZLow_out <= 1; 

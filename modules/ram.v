@@ -15,7 +15,7 @@ reg [31:0] mem [511:0]; //[Size] name [quantity]
 initial begin
     // $readmemb("mem_init.mif", mem); //Read the memory contents of MIF file and initialize memory
     
-    mem[0] = 32'h00800075; // ld R1, $75
+    mem[0] = 32'h00800075; // ld R1, $75 => 0000 0000 1000 0000 0000 0000 0111 0101
     mem[1] = 32'h00080045; // ld R0, $45(R1)
     mem[2] = 32'h08800075; // ldi R1, $75
     mem[3] = 32'h08080045; // ldi R0, $45(R1)

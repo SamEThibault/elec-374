@@ -1,4 +1,4 @@
-module select_and_encode (output reg [31:0] C_sign_extended_out, output reg [15:0] R_enables, output reg [15:0] R_outs, input wire Gra, Grb, Grc, R_in, R_out, BA_out, input [31:0] IR);
+module select_and_encode #(parameter init_val =0 )(output reg [31:0] C_sign_extended_out, output reg [15:0] R_enables, output reg [15:0] R_outs, input wire Gra, Grb, Grc, R_in, R_out, BA_out, input [31:0] IR);
 
 reg [3:0] decoder_input;
 reg [15:0] decoder_output;
