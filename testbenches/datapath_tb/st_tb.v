@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module ldi_tb; //Add name of test bench here.
+module st_tb; //Add name of test bench here.
     // reg RAM_data_out;
     reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, R_out, In_port_out; 
     reg R0_out, R1_out, R2_out, R3_out, R4_out, R5_out;
@@ -15,13 +15,12 @@ module ldi_tb; //Add name of test bench here.
     reg Clock, clr;
     reg [31:0] Mdatain;
 
-    //Phase 2 Shiz
     reg con_in, in_port_in, BA_out,Grb, out_port_enable;
     reg RAM_write_enable;
 
     parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
     Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, T0 = 4'b0111,
-    T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100;
+    T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100, T6 = 4'b1101, T7 = 4'b1110;
     reg [3:0] Present_state = Default;
 
     Datapath DUT(
@@ -94,18 +93,14 @@ module ldi_tb; //Add name of test bench here.
     always @(posedge Clock) // finite state machine; if clock rising-edge
         begin
             case (Present_state)
-                Default : Present_state = Reg_load1a;
-                Reg_load1a : Present_state = Reg_load1b;
-                Reg_load1b : Present_state = Reg_load2a;
-                Reg_load2a : Present_state = Reg_load2b;
-                Reg_load2b : Present_state = Reg_load3a;
-                Reg_load3a : Present_state = Reg_load3b;
-                Reg_load3b : Present_state = T0;
+                Default : Present_state = T0;
                 T0 : Present_state = T1;
                 T1 : Present_state = T2;
                 T2 : Present_state = T3;
                 T3 : Present_state = T4;
                 T4 : Present_state = T5;
+                T5 : Present_state = T6;
+                T6 : Present_state = T7;
             endcase
         end
 
@@ -123,43 +118,8 @@ module ldi_tb; //Add name of test bench here.
                     R6_out <= 0; R7_out <= 0; R8_out <= 0; R9_out <= 0; R10_out <= 0; R11_out <= 0;
                     R12_out <= 0; R13_out <= 0; R14_out <= 0; R15_out <= 0; 
                 end
-                // ----------------------------------- LOADING DATA INTO REGISTER R2 ----------------------------------- // 
-                Reg_load1a: begin 
-
-                    //Set all general purpose registers to w.e you need abitrary
-                    //Set default values to gen reg and pc
-                    
-                    // Mdatain <= 32'h00000000; //INPUT
-                    Read = 0; MDR_enable = 0;
-                    #10 Read <= 1; MDR_enable <= 1;
-                    #10 Read <= 0; MDR_enable <= 0;
-                end
-                Reg_load1b: begin 
-                    #10 MDR_out <= 1; R2_enable <= 1;
-                    #10 MDR_out <= 0; R2_enable <= 0; 
-                end
-                // ----------------------------------- LOADING DATA INTO REGISTER R3 ----------------------------------- // 
-                Reg_load2a: begin
-                    // Mdatain <= 32'h00000000; //INPUT
-                    #10 Read <= 1; MDR_enable <= 1;
-                    #10 Read <= 0; MDR_enable <= 0;
-                end
-                Reg_load2b: begin 
-                    #10 MDR_out <= 1; R3_enable <= 1;
-                    #10 MDR_out <= 0; R3_enable <= 0; 
-                end
-                // ----------------------------------- LOADING DATA INTO REGISTER R1 ----------------------------------- // 
-                Reg_load3a: begin
-                    // Mdatain <= 32'h00000000; //INPUT
-                    #10 Read <= 1; MDR_enable <= 1;
-                    #10 Read <= 0; MDR_enable <= 0;
-                end
-                Reg_load3b: begin 
-                    #10 MDR_out <= 1; R1_enable <= 1;
-                    #10 MDR_out <= 0; R1_enable <= 0; 
-                end 
                 // ----------------------------------- T0 INSTRUCTION FETCH ----------------------------------- // 
-                T0: begin
+                T0: begin 
                     #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  
 					#10 PC_out <= 0; MAR_enable <= 0; IncPC <= 0; PC_enable <= 0;
                 end
@@ -167,12 +127,13 @@ module ldi_tb; //Add name of test bench here.
                 T1: begin
                      //Instruction to fetch from RAM.
                     #10 Read <= 1;
-                    #10 MDR_enable <= 1;
+                    #10 MDR_enable <= 1; ZLow_out <= 1;
+                    #10 ZLow_out <= 0; MDR_enable <= 0; Read <= 0;
                 end
                 // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
                 T2: begin
-                    #10 MDR_out <= 1; IR_enable <= 1; 
-                    #10 MDR_out <= 0; IR_enable <= 0;
+                    #10 MDR_out <= 1; IR_enable <= 1; PC_enable <= 1; IncPC <= 1;
+                    #10 MDR_out <= 0; IR_enable <= 0; PC_enable <= 0; IncPc <= 0;
                 end
                 // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
                 T3: begin
@@ -182,18 +143,24 @@ module ldi_tb; //Add name of test bench here.
                 end
                 // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
                 T4: begin
-                    #10 PC_out<= 1;
+                    #10 C_out <= 1; Z_enable <= 1;
                     #10 C_out <= 0; Z_enable <= 0; 
                 end
                 // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- //             
                 T5: begin
-                    #10 Z_enable <= 0;
-                    #10 ZLow_out <= 1; 
-
-                    #10 R1_enable <= 1;
-                    #10 ZLow_out <= 0; 
-                    R1_enable <= 0;
+                    // #10 Z_enable <= 0;
+                    #10 ZLow_out <= 1; MAR_enable <= 1;
+                    #10 ZLow_out <= 0; MAR_enable <= 0;
                 end
+                T6: begin
+                    #10 Gra <= 1; Read <= 0; MDR_enable <= 1;
+                end
+                T7: begin
+                    #10 Gra <= 1; Read <= 0; MDR_enable <= 0;
+                    #10 MDR_enable <= 1; RAM_write_enable <= 1;
+                    #10 MDR_enable <= 0; Gra <= 0; 
+                end
+
             endcase
         end
 endmodule
