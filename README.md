@@ -88,33 +88,55 @@ Wave Viewer Requirements:
 - MuxOut
 
 Optional?
+
 - MDR
 - IR
 
 Kevin:
-Not 
+Not
 Neg
 Rol
 Ror
 
 # Phase 2
+
 Kevin:
+
 - Ram - Done (not tested)
 - Select and Encode Block Diagram - Done (tested in individual TB)
-- Sign extension of constant C - 
+- Sign extension of constant C -
 - Revised Register R0
 
-Sam: 
-- CON FF Logic
-- Computation of the conditional value CON in the CON FF LOGIC
-- Input and output port
+Sam:
 
+- CON FF Logic - Done (Tested in individual TB)
+- Computation of the conditional value CON in the CON FF LOGIC (Done)
+- Input and output port (Done, not tested)
 
-
------------------------
+---
 
 Phase 2 To Do:
-- Fill out the rest of the instruction codes in ram
-- Set up template TB for instruction tests
-- Simulate and take screenshots
-- Assemble report
+
+- Fill out the rest of the instruction codes in ram (Done)
+- Set up template TB for instruction tests (Done)
+- Simulate and take screenshots (In Progress)
+- Assemble report (In Progress)
+
+Remaining Instructions:
+
+- ld    (In Progress)
+- ldi   (In Progress)
+- st    (In Progress)
+- addi  
+- andi
+- ori
+- brzr
+- brnz
+- brmi
+- brpl
+- jr
+- jal
+- mfhi
+- mflo
+- out
+- in
