@@ -1,7 +1,6 @@
 module Datapath(
 input PC_out, ZHigh_out, ZLow_out, HI_out, LO_out, In_port_out, C_out,
-input [31:0] MDR_out,
-input MDR_enable, MAR_enable, Z_enable, Y_enable, IR_enable, PC_enable, CON_enable, LO_enable, 
+input MDR_out,MDR_enable, MAR_enable, Z_enable, Y_enable, PC_enable, CON_enable, LO_enable, 
       HI_enable, clr, clk, InPort, IncPC, Read,
 input [4:0] opcode,
 input R0_out, R1_out, R2_out, R3_out, R4_out, R5_out, R6_out, R7_out, R8_out, R9_out, 
@@ -11,7 +10,7 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
       R14_enable, R15_enable,
 
 // Phase 2 Inputs/Outputs
-input con_in, in_port_in, out_port_enable, RAM_write_enable,  // "Out.Portin"
+input con_in, in_port_in, out_port_enable, RAM_write_enable, IR_enable,  
 input Gra, Grb, Grc, R_in, R_out, BA_out
 );
 
@@ -49,28 +48,32 @@ wire[31:0] Mdatain;
     wire [31:0] In_port_data_out;
     wire [31:0] C_sign_extended_data_out;
     
+
+//     PHASE 2
     //MDR
     wire[4:0] enc_out;
     wire [63:0] C_data_out;
     
+//  SELECT AND ENCODE
+      wire [15:0] R_enables;
     
     // Instantiating the 16 registers
-    reg0_32_bit R0(R0_data_out, MuxOut, clk, clr, R0_enable, BA_out);
-    reg_32_bit R1(R1_data_out, MuxOut, clk, clr, R1_enable);
-    reg_32_bit R2(R2_data_out, MuxOut, clk, clr, R2_enable);
-    reg_32_bit R3(R3_data_out, MuxOut, clk, clr, R3_enable);
-    reg_32_bit R4(R4_data_out, MuxOut, clk, clr, R4_enable);
-    reg_32_bit R5(R5_data_out, MuxOut, clk, clr, R5_enable);
-    reg_32_bit R6(R6_data_out, MuxOut, clk, clr, R6_enable);
-    reg_32_bit R7(R7_data_out, MuxOut, clk, clr, R7_enable);
-    reg_32_bit R8(R8_data_out, MuxOut, clk, clr, R8_enable);
-    reg_32_bit R9(R9_data_out, MuxOut, clk, clr, R9_enable);
-    reg_32_bit R10(R10_data_out, MuxOut, clk, clr, R10_enable);
-    reg_32_bit R11(R11_data_out, MuxOut, clk, clr, R11_enable);
-    reg_32_bit R12(R12_data_out, MuxOut, clk, clr, R12_enable);
-    reg_32_bit R13(R13_data_out, MuxOut, clk, clr, R13_enable);
-    reg_32_bit R14(R14_data_out, MuxOut, clk, clr, R14_enable);
-    reg_32_bit R15(R15_data_out, MuxOut, clk, clr, R15_enable);
+    reg0_32_bit R0(R0_data_out, MuxOut, clk, clr, R_enables[0], BA_out);
+    reg_32_bit R1(R1_data_out, MuxOut, clk, clr, R_enables[1]);
+    reg_32_bit R2(R2_data_out, MuxOut, clk, clr, R_enables[2]);
+    reg_32_bit R3(R3_data_out, MuxOut, clk, clr, R_enables[3]);
+    reg_32_bit R4(R4_data_out, MuxOut, clk, clr, R_enables[4]);
+    reg_32_bit R5(R5_data_out, MuxOut, clk, clr, R_enables[5]);
+    reg_32_bit R6(R6_data_out, MuxOut, clk, clr, R_enables[6]);
+    reg_32_bit R7(R7_data_out, MuxOut, clk, clr, R_enables[7]);
+    reg_32_bit R8(R8_data_out, MuxOut, clk, clr, R_enables[8]);
+    reg_32_bit R9(R9_data_out, MuxOut, clk, clr, R_enables[9]);
+    reg_32_bit R10(R10_data_out, MuxOut, clk, clr, R_enables[10]);
+    reg_32_bit R11(R11_data_out, MuxOut, clk, clr, R_enables[11]);
+    reg_32_bit R12(R12_data_out, MuxOut, clk, clr, R_enables[12]);
+    reg_32_bit R13(R13_data_out, MuxOut, clk, clr, R_enables[13]);
+    reg_32_bit R14(R14_data_out, MuxOut, clk, clr, R_enables[14]);
+    reg_32_bit R15(R15_data_out, MuxOut, clk, clr, R_enables[15]);
     
     // Instantiating special registers
     reg_32_bit HI(HI_data_out,  MuxOut, clk, clr, HI_enable);
@@ -85,13 +88,13 @@ wire[31:0] Mdatain;
     // PC
     pc PC(PC_data_out, clk, IncPC, PC_enable, MuxOut);
 
-    defparam PC.INIT_VAL = 32'b110; //ld instruction
+    defparam PC.INIT_VAL = 32'b000; //ld instruction
 
     // RAM
     ram RAM(.RAM_data_out(Mdatain), .RAM_data_in(MDR_data_out), .address(MAR_data_out[8:0]), .clk(clk), .write_enable(RAM_write_enable), .read_enable(Read));
 
     select_and_encode SELECT_AND_ENCODE(
-    .C_sign_extended_out(C_sign_extended_out), 
+    .C_sign_extended_out(C_sign_extended_data_out), 
     .R_enables(R_enables), 
     .R_outs(R_outs), 
     .Gra(Gra) , 
@@ -105,9 +108,11 @@ wire[31:0] Mdatain;
     //MDR
     mdr MDR(.MDRdataout(MDR_data_out), .BusMuxOut(MuxOut), .Mdatain(Mdatain), .read_signal(Read), .clk(clk), .clr(clr), .enable(MDR_enable));
     
-    // 32:5 Encoder (Goes highest to lowest in descending order) //For some reason the the the first three encoders dont work.
-    encoder_32_to_5 BusEncoder(enc_out,
-                               {{8{1'b0}}, 
+    // 32:5 Encoder (Goes highest to lowest in descending order) For some reason the the the first three encoders dont work.
+    encoder_32_to_5 BusEncoder(.enc_output(enc_out),
+                              .enc_input(
+                               { 
+                                {8{1'b0}},
                                 C_out,
                                 In_port_out, 
                                 MDR_out, 
@@ -133,6 +138,7 @@ wire[31:0] Mdatain;
                                 R1_out, 
                                 R0_out 
                                 } 
+                              )
                                 );
 
     //Multiplexer Bus Mux 32:1 all of these inputs are the data that will be sent to "MuxOut" based on the "enc_out" selection
@@ -160,7 +166,7 @@ wire[31:0] Mdatain;
                        PC_data_out,
                        MDR_data_out,
                        In_port_data_out,
-                       C_sign_extended_out,
+                       C_sign_extended_data_out,
                        enc_out
                        );
 

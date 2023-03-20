@@ -6,6 +6,13 @@ reg [15:0] decoder_output;
 wire BA_or_R_out;
 or_32_bit OR(BA_or_R_out, R_out, BA_out);
 
+initial
+begin
+    // R_enables = 16'b00000 00000 000000;
+    R_enables = 16'b0000000000000000;
+    R_outs = 16'b0000000000000000;
+end
+
 
 always@(IR[26:23], IR[22:19], IR[18:15], Gra, Grb, Grc)
 begin
@@ -14,7 +21,7 @@ end
     always@(decoder_input) 
     begin
 		case(decoder_input)
-            //0-15 (binary)         //One-hot encoding
+            //0-15 (binary)                //One-hot encoding
             4'b0000 : decoder_output <= 16'b0000000000000001; 
             4'b0001 : decoder_output <= 16'b0000000000000010;
             4'b0010 : decoder_output <= 16'b0000000000000100; 

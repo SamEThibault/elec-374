@@ -1,7 +1,7 @@
 `timescale 1ns/10ps
 module load_tb; //Add name of test bench here.
     // reg RAM_data_out;
-    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, R_out, In_port_out; 
+    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, In_port_out; 
     reg R0_out, R1_out, R2_out, R3_out, R4_out, R5_out;
     reg R6_out, R7_out, R8_out, R9_out, R10_out, R11_out;
     reg R12_out, R13_out, R14_out, R15_out;
@@ -16,12 +16,12 @@ module load_tb; //Add name of test bench here.
     reg [31:0] Mdatain;
 
     //Phase 2 Shiz
-    reg con_in, in_port_in, BA_out,Grb, out_port_enable;
+    reg con_in, in_port_in, BA_out,Gra, Grb, Grc, out_port_enable, R_in, R_out;
     reg RAM_write_enable;
 
     parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
     Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, T0 = 4'b0111,
-    T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100;
+    T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010, T4 = 4'b1011, T5 = 4'b1100, T6= 4'b1101, T7= 4'b1110;
     reg [3:0] Present_state = Default;
 
     Datapath DUT(
@@ -49,40 +49,44 @@ module load_tb; //Add name of test bench here.
      .R13_out(R13_out), 
      .R14_out(R14_out), 
      .R15_out(R15_out), 
-	//   .Mdatain(Mdatain),
 	  .MDR_enable(MDR_enable), 
      .MAR_enable(MAR_enable), 
 	  .Z_enable(Z_enable), 
 	 .Y_enable(Y_enable), 
-	 .IR_enable(IR_enable), 
 	 .PC_enable(PC_enable), 
      .Read(Read), 
 	 .IncPC(IncPC), 
 	 .clk(Clock), 
      .clr(clr),
 	 .opcode(opcode), 
-     .R0_enable(R0_enable), 
-	 .R1_enable(R1_enable), 
-	 .R2_enable(R2_enable), 
-	 .R3_enable(R3_enable), 
-     .R4_enable(R4_enable), 
-	 .R5_enable(R5_enable), 
-	 .R6_enable(R6_enable), 
-     .R7_enable(R7_enable), 
-	 .R8_enable(R8_enable), 
-	 .R9_enable(R9_enable), 
-     .R10_enable(R10_enable), 
-	 .R11_enable(R11_enable), 
-	 .R12_enable(R12_enable), 
-     .R13_enable(R13_enable), 
-	 .R14_enable(R14_enable), 
-	 .R15_enable(R15_enable),
+    //  .R0_enable(R0_enable), 
+	//  .R1_enable(R1_enable), 
+	//  .R2_enable(R2_enable), 
+	//  .R3_enable(R3_enable), 
+    //  .R4_enable(R4_enable), 
+	//  .R5_enable(R5_enable), 
+	//  .R6_enable(R6_enable), 
+    //  .R7_enable(R7_enable), 
+	//  .R8_enable(R8_enable), 
+	//  .R9_enable(R9_enable), 
+    //  .R10_enable(R10_enable), 
+	//  .R11_enable(R11_enable), 
+	//  .R12_enable(R12_enable), 
+    //  .R13_enable(R13_enable), 
+	//  .R14_enable(R14_enable), 
+	//  .R15_enable(R15_enable),
      //Phase Two Inputs
      .con_in(con_in),
      .in_port_in(in_port_in),
-     .BA_out(BA_out),
      .out_port_enable(out_port_enable),
-     .RAM_write_enable(RAM_write_enable)
+     .RAM_write_enable(RAM_write_enable),
+     .Grb(Grb),
+     .Gra(Gra), 
+     .Grc(Grc),
+     .R_in(R_in),
+     .R_out(R_out),
+     .BA_out(BA_out),
+     .IR_enable(IR_enable)
     );
 
     initial
@@ -106,6 +110,8 @@ module load_tb; //Add name of test bench here.
                 T2 : Present_state = T3;
                 T3 : Present_state = T4;
                 T4 : Present_state = T5;
+                T5 : Present_state = T6;
+                T6 : Present_state = T7;
             endcase
         end
 
@@ -122,6 +128,9 @@ module load_tb; //Add name of test bench here.
                     R0_out <= 0; R1_out <= 0; R2_out <= 0; R3_out <= 0; R4_out <= 0; R5_out <= 0;
                     R6_out <= 0; R7_out <= 0; R8_out <= 0; R9_out <= 0; R10_out <= 0; R11_out <= 0;
                     R12_out <= 0; R13_out <= 0; R14_out <= 0; R15_out <= 0; 
+                    // Phase 2 Shiz
+
+                    Gra <= 0; Grb<= 0; Grc<=0; BA_out <=0; RAM_write_enable <=0; out_port_enable <=0; in_port_in <=0; con_in<=0; R_out <= 0;
                 end
                 // ----------------------------------- LOADING DATA INTO REGISTER R2 ----------------------------------- // 
                 Reg_load1a: begin 
@@ -167,12 +176,13 @@ module load_tb; //Add name of test bench here.
                 T1: begin
                      //Instruction to fetch from RAM.
                     #10 Read <= 1;
-                    #10 MDR_enable <= 1;
+                    #10 MDR_enable <= 1; 
+                    // #10 MDR_enable <= 0;
                 end
                 // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
                 T2: begin
                     #10 MDR_out <= 1; IR_enable <= 1; 
-                    #10 MDR_out <= 0; IR_enable <= 0;
+                    #10 MDR_out <= 0; IR_enable <= 0; MDR_enable <= 0;
                 end
                 // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
                 T3: begin
@@ -181,17 +191,34 @@ module load_tb; //Add name of test bench here.
                 end
                 // // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
                 T4: begin
-                    #10 PC_out<= 1;
-                    // #10 C_out<= 0; Z_enable <= 0; 
+                    #10 C_out<= 1; Z_enable <= 1; opcode <= 5'b00011;
+                    #10 C_out<= 0; Z_enable <= 0; 
+
                 end
-                // // // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
-                // T5: begin
-				//     Z_enable <= 0;
-                //     ZLow_out <= 1; 
-                //     #10 R1_enable <= 1;
-				// 	#10 ZLow_out <= 0; 
-                //     R1_enable <= 0;
-                // end
+                 // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
+                T5: begin
+                    // Notes ZLow out is the effective address we are looking into the ram for the data.
+                    #10 ZLow_out <= 1; MAR_enable <=1; //Sending it back to MAR to get the effective memory address
+                    #10 ZLow_out <= 0; MAR_enable <=0;
+
+                end
+                 // ----------------------------------- T6 CYCLE OPERATION ----------------------------------- // 
+                T6: begin
+                    //Fetching data from ram
+                    #10 Read <= 1; MDR_enable <=1; 
+                    #10 MDR_enable <=0; 
+                end
+                 // ----------------------------------- T7 CYCLE OPERATION ----------------------------------- // 
+                T7: begin
+                    //Send the data that was taken from ram and load it into register R1
+                    MDR_out <=1; //Data from ram
+                    Gra <= 1; 
+                    R_in <= 1;
+                    #10MDR_out <=0; //Data from ram
+                    Gra <= 0; 
+                    R_in <= 0;
+
+                end
             endcase
         end
 endmodule
