@@ -127,7 +127,7 @@ Remaining Instructions:
 - ld    (In Progress)
 - ldi   (In Progress)
 - st    (In Progress)
-- addi  
+- addi  (In Progress)
 - andi
 - ori
 - brzr

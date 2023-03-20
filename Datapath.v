@@ -88,7 +88,10 @@ wire[31:0] Mdatain;
     // PC
     pc PC(PC_data_out, clk, IncPC, PC_enable, MuxOut);
 
-    defparam PC.INIT_VAL = 32'b000; //ld instruction
+//     defparam PC.INIT_VAL = 32'b000; //ld instruction
+
+    defparam PC.INIT_VAL = 32'b001; //ld instruction case 2
+    defparam R1.init_val = 32'b001; // for ld case 2
 
     // RAM
     ram RAM(.RAM_data_out(Mdatain), .RAM_data_in(MDR_data_out), .address(MAR_data_out[8:0]), .clk(clk), .write_enable(RAM_write_enable), .read_enable(Read));
