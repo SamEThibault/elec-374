@@ -1,9 +1,10 @@
-module ram#(parameter init_RAM_data_out = 0)(
+module ram #(parameter init_RAM_data_out = 0)(
     output reg [31:0] RAM_data_out,
     input [31:0] RAM_data_in,
     input [8:0] address,
     input wire clk,
-    input write_enable, read_enable
+    input write_enable, 
+          read_enable
 );
  
 //Note the address will always be log_2(data_in_size). 

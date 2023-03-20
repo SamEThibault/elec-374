@@ -1,6 +1,6 @@
 module Datapath(
 input PC_out, ZHigh_out, ZLow_out, HI_out, LO_out, In_port_out, C_out,
-input [31:0] MDR_out, Mdatain, 
+input [31:0] MDR_out,
 input MDR_enable, MAR_enable, Z_enable, Y_enable, IR_enable, PC_enable, CON_enable, LO_enable, 
       HI_enable, clr, clk, InPort, IncPC, Read,
 input [4:0] opcode,
@@ -13,6 +13,8 @@ input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enabl
 // Phase 2 Inputs/Outputs
 input con_in, in_port_in, BA_out, out_port_enable, RAM_write_enable  // "Out.Portin"
 );
+
+wire[31:0] Mdatain;
 
     // General Purpose Registers
     wire [31:0] R0_data_out;

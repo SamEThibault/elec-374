@@ -47,7 +47,7 @@ module load_tb; //Add name of test bench here.
      .R13_out(R13_out), 
      .R14_out(R14_out), 
      .R15_out(R15_out), 
-	  .Mdatain(Mdatain),
+	//   .Mdatain(Mdatain),
 	  .MDR_enable(MDR_enable), 
      .MAR_enable(MAR_enable), 
 	  .Z_enable(Z_enable), 
@@ -80,7 +80,7 @@ module load_tb; //Add name of test bench here.
      .in_port_in(in_port_in),
      .BA_out(BA_out),
      .out_port_enable(out_port_enable),
-    .RAM_write_enable(RAM_write_enable)
+     .RAM_write_enable(RAM_write_enable)
     );
 
     initial
@@ -127,7 +127,7 @@ module load_tb; //Add name of test bench here.
                     //Set all general purpose registers to w.e you need abitrary
                     //Set default values to gen reg and pc
                     
-                    Mdatain <= 32'h00000000; //INPUT
+                    // Mdatain <= 32'h00000000; //INPUT
                     Read = 0; MDR_enable = 0;
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
@@ -138,7 +138,7 @@ module load_tb; //Add name of test bench here.
                 end
                 // ----------------------------------- LOADING DATA INTO REGISTER R3 ----------------------------------- // 
                 Reg_load2a: begin
-                    Mdatain <= 32'h00000000; //INPUT
+                    // Mdatain <= 32'h00000000; //INPUT
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
@@ -148,7 +148,7 @@ module load_tb; //Add name of test bench here.
                 end
                 // ----------------------------------- LOADING DATA INTO REGISTER R1 ----------------------------------- // 
                 Reg_load3a: begin
-                    Mdatain <= 32'h00000000; //INPUT
+                    // Mdatain <= 32'h00000000; //INPUT
                     #10 Read <= 1; MDR_enable <= 1;
                     #10 Read <= 0; MDR_enable <= 0;
                 end
@@ -163,8 +163,8 @@ module load_tb; //Add name of test bench here.
                 end
                 // ----------------------------------- T1 INSTRUCTION FETCH ----------------------------------- // 
                 T1: begin
-                    Mdatain <= 32'hFFFFFFFF; //Instruction to fetch from RAM.
-                    #10 Read <= 1;
+                    // Mdatain <= 32'hFFFFFFFF; //Instruction to fetch from RAM.
+                    Read <= 1;
                     // MDR_enable <= 1;
                 end
                 // // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
