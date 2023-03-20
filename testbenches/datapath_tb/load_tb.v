@@ -169,21 +169,21 @@ module load_tb; //Add name of test bench here.
                 end
                 // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
                 T2: begin
-                    #10 MDR_out <= 1; IR_enable= 1; 
-                    // #10 MDR_out <= 0;
+                    #10 MDR_out <= 1; IR_enable <= 1; 
+                    #10 MDR_out <= 0; IR_enable <= 0;
                 end
-                // // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
-                // T3: begin
-				// 	#10 R2_out <= 1; Y_enable <= 1;
-                //     #10 R2_out <= 0; Y_enable <= 0;
-                // end
+                // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
+                T3: begin
+                    Grb <= 1; BA_out <= 1;
+                    //  Y_enable<=1;
+                end
                 // // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
-                // T4: begin
-                //     #10 R3_out <= 1; 
-                //     opcode <= 5'b00110; //OPCODE for the instruction/operation
-                //     Z_enable <= 1; 
-                //     #10 R3_out <= 0;
-                // end
+                T4: begin
+                    #10 R3_out <= 1; 
+                    opcode <= 5'b00110; //OPCODE for the instruction/operation
+                    Z_enable <= 1; 
+                    #10 R3_out <= 0;
+                end
                 // // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
                 // T5: begin
 				//     Z_enable <= 0;
