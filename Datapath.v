@@ -3,16 +3,19 @@ input PC_out, ZHigh_out, ZLow_out, HI_out, LO_out, In_port_out, C_out,
 input MDR_out,MDR_enable, MAR_enable, Z_enable, Y_enable, PC_enable, CON_enable, LO_enable, 
       HI_enable, clr, clk, InPort, IncPC, Read,
 input [4:0] opcode,
-input R0_out, R1_out, R2_out, R3_out, R4_out, R5_out, R6_out, R7_out, R8_out, R9_out, 
-      R10_out, R11_out, R12_out, R13_out, R14_out, R15_out,
-input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enable, 
-      R7_enable, R8_enable, R9_enable, R10_enable, R11_enable, R12_enable, R13_enable, 
-      R14_enable, R15_enable,
+// input R0_out, R1_out, R2_out, R3_out, R4_out, R5_out, R6_out, R7_out, R8_out, R9_out, 
+//       R10_out, R11_out, R12_out, R13_out, R14_out, R15_out,
+// input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enable, 
+//       R7_enable, R8_enable, R9_enable, R10_enable, R11_enable, R12_enable, R13_enable, 
+//       R14_enable, R15_enable,
 
 // Phase 2 Inputs/Outputs
 input con_in, in_port_in, out_port_enable, RAM_write_enable, IR_enable,  
 input Gra, Grb, Grc, R_in, R_out, BA_out
 );
+
+
+
 
 wire[31:0] Mdatain;
 
@@ -56,7 +59,8 @@ wire[31:0] Mdatain;
     
 //  SELECT AND ENCODE
       wire [15:0] R_enables;
-    
+      wire [15:0] R_outs;
+
     // Instantiating the 16 registers
     reg0_32_bit R0(R0_data_out, MuxOut, clk, clr, R_enables[0], BA_out);
     reg_32_bit R1(R1_data_out, MuxOut, clk, clr, R_enables[1]);
@@ -84,11 +88,29 @@ wire[31:0] Mdatain;
     z Z_reg(ZHigh_data_out, ZLow_data_out, C_data_out, clk, clr, Z_enable);
 
     //PHASE 2 SHIZ
+
+    // CON FF cct
+    wire con_out;
+    con_ff CON_FF(con_out, IR_data_out[20:19], BusMuxOut, con_in);
+
+    // In/Out Ports cct
+    wire [31:0] in_port_out;
+    wire in_port_enable = 1;       // no enable so just always set it to 1. (Note we might not need to set the value here maybe just in test bench)
+    reg_32_bit in_port(in_port_out, in_port_in, clk, clr, in_port_enable);
+
+    wire [31:0] out_port_out;       // "to output unit"
+    reg_32_bit out_port(out_port_out, BusMuxOut, clk, clr, out_port_enable);  
+
     
     // PC
-    pc PC(PC_data_out, clk, IncPC, PC_enable, MuxOut);
+    pc PC(PC_data_out, clk, IncPC, PC_enable, MuxOut); //ld R1, $75
+    
+//     defparam PC.INIT_VAL = 32'b000; //ld R1, $75
+//     defparam PC.INIT_VAL = 32'b001; //ld R0, $75(R1)
+      //  defparam PC.INIT_VAL = 32'b010; //ldi R1, $75 
+       defparam PC.INIT_VAL = 32'b011; //ldi R1, $45(R1) 
 
-    defparam PC.INIT_VAL = 32'b000; //ld instruction
+       defparam R1.INIT_VAL = 32'h00000001; //R1 holds value of 1 for $45(R1) = $45+$1 = $46 = 70 decimal => 100 0110
 
     // RAM
     ram RAM(.RAM_data_out(Mdatain), .RAM_data_in(MDR_data_out), .address(MAR_data_out[8:0]), .clk(clk), .write_enable(RAM_write_enable), .read_enable(Read));
@@ -97,7 +119,7 @@ wire[31:0] Mdatain;
     .C_sign_extended_out(C_sign_extended_data_out), 
     .R_enables(R_enables), 
     .R_outs(R_outs), 
-    .Gra(Gra) , 
+    .Gra(Gra), 
     .Grb(Grb), 
     .Grc(Grc), 
     .R_in(R_in), 
@@ -121,22 +143,22 @@ wire[31:0] Mdatain;
                                 ZHigh_out,
                                 LO_out, 
                                 HI_out, 
-                                R15_out,
-                                R14_out,
-                                R13_out, 
-                                R12_out, 
-                                R11_out, 
-                                R10_out, 
-                                R9_out,
-                                R8_out, 
-                                R7_out, 
-                                R6_out,
-                                R5_out, 
-                                R4_out,
-                                R3_out, 
-                                R2_out, 
-                                R1_out, 
-                                R0_out 
+                                R_outs[15],
+                                R_outs[14],
+                                R_outs[13],
+                                R_outs[12],
+                                R_outs[11],
+                                R_outs[10],
+                                R_outs[9],
+                                R_outs[8],
+                                R_outs[7],
+                                R_outs[6],
+                                R_outs[5],
+                                R_outs[4],
+                                R_outs[3],
+                                R_outs[2],
+                                R_outs[1],
+                                R_outs[0]
                                 } 
                               )
                                 );
@@ -172,15 +194,5 @@ wire[31:0] Mdatain;
 
     alu alu_instance(C_data_out, Y_data_out, MuxOut, opcode);
 
-    // CON FF cct
-    wire con_out;
-    con_ff CON_FF(con_out, IR_data_out[20:19], BusMuxOut, con_in);
-
-    // In/Out Ports cct
-    wire [31:0] in_port_out;
-    wire in_port_enable = 1;       // no enable so just always set it to 1. (Note we might not need to set the value here maybe just in test bench)
-    reg_32_bit in_port(in_port_out, in_port_in, clk, clr, in_port_enable);
-
-    wire [31:0] out_port_out;       // "to output unit"
-    reg_32_bit out_port(out_port_out, BusMuxOut, clk, clr, out_port_enable);                
+              
 endmodule

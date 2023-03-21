@@ -128,9 +128,10 @@ module load_tb; //Add name of test bench here.
                     R0_out <= 0; R1_out <= 0; R2_out <= 0; R3_out <= 0; R4_out <= 0; R5_out <= 0;
                     R6_out <= 0; R7_out <= 0; R8_out <= 0; R9_out <= 0; R10_out <= 0; R11_out <= 0;
                     R12_out <= 0; R13_out <= 0; R14_out <= 0; R15_out <= 0; 
+                    
                     // Phase 2 Shiz
-
                     Gra <= 0; Grb<= 0; Grc<=0; BA_out <=0; RAM_write_enable <=0; out_port_enable <=0; in_port_in <=0; con_in<=0; R_out <= 0;
+
                 end
                 // ----------------------------------- LOADING DATA INTO REGISTER R2 ----------------------------------- // 
                 Reg_load1a: begin 
@@ -191,7 +192,7 @@ module load_tb; //Add name of test bench here.
                 end
                 // // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
                 T4: begin
-                    #10 C_out<= 1; Z_enable <= 1; opcode <= 5'b00011;
+                    #10 C_out<= 1; Z_enable <= 1; opcode <= 5'b00011; //ADD OP CODE
                     #10 C_out<= 0; Z_enable <= 0; 
 
                 end
@@ -214,7 +215,8 @@ module load_tb; //Add name of test bench here.
                     MDR_out <=1; //Data from ram
                     Gra <= 1; 
                     R_in <= 1;
-                    #10MDR_out <=0; //Data from ram
+                    #10
+                    MDR_out <= 0; //Data from ram
                     Gra <= 0; 
                     R_in <= 0;
 

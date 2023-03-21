@@ -1,5 +1,5 @@
 // Revised R0
-module reg0_32_bit(
+module reg0_32_bit #(parameter INIT_VAL = 32'h00000000)(
     output reg [31:0] q,
     input wire [31:0] BusMuxOut,
     input wire clk,
@@ -10,6 +10,11 @@ module reg0_32_bit(
 
 // wire [31:0] BAout_extended;
 
+initial 
+begin
+    q = INIT_VAL;
+end
+
 always @(posedge clk or posedge clr)
 begin
     // if (BAout == 1)
@@ -17,10 +22,10 @@ begin
     // else
     //     BAout_extended = 32'b0;
     
-    if (clr)
-        q <= 32'b0 & ~(BAout ?32'hFFFFFFFF : 32'h00000000);
-    else if (enable)
-        q <= BusMuxOut & ~(BAout ?32'hFFFFFFFF : 32'h00000000);
+    if (clr == 1)
+        q <= 32'h00000000;
+    else if (enable == 1)
+        q <= BusMuxOut & ~(BAout == 1 ? 32'hFFFFFFFF : 32'h00000000);
 end
 
 endmodule

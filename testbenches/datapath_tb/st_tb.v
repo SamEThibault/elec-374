@@ -1,7 +1,7 @@
 `timescale 1ns/10ps
 module st_tb; //Add name of test bench here.
     // reg RAM_data_out;
-    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, R_out, In_port_out; 
+    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, In_port_out; 
     reg R0_out, R1_out, R2_out, R3_out, R4_out, R5_out;
     reg R6_out, R7_out, R8_out, R9_out, R10_out, R11_out;
     reg R12_out, R13_out, R14_out, R15_out;
@@ -15,7 +15,8 @@ module st_tb; //Add name of test bench here.
     reg Clock, clr;
     reg [31:0] Mdatain;
 
-    reg con_in, in_port_in, BA_out,Grb, out_port_enable;
+    //Phase 2 Shiz
+    reg con_in, in_port_in, BA_out,Gra, Grb, Grc, out_port_enable, R_in, R_out;
     reg RAM_write_enable;
 
     parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
@@ -133,13 +134,13 @@ module st_tb; //Add name of test bench here.
                 // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
                 T2: begin
                     #10 MDR_out <= 1; IR_enable <= 1; PC_enable <= 1; IncPC <= 1;
-                    #10 MDR_out <= 0; IR_enable <= 0; PC_enable <= 0; IncPc <= 0;
+                    #10 MDR_out <= 0; IR_enable <= 0; PC_enable <= 0; IncPC <= 0;
                 end
                 // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
                 T3: begin
                     // send data to bus
-                    #10 Grb <= 1; BAout <= 1; Y_enable <= 1;
-                    #10 Grb <= 0; BAout <= 0; Y_enable <= 0;
+                    #10 Grb <= 1; BA_out <= 1; Y_enable <= 1;
+                    #10 Grb <= 0; BA_out <= 0; Y_enable <= 0;
                 end
                 // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
                 T4: begin

@@ -124,8 +124,8 @@ Phase 2 To Do:
 
 Remaining Instructions:
 
-- ld    (In Progress)
-- ldi   (In Progress)
+- ld    (In Progress) 
+- ldi   (In Progress) done
 - st    (In Progress)
 - addi  
 - andi

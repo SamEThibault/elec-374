@@ -1,5 +1,5 @@
 // Register with posedge async clear and rising clock-edge response, pos-edge enable
-module reg_32_bit #(parameter init_val = 0)(
+module reg_32_bit #(parameter INIT_VAL = 32'h00000000)(
     output reg [31:0] q,
     input wire [31:0] d,
     input wire clk,
@@ -7,17 +7,18 @@ module reg_32_bit #(parameter init_val = 0)(
     input wire enable
     );
 
+
 initial 
 begin
-    q = init_val;
+    q = INIT_VAL;
 end
 
 always @(posedge clk or posedge clr)
 begin
 
-    if (clr)
+    if (clr == 1)
         q <= 0;
-    else if (enable)
+    else if (enable == 1)
         q <= d;
 end
 
