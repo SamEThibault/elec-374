@@ -33,8 +33,11 @@ initial begin
     mem[16] = 32'hB1800000; //in R3
     mem[17] = 32'h00000000;
     mem[18] = 32'h00000000;
-    mem[70] = 32'hFFFFFFF0; // Value at $45 + 1
+    // DATA VALUES
+    mem[70] =  32'hFFFFFFF0; // Value at $45 + 1
     mem[117] = 32'hFFFFFFF0; //Value at $75 (hex) => 117 decimal
+    mem[144] = 32'h67;
+    mem[247] = 32'h67;
 
     RAM_data_out = init_RAM_data_out;
 

@@ -51,6 +51,16 @@ wire[31:0] Mdatain;
     wire [31:0] In_port_data_out;
     wire [31:0] C_sign_extended_data_out;
     
+
+//     PHASE 2
+    //MDR
+    wire[4:0] enc_out;
+    wire [63:0] C_data_out;
+    
+//  SELECT AND ENCODE
+      wire [15:0] R_enables;
+      wire [15:0] R_outs;
+
     // Instantiating the 16 registers
     reg0_32_bit R0(R0_data_out, MuxOut, clk, clr, R_enables[0], BA_out);
     reg_32_bit R1(R1_data_out, MuxOut, clk, clr, R_enables[1]);
@@ -77,23 +87,17 @@ wire[31:0] Mdatain;
     reg_32_bit MAR(MAR_data_out, MuxOut, clk, clr, MAR_enable);
     z Z_reg(ZHigh_data_out, ZLow_data_out, C_data_out, clk, clr, Z_enable);
 
-    //MDR
-    wire[4:0] enc_out;
-    wire [63:0] C_data_out;
-
-    // PC
-    pc PC(PC_data_out, clk, IncPC, PC_enable, MuxOut); 
-
-//     ------------------------------------------ PHASE 2 SHIZ ------------------------------------------  //
     
-    //SELECT AND ENCODE
-    wire [15:0] R_enables;
-    wire [15:0] R_outs;
+    // PC
+    pc PC(PC_data_out, clk, IncPC, PC_enable, MuxOut); //ld R1, $75
+
 
     // CON FF cct
     wire con_out;
     con_ff CON_FF(con_out, IR_data_out[20:19], BusMuxOut, con_in);
 
+//     ------------------------------------------ PHASE 2 SHIZ ------------------------------------------  //
+    
     // In/Out Ports cct
     wire [31:0] in_port_out;
     wire in_port_enable = 1;       // no enable so just always set it to 1. (Note we might not need to set the value here maybe just in test bench)
@@ -102,6 +106,7 @@ wire[31:0] Mdatain;
     wire [31:0] out_port_out;       // "to output unit"
     reg_32_bit out_port(out_port_out, BusMuxOut, clk, clr, out_port_enable);  
 
+    
     //ld Case 1:
     //defparam PC.INIT_VAL = 32'b000; //ld instruction
     //defparam PC.INIT_VAL = 32'b000; //ld R1, $75
@@ -118,6 +123,8 @@ wire[31:0] Mdatain;
 //     defparam PC.INIT_VAL = 32'b011; //ldi R1, $45(R1) 
 //     defparam R1.INIT_VAL = 32'h00000001; //R1 holds value of 1 for $45(R1) = $45+$1 = $46 = 70 decimal => 100 0110
     
+    //st Case 1: st $90, R4
+    defparam PC.INIT_VAL = 32'b100; //ldi R1, $45(R1) 
 
     // RAM
     ram RAM(.RAM_data_out(Mdatain), .RAM_data_in(MDR_data_out), .address(MAR_data_out[8:0]), .clk(clk), .write_enable(RAM_write_enable), .read_enable(Read));
