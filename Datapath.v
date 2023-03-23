@@ -117,14 +117,15 @@ wire[31:0] Mdatain;
 
 
     //ldi Case 3:
-    defparam PC.INIT_VAL = 32'b010; //ldi R1, $75 
+    // defparam PC.INIT_VAL = 32'b010; //ldi R1, $75 
 
     //ldi Case 4:
 //     defparam PC.INIT_VAL = 32'b011; //ldi R1, $45(R1) 
     // defparam R1.INIT_VAL = 32'h00000001; //R1 holds value of 1 for $45(R1) = $45+$1 = $46 = 70 decimal => 100 0110
     
     //st Case 1: st $90, R4
-    // defparam PC.INIT_VAL = 32'b100; //ldi R1, $45(R1) 
+    defparam PC.INIT_VAL = 32'b100; //ldi R1, $45(R1) 
+    defparam R4.INIT_VAL = 32'h94;
 
     // RAM
     ram RAM(.RAM_data_out(Mdatain), .RAM_data_in(MDR_data_out), .address(MAR_data_out[8:0]), .clk(clk), .write_enable(RAM_write_enable), .read_enable(Read));

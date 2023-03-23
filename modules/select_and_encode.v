@@ -8,10 +8,8 @@ reg [15:0] decoder_output;
 
 initial
 begin
-    // R_enables = 16'b00000 00000 000000;
     R_enables = 16'h00000000;
     R_outs =    16'h00000000;
-    // BA_out_or_R_out = 0;
 end
 
 reg BA_out_or_R_out;
