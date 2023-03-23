@@ -140,3 +140,11 @@ Remaining Instructions:
 - mflo
 - out
 - in
+
+
+Phase 2 Docs
+- [] Code 
+- [] IR Values
+- [] RAM values
+- [] Register you're storing into
+- [] Wave form signals
