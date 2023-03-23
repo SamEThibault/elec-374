@@ -124,7 +124,8 @@ wire[31:0] Mdatain;
     // defparam R1.INIT_VAL = 32'h00000001; //R1 holds value of 1 for $45(R1) = $45+$1 = $46 = 70 decimal => 100 0110
     
     //st Case 1: st $90, R4
-    // defparam PC.INIT_VAL = 32'b100; //ldi R1, $45(R1) 
+    defparam PC.INIT_VAL = 32'b100; //ldi R1, $45(R1) 
+    defparam R4.INIT_VAL = 32'h94;
 
     //addi R2, R3, -3
     // defparam PC.INIT_VAL = 32'b110;
