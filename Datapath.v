@@ -129,6 +129,10 @@ input Gra, Grb, Grc, R_in, R_out, BA_out
     //addi R2, R3, -3
     // defparam PC.INIT_VAL = 32'b110;
 
+    //andi R2, R3, $25
+    defparam PC.INIT_VAL = 32'b10011;
+    defparam R3.INIT_VAL = 32'b1;
+
     // RAM
     ram RAM(.RAM_data_out(Mdatain), .RAM_data_in(MDR_data_out), .address(MAR_data_out[8:0]), .clk(clk), .write_enable(RAM_write_enable), .read_enable(Read));
 

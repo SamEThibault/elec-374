@@ -33,6 +33,7 @@ initial begin
     mem[16] = 32'hB1800000; //in R3
     mem[17] = 32'h00000000;
     mem[18] = 32'h00000000;
+    mem[19] = 32'h69180025; // andi R2, R3, $25 ($25 = 0000000000000100101)
     // DATA VALUES
     mem[70] =  32'hFFFFFFF0; // Value at $45 + 1
     mem[117] = 32'hFFFFFFF0; //Value at $75 (hex) => 117 decimal
