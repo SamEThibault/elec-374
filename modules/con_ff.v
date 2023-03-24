@@ -23,7 +23,7 @@ begin
 			  default: decoder_out <= 4'b0000;
 		 endcase
 
-		 nor_out <= ~|bus_in;
+		 nor_out = ~|bus_in;
 		 equal_zero <= decoder_out[0] & nor_out;
 		 not_equal_zero <= decoder_out[1] & ~(nor_out);
 		 greater_equal_zero <= decoder_out[2] & ~(bus_in[31]);

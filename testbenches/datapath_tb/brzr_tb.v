@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module store_tb; //Add name of test bench here.
+module brzr_tb; //Add name of test bench here.
     reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, In_port_out; 
     wire [31:0] MDR_data_out;
     reg MDR_out;
@@ -10,7 +10,7 @@ module store_tb; //Add name of test bench here.
     wire [31:0] Mdatain;
 
     //Phase 2 Shiz
-    reg con_in, in_port_in, BA_out,Gra, Grb, Grc, out_port_enable, R_in, R_out;
+    reg con_in, in_port_in, BA_out, Gra, Grb, Grc, out_port_enable, R_in, R_out;
     reg RAM_write_enable;
 
     parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
@@ -110,44 +110,32 @@ module store_tb; //Add name of test bench here.
                 // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
                 T3: begin
                     #10 MDR_out <= 0; IR_enable <= 0;
-                    // //Disecting the IR register to grab the Rb register as well as triggering the corresponding register (eg R_out register to send data to the bus)
-                    // //Where register Y of the alu would store that value.
-                    #10 Grb <= 1; BA_out <= 1; Y_enable <= 1; 
+
+                    #10 Gra <= 1; R_out <= 1; con_in <=1;
                 end
                 // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
                 T4: begin
-                    #10 Grb <= 0; BA_out <= 0; Y_enable <= 0;
-                    //Here is where the immediate value is loaded onto the bus to be ready for the ALU add operation to find the effective address
-                    //For the case 1: you should see $90 = 1001 0000 = 144 decimal
-                    #10 C_out<= 1; Z_enable <= 1; opcode <= 5'b00011; //ADD OPCODE
+                    #10 Gra <= 0; R_out <= 0; con_in <= 0;
+
+                    #10 PC_out<= 1; Y_enable <= 1;
 
                 end
                  // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
                 T5: begin
-                    #10 C_out<= 0; Z_enable <= 0; 
+                    #10 PC_out<= 0; Y_enable<=0;
 
-                    // Notes ZLow out is the effective address we are writing to into the RAM.
-                    // Use the effective address to index the value in the ram
-                    #10 ZLow_out <= 1; MAR_enable <= 1; 
+
+                    //Here is where we add the current PC value with the immediate value 25 to get 34 = 100010
+                    #10 C_out <= 1; Z_enable <= 1; opcode<= 5'b00011;
                 end
-                // //  // ----------------------------------- T6 CYCLE OPERATION ----------------------------------- // 
+                 // ----------------------------------- T6 CYCLE OPERATION ----------------------------------- // 
                 T6: begin
-                    #10 ZLow_out <= 0; MAR_enable <= 0; 
+                    #10 C_out <= 0; Z_enable <= 0;
 
-                    //Sets RAM to be in Write mode and takes the data from the bus to write to a specific memory location.
-                    //Case 1: You'll be writing the memory address 117 decimal in RAM
-                    #10 Gra<= 1; BA_out <= 1; Read=0; MDR_enable <= 1;  //Read z_lowout from the bus
-                    
+                    //Sending the incremented PC value to the PC register.
+                    #10 ZLow_out <= 1; PC_enable <= 1;
                 end
-                 // ----------------------------------- T7 CYCLE OPERATION ----------------------------------- // 
-                T7: begin
 
-                    #10 Gra<= 0; BA_out <= 0; MDR_enable <= 0;  
-
-                    //Allow ram to write the value into memory
-                    #10 MDR_out<= 1; RAM_write_enable <= 1;                    
-
-                end
                 
             endcase
         end
