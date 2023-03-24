@@ -27,7 +27,7 @@ module ortb;
      .HI_out(HI_out),
      .LO_out(LO_out),
      .C_out(C_out),
-     .In_port_out(In_port_out),
+     .in_port_out(in_port_out),
      .R0_out(R0_out),
      .R1_out(R1_out),
 	 .R2_out(R2_out),

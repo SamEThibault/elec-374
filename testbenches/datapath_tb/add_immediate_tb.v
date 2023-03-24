@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 module add_immediate_tb; //Add name of test bench here.
-    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, In_port_out; 
+    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, in_port_out; 
     reg [31:0] MDR_out;
     reg MAR_enable, Z_enable, PC_enable, MDR_enable, IR_enable, Y_enable;
     reg IncPC, Read;
@@ -25,7 +25,7 @@ module add_immediate_tb; //Add name of test bench here.
      .HI_out(HI_out),
      .LO_out(LO_out),
      .C_out(C_out),
-     .In_port_out(In_port_out),
+     .in_port_out(in_port_out),
 	  .MDR_enable(MDR_enable), 
      .MAR_enable(MAR_enable), 
 	  .Z_enable(Z_enable), 
@@ -84,7 +84,7 @@ module add_immediate_tb; //Add name of test bench here.
                     PC_enable <=0; MDR_enable <= 0; IR_enable= 0; Y_enable= 0;
                     IncPC <= 0; Read <= 0; opcode <= 0;
                      Mdatain <= 32'h00000000;
-                    ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; In_port_out <= 0;
+                    ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; in_port_out <= 0;
 
                     // Phase 2 Initialization process for signals
                     Gra <= 0; Grb<= 0; Grc<=0; BA_out <=0; RAM_write_enable <=0; out_port_enable <=0; in_port_in <=0; con_in<=0; R_out <= 0; R_in <=0;

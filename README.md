@@ -124,10 +124,10 @@ Phase 2 To Do:
 
 Remaining Instructions:
 
-- ld    (In Progress) 
-- ldi   (In Progress) done
-- st    (In Progress)
-- addi  (In Progress)
+- ld     
+- ldi   
+- st    
+- addi  
 - andi
 - ori
 - brzr
@@ -136,8 +136,8 @@ Remaining Instructions:
 - brpl
 - jr
 - jal
-- mfhi
-- mflo
+- mfhi -
+- mflo -
 - out
 - in
 

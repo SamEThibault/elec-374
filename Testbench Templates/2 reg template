@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 module mul_tb;
-    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, R_out, In_port_out; 
+    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, R_out, in_port_out; 
     reg R0_out, R1_out, R2_out, R3_out, R4_out, R5_out;
     reg R6_out, R7_out, R8_out, R9_out, R10_out, R11_out;
     reg R12_out, R13_out, R14_out, R15_out;
@@ -27,7 +27,7 @@ module mul_tb;
      .HI_out(HI_out),
      .LO_out(LO_out),
      .C_out(C_out),
-     .In_port_out(In_port_out),
+     .in_port_out(in_port_out),
      .R0_out(R0_out),
      .R1_out(R1_out),
 	 .R2_out(R2_out),
@@ -111,7 +111,7 @@ module mul_tb;
                     PC_enable <=0; MDR_enable <= 0; IR_enable= 0; Y_enable= 0;
                     IncPC <= 0; Read <= 0; opcode <= 0;
                     R1_enable <= 0; R2_enable <= 0; R3_enable <= 0; Mdatain <= 32'h00000000;
-                ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; In_port_out <= 0;
+                ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; in_port_out <= 0;
                     //Out Registers
                     R0_out <= 0; R1_out <= 0; R2_out <= 0; R3_out <= 0; R4_out <= 0; R5_out <= 0;
                     R6_out <= 0; R7_out <= 0; R8_out <= 0; R9_out <= 0; R10_out <= 0; R11_out <= 0;

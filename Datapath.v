@@ -99,8 +99,8 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     reg_32_bit out_port(out_port_data_out, MuxOut, clk, clr, out_port_enable);  
 
     //ld Case 1:
-    //defparam PC.INIT_VAL = 32'b000; //ld instruction
-    //defparam PC.INIT_VAL = 32'b000; //ld R1, $75
+    // defparam PC.INIT_VAL = 32'b000; //ld instruction
+    // defparam PC.INIT_VAL = 32'b000; //ld R1, $75
     
     //ld Case 2: 
     // defparam R1.INIT_VAL = 32'b001; // for ld case 2
@@ -108,7 +108,7 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
 
 
     //ldi Case 3:
-    // defparam PC.INIT_VAL = 32'b010; //ldi R1, $75 
+    defparam PC.INIT_VAL = 32'b010; //ldi R1, $75 
 
     //ldi Case 4:
     //defparam PC.INIT_VAL = 32'b011; //ldi R1, $45(R1) 
@@ -164,8 +164,12 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     // defparam PC.INIT_VAL = 32'b10000;
 
     //mfhi
-    defparam PC.INIT_VAL = 32'b01110;
-    defparam HI.INIT_VAL = 32'hFFFFFFFF;
+    // defparam PC.INIT_VAL = 32'b01110;
+    // defparam HI.INIT_VAL = 32'hFFFFFFFF;
+
+    //mflo 
+    // defparam PC.INIT_VAL = 32'b01111;
+    // defparam LO.INIT_VAL = 32'hFFFFFFFF;
  
 
     // RAM

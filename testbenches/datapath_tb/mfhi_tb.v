@@ -11,7 +11,7 @@ module mfhi_tb; //Add name of test bench here.
 
     //Phase 2 Shiz
     reg con_in, in_port_in, BA_out,Gra, Grb, Grc, out_port_enable, R_in, R_out;
-    reg RAM_write_enable;
+    reg RAM_write_enable, in_port_enable;
 
     parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
     Reg_load2b = 4'b0100, Reg_load3a = 4'b0101, Reg_load3b = 4'b0110, T0 = 4'b0111,
