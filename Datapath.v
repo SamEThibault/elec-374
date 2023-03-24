@@ -12,7 +12,7 @@ input [4:0] opcode,
 
 // Phase 2 Inputs/Outputs
 input con_in, out_port_enable, RAM_write_enable, IR_enable,  
-input Gra, Grb, Grc, R_in, R_out, BA_out, In_port_out
+input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
 );
 
 
@@ -48,7 +48,7 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, In_port_out
     wire [31:0] MAR_data_out;
     wire [31:0] ZLow_data_out;
     wire [31:0] ZHigh_data_out;
-    wire [31:0] In_port_data_out;
+    wire [31:0] in_port_data_out;
     wire [31:0] C_sign_extended_data_out;
     
 
@@ -99,11 +99,10 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, In_port_out
 //     ------------------------------------------ PHASE 2 SHIZ ------------------------------------------  //
     
     // In/Out Ports cct
-    wire in_port_enable = 1;       // no enable so just always set it to 1. (Note we might not need to set the value here maybe just in test bench)
     wire [31:0] out_port_data_out;
     wire [31:0] in_port_in = 32'hFFFFFFFF;
     
-    reg_32_bit in_port(MuxOut, in_port_in, clk, clr, in_port_enable);
+    reg_32_bit in_port(in_port_data_out, in_port_in, clk, clr, in_port_enable);
     reg_32_bit out_port(out_port_data_out, MuxOut, clk, clr, out_port_enable);  
 
     //ld Case 1:
@@ -137,7 +136,7 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, In_port_out
     // defparam PC.INIT_VAL = 32'b10000;
 
     //out
-    defparam PC.INIT_VAL = 32'b10100;
+    defparam PC.INIT_VAL = 32'b10000;
  
 
     // RAM
@@ -161,7 +160,7 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, In_port_out
     wire [31:0] temp = { 
                                 {8{1'b0}},
                                 C_out,
-                                In_port_out, 
+                                in_port_out, 
                                 MDR_out, 
                                 PC_out, 
                                 ZLow_out,
