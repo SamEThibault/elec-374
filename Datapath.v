@@ -129,8 +129,8 @@ input Gra, Grb, Grc, R_in, R_out, BA_out
     //addi R2, R3, -3
     // defparam PC.INIT_VAL = 32'b110;
 
-    //andi R2, R3, $25
-    defparam PC.INIT_VAL = 32'b10011;
+    //ori R2, R3, $25
+    defparam PC.INIT_VAL = 32'b00111;
     defparam R3.INIT_VAL = 32'b1;
 
     // RAM
