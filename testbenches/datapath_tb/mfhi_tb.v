@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 module mfhi_tb; //Add name of test bench here.
-    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, In_port_out; 
+    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, in_port_out; 
     wire [31:0] MDR_data_out;
     reg MDR_out;
     reg MAR_enable, Z_enable, PC_enable, MDR_enable, IR_enable, Y_enable;
@@ -64,7 +64,7 @@ module mfhi_tb; //Add name of test bench here.
         begin
             case (Present_state)
                 Default : Present_state = T0;
-                T0 : Present_state = T1;
+                T0 : #40 Present_state = T1;
                 T1 : #40 Present_state = T2;
                 T2 : #40 Present_state = T3;
                 T3 : #40 Present_state = T4;
@@ -79,20 +79,22 @@ always @(Present_state) // do the required job in each state
                     MAR_enable <= 0; Z_enable <= 0;
                     PC_enable <=0; MDR_enable <= 0; IR_enable= 0; Y_enable= 0;
                     IncPC <= 0; Read <= 0; opcode <= 0;
-                    ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; In_port_out <= 0;
+                    ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; in_port_out <= 0;
                     MDR_out <= 0;
 
                     // Phase 2 Initialization process for signals
                     Gra <= 0; Grb<= 0; Grc<=0; BA_out <=0; RAM_write_enable <=0; out_port_enable <=0; 
-                    in_port_in <=0; con_in<=0; R_out <= 0; R_in <=0;
+                     con_in<=0; R_out <= 0; R_in <=0; //in_port_in <=0;
+                    //  in_port_enable <=0;
+                     
                 end
                 // ----------------------------------- T0 INSTRUCTION FETCH ----------------------------------- // 
                 T0: begin
-                    PC_out <= 1;  
+                    PC_out <= 1;  MAR_enable <= 1; 
                 end
                 // ----------------------------------- T1 INSTRUCTION FETCH ----------------------------------- // 
                 T1: begin
-                    MAR_enable <= 1; 
+                    PC_out <= 0; MAR_enable <= 0; 
 
                      //Instruction to fetch from RAM to store the data into MDR.
                     Read <= 1;
@@ -102,7 +104,7 @@ always @(Present_state) // do the required job in each state
                 T2: begin
                     PC_enable <= 1;
                     IncPC <= 1;
-					PC_out <= 0; MAR_enable <= 0; IncPC <= 0; PC_enable <= 0;
+					IncPC <= 0; PC_enable <= 0;
                     MDR_enable <= 0;
 
                     //Puts the RAM memory data into the IR register via the busmuxout
