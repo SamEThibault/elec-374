@@ -124,26 +124,26 @@ Phase 2 To Do:
 
 Remaining Instructions:
 
-- ld    - 
+- ld    -
 - ldi   -
 - st    -
-- addi  
-- andi
-- ori
+- addi  -
+- andi  -
+- ori   -
 - brzr
 - brnz
 - brmi
 - brpl
 - jr
 - jal
-- mfhi -
-- mflo -
-- out
-- in
-
+- mfhi  -
+- mflo  -
+- out   -
+- in    -
 
 Phase 2 Docs
-- [] Code 
+
+- [] Code
 - [] IR Values
 - [] RAM values
 - [] Register you're storing into

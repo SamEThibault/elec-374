@@ -10,7 +10,7 @@ module or_immediate_tb; //Add name of test bench here.
     wire [31:0] Mdatain;
 
     //Phase 2 Shiz
-    reg con_in, in_port_in, BA_out,Gra, Grb, Grc, out_port_enable, R_in, R_out;
+    reg con_in, in_port_in, BA_out,Gra, Grb, Grc, out_port_enable, R_in, R_out, in_port_enable;
     reg RAM_write_enable;
 
     parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
@@ -41,7 +41,6 @@ module or_immediate_tb; //Add name of test bench here.
 
      //Phase Two Inputs
      .con_in(con_in),
-     .in_port_in(in_port_in),
      .out_port_enable(out_port_enable),
      .RAM_write_enable(RAM_write_enable),
      .Gra(Gra), 
@@ -51,7 +50,8 @@ module or_immediate_tb; //Add name of test bench here.
      .R_out(R_out),
      .BA_out(BA_out),
      .IR_enable(IR_enable),
-     .Mdatain(Mdatain)
+     .Mdatain(Mdatain),
+     .in_port_enable(in_port_enable)
     );
 
     initial

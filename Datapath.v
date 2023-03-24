@@ -108,7 +108,7 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
 
 
     //ldi Case 3:
-    defparam PC.INIT_VAL = 32'b010; //ldi R1, $75 
+    // defparam PC.INIT_VAL = 32'b010; //ldi R1, $75 
 
     //ldi Case 4:
     //defparam PC.INIT_VAL = 32'b011; //ldi R1, $45(R1) 
@@ -146,7 +146,7 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     // defparam PC.INIT_VAL = 32'b1101; 
     // defparam R2.INIT_VAL = 32'hF;
 
-    //addi R2, R3, -3
+    // addi R2, R3, -3
     // defparam PC.INIT_VAL = 32'b110;
 
     //andi R2, R3, $25
@@ -158,10 +158,11 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     // defparam R3.INIT_VAL = 32'b1;
 
     // in
-    // defparam PC.INIT_VAL = 32'b10000;
+    defparam PC.INIT_VAL = 32'b10000;
 
     //out
-    // defparam PC.INIT_VAL = 32'b10000;
+    // defparam R2.INIT_VAL = 32'hFFFFFFFF;
+    // defparam PC.INIT_VAL = 32'b10100;
 
     //mfhi
     // defparam PC.INIT_VAL = 32'b01110;
