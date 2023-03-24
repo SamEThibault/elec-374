@@ -13,6 +13,8 @@ always@(posedge clk)
             PC_data_out <= PC_data_out + 1;
         else if(PC_enable == 1 && con_out  == 1)
             PC_data_out <= (MuxOut + 1); //C (sign extended + 1)
+        else if(PC_enable == 1)
+            PC_data_out <= (MuxOut + 1);
     end
 
 endmodule

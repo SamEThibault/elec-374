@@ -122,9 +122,29 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     // defparam PC.INIT_VAL = 32'b101;  
     // defparam R4.INIT_VAL = 32'h67;
 
-    //st Case 1: brzr R6, 25
-    defparam PC.INIT_VAL = 32'b1000; 
-    defparam R6.INIT_VAL = 32'h0;
+    //Case 1: brzr R6, 25
+    // defparam PC.INIT_VAL = 32'b1000; 
+    // defparam R6.INIT_VAL = 32'h0;
+
+    //Case 2: brnz R6, 25
+    // defparam PC.INIT_VAL = 32'b1001; 
+    // defparam R6.INIT_VAL = 32'h1;
+
+    // //Case 3: brpl R6, 25
+    // defparam PC.INIT_VAL = 32'b1010; 
+    // defparam R6.INIT_VAL = 32'h1;
+
+    // //Case 4: brmi R6, 25
+    // defparam PC.INIT_VAL = 32'b1011; 
+    // defparam R6.INIT_VAL = 32'h80000000;
+
+    //jr R2
+    defparam PC.INIT_VAL = 32'b1100; 
+    defparam R2.INIT_VAL = 32'hF;
+
+    //jal
+    // defparam PC.INIT_VAL = 32'b1101; 
+    // defparam R2.INIT_VAL = 32'hF;
 
     //addi R2, R3, -3
     // defparam PC.INIT_VAL = 32'b110;
