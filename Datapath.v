@@ -100,9 +100,10 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, In_port_out
     
     // In/Out Ports cct
     wire in_port_enable = 1;       // no enable so just always set it to 1. (Note we might not need to set the value here maybe just in test bench)
-    wire [31:0] in_port_data_out;
     wire [31:0] out_port_data_out;
-    reg_32_bit in_port(in_port_data_out, in_port_in, clk, clr, in_port_enable);
+    wire [31:0] in_port_in = 32'hFFFFFFFF;
+    
+    reg_32_bit in_port(MuxOut, in_port_in, clk, clr, in_port_enable);
     reg_32_bit out_port(out_port_data_out, MuxOut, clk, clr, out_port_enable);  
 
     //ld Case 1:
@@ -132,9 +133,12 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, In_port_out
     // defparam PC.INIT_VAL = 32'b00111;
     // defparam R3.INIT_VAL = 32'b1;
 
-    // mflo
+    // in
+    // defparam PC.INIT_VAL = 32'b10000;
+
+    //out
     defparam PC.INIT_VAL = 32'b10100;
-    defparam R2.INIT_VAL = 32'hFFFFFFFF;
+ 
 
     // RAM
     ram RAM(.RAM_data_out(Mdatain), .RAM_data_in(MDR_data_out), .address(MAR_data_out[8:0]), .clk(clk), .write_enable(RAM_write_enable), .read_enable(Read));
@@ -211,7 +215,7 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, In_port_out
                        ZLow_data_out, 
                        PC_data_out,
                        MDR_data_out,
-                       In_port_data_out,
+                       in_port_data_out,
                        C_sign_extended_data_out,
                        enc_out
                        );

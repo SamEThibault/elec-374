@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module mflo_tb; //Add name of test bench here.
+module in_tb; //Add name of test bench here.
     reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, In_port_out; 
     wire [31:0] MDR_data_out;
     reg MDR_out;
@@ -41,7 +41,6 @@ module mflo_tb; //Add name of test bench here.
 
      //Phase Two Inputs
      .con_in(con_in),
-     .in_port_in(in_port_in),
      .out_port_enable(out_port_enable),
      .RAM_write_enable(RAM_write_enable),
      .Gra(Gra), 
@@ -67,7 +66,6 @@ module mflo_tb; //Add name of test bench here.
                 T0 : Present_state = T1;
                 T1 : #40 Present_state = T2;
                 T2 : #40 Present_state = T3;
-                T3 : #40 Present_state = T4;
             endcase
         end
 
@@ -88,36 +86,30 @@ always @(Present_state) // do the required job in each state
                 end
                 // ----------------------------------- T0 INSTRUCTION FETCH ----------------------------------- // 
                 T0: begin
-                    PC_out <= 1;  
+                    // PC_enable <= 1; IncPC <= 1;
+                    PC_out <= 1; MAR_enable <= 1; 
                 end
                 // ----------------------------------- T1 INSTRUCTION FETCH ----------------------------------- // 
-                T1: begin
-                    MAR_enable <= 1; 
+                // T1: begin
+                //     MAR_enable <= 0; PC_out <= 0;
+                //     IncPC <= 0; PC_enable <= 0;
 
-                     //Instruction to fetch from RAM to store the data into MDR.
-                    Read <= 1;
-                    MDR_enable <= 1; 
-                end
-                // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
-                T2: begin
-                    PC_enable <= 1;
-                    IncPC <= 1;
-					PC_out <= 0; MAR_enable <= 0; IncPC <= 0; PC_enable <= 0;
-                    MDR_enable <= 0;
+                //      //Instruction to fetch from RAM to store the data into MDR.
+                //     Read <= 1;
+                //     MDR_enable <= 1; 
+                // end
+                // // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
+                // T2: begin
+                //     MDR_enable <= 0; MDR_out <= 1;
 
-                    //Puts the RAM memory data into the IR register via the busmuxout
-                    MDR_out <= 1; IR_enable <= 1;
-                end
-            //     // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
-                T3: begin
-                    MDR_out <= 0; IR_enable <= 0;
-                    LO_out <= 1;
-                    Gra <= 1; R_in <= 1; 
-                end
-                // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
-                T4: begin
-                    // Gra <= 0;
-                end
+                //     //Puts the RAM memory data into the IR register via the busmuxout
+                //     IR_enable <= 1;
+                // end
+                // // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
+                // T3: begin
+                //     MDR_out <= 0; IR_enable <= 0;
+                //     Gra <= 1; In_port_out <= 1; R_in <= 1;
+                // end 
 
             endcase
         end

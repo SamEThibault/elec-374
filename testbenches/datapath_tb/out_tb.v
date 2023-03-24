@@ -7,7 +7,7 @@ module out_tb; //Add name of test bench here.
     reg IncPC, Read;
     reg [4:0] opcode;
     reg Clock, clr;
-    wire [31:0] Mdatain, in_port_data_out, out_port_data_out;
+    wire [31:0] Mdatain;
 
     //Phase 2 Shiz
     reg con_in, in_port_in, BA_out,Gra, Grb, Grc, out_port_enable, R_in, R_out;
