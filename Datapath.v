@@ -123,8 +123,8 @@ input Gra, Grb, Grc, R_in, R_out, BA_out
     // defparam R1.INIT_VAL = 32'h00000001; //R1 holds value of 1 for $45(R1) = $45+$1 = $46 = 70 decimal => 100 0110
     
     //st Case 1: st $90, R4
-    defparam PC.INIT_VAL = 32'b100; //ldi R1, $45(R1) 
-    defparam R4.INIT_VAL = 32'h94;
+    // defparam PC.INIT_VAL = 32'b100; //ldi R1, $45(R1) 
+    // defparam R4.INIT_VAL = 32'h94;
 
     //addi R2, R3, -3
     // defparam PC.INIT_VAL = 32'b110;
@@ -150,11 +150,8 @@ input Gra, Grb, Grc, R_in, R_out, BA_out
     
     //MDR
     mdr MDR(.MDRdataout(MDR_data_out), .BusMuxOut(MuxOut), .Mdatain(Mdatain), .read_signal(Read), .clk(clk), .clr(clr), .enable(MDR_enable));
-    
-    // 32:5 Encoder (Goes highest to lowest in descending order) For some reason the the the first three encoders dont work.
-    encoder_32_to_5 BusEncoder(.enc_output(enc_out),
-                              .enc_input(
-                               { 
+
+    wire [31:0] temp = { 
                                 {8{1'b0}},
                                 C_out,
                                 In_port_out, 
@@ -180,8 +177,11 @@ input Gra, Grb, Grc, R_in, R_out, BA_out
                                 R_outs[2],
                                 R_outs[1],
                                 R_outs[0]
-                                } 
-                              )
+                                };
+
+    // 32:5 Encoder (Goes highest to lowest in descending order) For some reason the the the first three encoders dont work.
+    encoder_32_to_5 BusEncoder(.enc_output(enc_out),
+                              .enc_input(temp)
                                 );
 
     //Multiplexer Bus Mux 32:1 all of these inputs are the data that will be sent to "MuxOut" based on the "enc_out" selection
