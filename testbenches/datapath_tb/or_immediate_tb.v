@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module and_immediate_tb; //Add name of test bench here.
+module or_immediate_tb; //Add name of test bench here.
     reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, In_port_out; 
     wire [31:0] MDR_data_out;
     reg MDR_out;
@@ -123,7 +123,7 @@ always @(Present_state) // do the required job in each state
                     Grb <= 0; BA_out <= 0; Y_enable <= 0;
 
                     //Here is where the immediate value is loaded onto the bus to be ready for the ALU add operation to find the effective address
-                    #10 C_out<= 1; Z_enable <= 1; opcode <= 5'b00101; //AND OPCODE
+                    #10 C_out<= 1; Z_enable <= 1; opcode <= 5'b00110; //OR OPCODE
                 end
                  // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
                 T5: begin

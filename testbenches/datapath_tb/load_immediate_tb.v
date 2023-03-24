@@ -18,14 +18,15 @@ module load_immediate_tb; //Add name of test bench here.
     reg [3:0] Present_state = Default;
 
     Datapath DUT(
-	 .PC_out(PC_out), 
+.PC_out(PC_out),
+     .MDR_data_out(MDR_data_out), 
      .ZHigh_out(ZHigh_out),
 	 .ZLow_out(ZLow_out), 
 	 .MDR_out(MDR_out),
      .HI_out(HI_out),
      .LO_out(LO_out),
      .C_out(C_out),
-     .In_port_out(In_port_out),
+     .in_port_out(in_port_out),
 	  .MDR_enable(MDR_enable), 
      .MAR_enable(MAR_enable), 
 	  .Z_enable(Z_enable), 
@@ -39,7 +40,6 @@ module load_immediate_tb; //Add name of test bench here.
 
      //Phase Two Inputs
      .con_in(con_in),
-     .in_port_in(in_port_in),
      .out_port_enable(out_port_enable),
      .RAM_write_enable(RAM_write_enable),
      .Gra(Gra), 
@@ -48,7 +48,9 @@ module load_immediate_tb; //Add name of test bench here.
      .R_in(R_in),
      .R_out(R_out),
      .BA_out(BA_out),
-     .IR_enable(IR_enable)
+     .IR_enable(IR_enable),
+     .Mdatain(Mdatain),
+     .in_port_enable(in_port_enable)
     );
 
     initial

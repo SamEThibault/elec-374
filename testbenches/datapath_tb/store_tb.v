@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 module store_tb; //Add name of test bench here.
-    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, In_port_out; 
+    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, in_port_out; 
     wire [31:0] MDR_data_out;
     reg MDR_out;
     reg MAR_enable, Z_enable, PC_enable, MDR_enable, IR_enable, Y_enable;
@@ -19,7 +19,7 @@ module store_tb; //Add name of test bench here.
     reg [3:0] Present_state = Default;
 
     Datapath DUT(
-	 .PC_out(PC_out),
+.PC_out(PC_out),
      .MDR_data_out(MDR_data_out), 
      .ZHigh_out(ZHigh_out),
 	 .ZLow_out(ZLow_out), 
@@ -27,7 +27,7 @@ module store_tb; //Add name of test bench here.
      .HI_out(HI_out),
      .LO_out(LO_out),
      .C_out(C_out),
-     .In_port_out(In_port_out),
+     .in_port_out(in_port_out),
 	  .MDR_enable(MDR_enable), 
      .MAR_enable(MAR_enable), 
 	  .Z_enable(Z_enable), 
@@ -41,7 +41,6 @@ module store_tb; //Add name of test bench here.
 
      //Phase Two Inputs
      .con_in(con_in),
-     .in_port_in(in_port_in),
      .out_port_enable(out_port_enable),
      .RAM_write_enable(RAM_write_enable),
      .Gra(Gra), 
@@ -51,7 +50,8 @@ module store_tb; //Add name of test bench here.
      .R_out(R_out),
      .BA_out(BA_out),
      .IR_enable(IR_enable),
-     .Mdatain(Mdatain)
+     .Mdatain(Mdatain),
+     .in_port_enable(in_port_enable)
     );
 
     initial
@@ -83,7 +83,7 @@ module store_tb; //Add name of test bench here.
                     PC_enable <=0; MDR_enable <= 0; IR_enable= 0; Y_enable= 0;
                     IncPC <= 0; Read <= 0; opcode <= 0;
                     //  Mdatain <= 32'h00000000;
-                    ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; In_port_out <= 0;
+                    ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; in_port_out <= 0;
 
                     // Phase 2 Initialization process for signals
                     Gra <= 0; Grb<= 0; Grc<=0; BA_out <=0; RAM_write_enable <=0; out_port_enable <=0; in_port_in <=0; con_in<=0; R_out <= 0; R_in <=0;

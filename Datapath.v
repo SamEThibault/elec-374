@@ -1,13 +1,13 @@
 module Datapath(
 output [31:0] Mdatain, MDR_data_out,
-input PC_out, ZHigh_out, ZLow_out, HI_out, LO_out, In_port_out, C_out,
-input MDR_out,MDR_enable, MAR_enable, Z_enable, Y_enable, PC_enable, CON_enable, LO_enable, 
+input PC_out, ZHigh_out, ZLow_out, HI_out, LO_out, C_out,
+input MDR_out,MDR_enable, MAR_enable, Z_enable, Y_enable, PC_enable, LO_enable, 
 HI_enable, clr, clk, InPort, IncPC, Read,
 input [4:0] opcode,
 
 // Phase 2 Inputs/Outputs
-input con_in, in_port_in, out_port_enable, RAM_write_enable, IR_enable,  
-input Gra, Grb, Grc, R_in, R_out, BA_out
+input con_in, out_port_enable, RAM_write_enable, IR_enable,  
+input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
 );
 
 
@@ -41,7 +41,7 @@ input Gra, Grb, Grc, R_in, R_out, BA_out
     wire [31:0] MAR_data_out;
     wire [31:0] ZLow_data_out;
     wire [31:0] ZHigh_data_out;
-    wire [31:0] In_port_data_out;
+    wire [31:0] in_port_data_out;
     wire [31:0] C_sign_extended_data_out;
     
 
@@ -86,18 +86,17 @@ input Gra, Grb, Grc, R_in, R_out, BA_out
     pc PC(.PC_data_out(PC_data_out), .clk(clk), .IncPC(IncPC), .PC_enable(PC_enable), .MuxOut(MuxOut), .con_out(con_out)); //ld R1, $75
 
 
-    // CON FF cct
+    // CON FF 
     con_ff CON_FF(con_out, IR_data_out[20:19], MuxOut, con_in);
 
 //     ------------------------------------------ PHASE 2 SHIZ ------------------------------------------  //
     
     // In/Out Ports cct
-    wire [31:0] in_port_out;
-    wire in_port_enable = 1;       // no enable so just always set it to 1. (Note we might not need to set the value here maybe just in test bench)
-    reg_32_bit in_port(in_port_out, in_port_in, clk, clr, in_port_enable);
-
-    wire [31:0] out_port_out;       // "to output unit"
-    reg_32_bit out_port(out_port_out, MuxOut, clk, clr, out_port_enable);  
+    wire [31:0] out_port_data_out;
+    wire [31:0] in_port_in = 32'hFFFFFFFF;
+    
+    reg_32_bit in_port(in_port_data_out, in_port_in, clk, clr, in_port_enable);
+    reg_32_bit out_port(out_port_data_out, MuxOut, clk, clr, out_port_enable);  
 
     //ld Case 1:
     //defparam PC.INIT_VAL = 32'b000; //ld instruction
@@ -134,6 +133,17 @@ input Gra, Grb, Grc, R_in, R_out, BA_out
     // defparam PC.INIT_VAL = 32'b10011;
     // defparam R3.INIT_VAL = 32'b1;
 
+    //ori R2, R3, $25
+    // defparam PC.INIT_VAL = 32'b00111;
+    // defparam R3.INIT_VAL = 32'b1;
+
+    // in
+    // defparam PC.INIT_VAL = 32'b10000;
+
+    //out
+    // defparam PC.INIT_VAL = 32'b10000;
+ 
+
     // RAM
     ram RAM(.RAM_data_out(Mdatain), .RAM_data_in(MDR_data_out), .address(MAR_data_out[8:0]), .clk(clk), .write_enable(RAM_write_enable), .read_enable(Read));
 
@@ -158,7 +168,7 @@ input Gra, Grb, Grc, R_in, R_out, BA_out
                                { 
                                 {8{1'b0}},
                                 C_out,
-                                In_port_out, 
+                                in_port_out, 
                                 MDR_out, 
                                 PC_out, 
                                 ZLow_out,
@@ -181,9 +191,10 @@ input Gra, Grb, Grc, R_in, R_out, BA_out
                                 R_outs[2],
                                 R_outs[1],
                                 R_outs[0]
-                                } 
-                              )
+                                }
+                                )
                                 );
+
 
     //Multiplexer Bus Mux 32:1 all of these inputs are the data that will be sent to "MuxOut" based on the "enc_out" selection
     mux_32_to_1 BusMux(MuxOut, 
@@ -209,7 +220,7 @@ input Gra, Grb, Grc, R_in, R_out, BA_out
                        ZLow_data_out, 
                        PC_data_out,
                        MDR_data_out,
-                       In_port_data_out,
+                       in_port_data_out,
                        C_sign_extended_data_out,
                        enc_out
                        );
