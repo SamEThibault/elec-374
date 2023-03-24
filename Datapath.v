@@ -103,8 +103,8 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     //defparam PC.INIT_VAL = 32'b000; //ld R1, $75
     
     //ld Case 2: 
-    //defparam R1.init_val = 32'b001; // for ld case 2
-    //defparam PC.INIT_VAL = 32'b001; //ld instruction case 2
+    defparam R1.INIT_VAL = 32'b001; // for ld case 2
+    defparam PC.INIT_VAL = 32'b001; //ld instruction case 2
 
 
     //ldi Case 3:
@@ -123,8 +123,8 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     // defparam R4.INIT_VAL = 32'h67;
 
     //st Case 1: brzr R6, 25
-    defparam PC.INIT_VAL = 32'b1000; 
-    defparam R6.INIT_VAL = 32'h0;
+    // defparam PC.INIT_VAL = 32'b1000; 
+    // defparam R6.INIT_VAL = 32'h0;
 
     //addi R2, R3, -3
     // defparam PC.INIT_VAL = 32'b110;

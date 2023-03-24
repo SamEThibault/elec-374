@@ -64,13 +64,13 @@ module load_tb; //Add name of test bench here.
         begin
             case (Present_state)
                 Default : Present_state = T0;
-                T0 : Present_state = T1;
-                T1 : Present_state = T2;
-                T2 : Present_state = T3;
-                T3 : Present_state = T4;
-                T4 : Present_state = T5;
-                T5 : Present_state = T6;
-                T6 : Present_state = T7;
+                T0 : #40 Present_state = T1;
+                T1 : #40 Present_state = T2;
+                T2 : #40 Present_state = T3;
+                T3 : #40 Present_state = T4;
+                T4 : #40 Present_state = T5;
+                T5 : #40 Present_state = T6;
+                T6 : #40 Present_state = T7;
             endcase
         end
 
@@ -92,56 +92,58 @@ module load_tb; //Add name of test bench here.
 
                 // ----------------------------------- T0 INSTRUCTION FETCH ----------------------------------- // 
                 T0: begin
-                    #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  
-					#10 PC_out <= 0; MAR_enable <= 0; IncPC <= 0; PC_enable <= 0;
+                    PC_out <= 1; MAR_enable <= 1; PC_enable <= 1;
                 end
                 // ----------------------------------- T1 INSTRUCTION FETCH ----------------------------------- // 
                 T1: begin
-                     //Instruction to fetch from RAM.
-                    #10 Read <= 1;
-                    #10 MDR_enable <= 1; 
-                    // #10 MDR_enable <= 0;
+                    PC_out <= 0; MAR_enable <= 0; PC_enable <= 0;
+
+                    //Instruction to fetch from RAM.
+                    Read <= 1;
+                    MDR_enable <= 1; 
                 end
-                // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
+                // // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
                 T2: begin
-                    #10 MDR_out <= 1; IR_enable <= 1; 
-                    #10 MDR_out <= 0; IR_enable <= 0; MDR_enable <= 0;
+                    MDR_enable <= 0;
+                    MDR_out <= 1; IR_enable <= 1; 
                 end
-                // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
+                // // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
                 T3: begin
-                    #10 Grb <= 1; BA_out <= 1; Y_enable <= 1; //Sends out the data of $75 to the bus
-                    #10 Grb <= 0; BA_out <= 0; Y_enable <= 0;
+                    MDR_out <= 0; IR_enable <= 0;
+
+                    Grb <= 1; BA_out <= 1; Y_enable <= 1; //Sends out the data of reg to Y
                 end
-                // // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
+                // // // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
                 T4: begin
-                    #10 C_out<= 1; Z_enable <= 1; opcode <= 5'b00011; //ADD OP CODE
-                    #10 C_out<= 0; Z_enable <= 0; 
+                    Grb <= 0; BA_out <= 0; Y_enable <= 0;
 
+                    C_out<= 1; Z_enable <= 1; opcode <= 5'b00011; //ADD OP CODE, send $45 to ALU and add
                 end
-                 // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
+                //  // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
                 T5: begin
-                    // Notes ZLow out is the effective address we are looking into the ram for the data.
-                    #10 ZLow_out <= 1; MAR_enable <=1; //Sending it back to MAR to get the effective memory address
-                    #10 ZLow_out <= 0; MAR_enable <=0;
+                    C_out<= 0; Z_enable <= 0; 
 
+                    // Notes ZLow out is the effective address we are looking into the ram for the data.
+                    ZLow_out <= 1; MAR_enable <=1; //Sending it back to MAR to get the effective memory address
                 end
-                 // ----------------------------------- T6 CYCLE OPERATION ----------------------------------- // 
+                //  // ----------------------------------- T6 CYCLE OPERATION ----------------------------------- // 
                 T6: begin
+                    ZLow_out <= 0; MAR_enable <=0;
+
                     //Fetching data from ram
-                    #10 Read <= 1; MDR_enable <=1; 
-                    #10 MDR_enable <=0; 
+                    Read <= 1; MDR_enable <=1;  
                 end
-                 // ----------------------------------- T7 CYCLE OPERATION ----------------------------------- // 
+                //  // ----------------------------------- T7 CYCLE OPERATION ----------------------------------- // 
                 T7: begin
+                    MDR_enable <=0;
+
                     //Send the data that was taken from ram and load it into register R1
                     MDR_out <=1; //Data from ram
                     Gra <= 1; 
                     R_in <= 1;
-                    #10
-                    MDR_out <= 0; //Data from ram
-                    Gra <= 0; 
-                    R_in <= 0;
-
+                    // MDR_out <= 0; //Data from ram
+                    // Gra <= 0; 
+                    // R_in <= 0;
                 end
             endcase
         end
