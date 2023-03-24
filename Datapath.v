@@ -1,7 +1,7 @@
 module Datapath(
 output [31:0] Mdatain, MDR_data_out,
-input PC_out, ZHigh_out, ZLow_out, HI_out, LO_out, In_port_out, C_out,
-input MDR_out,MDR_enable, MAR_enable, Z_enable, Y_enable, PC_enable, CON_enable, LO_enable, 
+input PC_out, ZHigh_out, ZLow_out, HI_out, LO_out, C_out,
+input MDR_out,MDR_enable, MAR_enable, Z_enable, Y_enable, PC_enable, LO_enable, 
 HI_enable, clr, clk, InPort, IncPC, Read,
 input [4:0] opcode,
 // input R0_out, R1_out, R2_out, R3_out, R4_out, R5_out, R6_out, R7_out, R8_out, R9_out, 
@@ -11,8 +11,8 @@ input [4:0] opcode,
 //       R14_enable, R15_enable,
 
 // Phase 2 Inputs/Outputs
-input con_in, in_port_in, out_port_enable, RAM_write_enable, IR_enable,  
-input Gra, Grb, Grc, R_in, R_out, BA_out
+input con_in, out_port_enable, RAM_write_enable, IR_enable,  
+input Gra, Grb, Grc, R_in, R_out, BA_out, In_port_out
 );
 
 
@@ -94,17 +94,16 @@ input Gra, Grb, Grc, R_in, R_out, BA_out
 
     // CON FF cct
     wire con_out;
-    con_ff CON_FF(con_out, IR_data_out[20:19], BusMuxOut, con_in);
+    con_ff CON_FF(con_out, IR_data_out[20:19], MuxOut, con_in);
 
 //     ------------------------------------------ PHASE 2 SHIZ ------------------------------------------  //
     
     // In/Out Ports cct
-    wire [31:0] in_port_out;
     wire in_port_enable = 1;       // no enable so just always set it to 1. (Note we might not need to set the value here maybe just in test bench)
-    reg_32_bit in_port(in_port_out, in_port_in, clk, clr, in_port_enable);
-
-    wire [31:0] out_port_out;       // "to output unit"
-    reg_32_bit out_port(out_port_out, BusMuxOut, clk, clr, out_port_enable);  
+    wire [31:0] in_port_data_out;
+    wire [31:0] out_port_data_out;
+    reg_32_bit in_port(in_port_data_out, in_port_in, clk, clr, in_port_enable);
+    reg_32_bit out_port(out_port_data_out, MuxOut, clk, clr, out_port_enable);  
 
     //ld Case 1:
     //defparam PC.INIT_VAL = 32'b000; //ld instruction
@@ -134,8 +133,8 @@ input Gra, Grb, Grc, R_in, R_out, BA_out
     // defparam R3.INIT_VAL = 32'b1;
 
     // mflo
-    defparam PC.INIT_VAL = 32'b1111;
-    defparam LO.INIT_VAL = 32'hFFFFFFFF;
+    defparam PC.INIT_VAL = 32'b10100;
+    defparam R2.INIT_VAL = 32'hFFFFFFFF;
 
     // RAM
     ram RAM(.RAM_data_out(Mdatain), .RAM_data_in(MDR_data_out), .address(MAR_data_out[8:0]), .clk(clk), .write_enable(RAM_write_enable), .read_enable(Read));
