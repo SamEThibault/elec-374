@@ -4,11 +4,6 @@ input PC_out, ZHigh_out, ZLow_out, HI_out, LO_out, C_out,
 input MDR_out,MDR_enable, MAR_enable, Z_enable, Y_enable, PC_enable, LO_enable, 
 HI_enable, clr, clk, InPort, IncPC, Read,
 input [4:0] opcode,
-// input R0_out, R1_out, R2_out, R3_out, R4_out, R5_out, R6_out, R7_out, R8_out, R9_out, 
-//       R10_out, R11_out, R12_out, R13_out, R14_out, R15_out,
-// input R0_enable, R1_enable, R2_enable, R3_enable, R4_enable, R5_enable, R6_enable, 
-//       R7_enable, R8_enable, R9_enable, R10_enable, R11_enable, R12_enable, R13_enable, 
-//       R14_enable, R15_enable,
 
 // Phase 2 Inputs/Outputs
 input con_in, out_port_enable, RAM_write_enable, IR_enable,  
@@ -16,8 +11,6 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
 );
 
 
-
-// wire[31:0] Mdatain;
 
 
     // General Purpose Registers
@@ -88,12 +81,12 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     z Z_reg(ZHigh_data_out, ZLow_data_out, C_data_out, clk, clr, Z_enable);
 
     
-    // PC
-    pc PC(PC_data_out, clk, IncPC, PC_enable, MuxOut); //ld R1, $75
-
-
-    // CON FF cct
     wire con_out;
+    // PC
+    pc PC(.PC_data_out(PC_data_out), .clk(clk), .IncPC(IncPC), .PC_enable(PC_enable), .MuxOut(MuxOut), .con_out(con_out)); //ld R1, $75
+
+
+    // CON FF 
     con_ff CON_FF(con_out, IR_data_out[20:19], MuxOut, con_in);
 
 //     ------------------------------------------ PHASE 2 SHIZ ------------------------------------------  //
@@ -110,23 +103,35 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     //defparam PC.INIT_VAL = 32'b000; //ld R1, $75
     
     //ld Case 2: 
-//     defparam R1.init_val = 32'b001; // for ld case 2
-//     defparam PC.INIT_VAL = 32'b001; //ld instruction case 2
+    //defparam R1.init_val = 32'b001; // for ld case 2
+    //defparam PC.INIT_VAL = 32'b001; //ld instruction case 2
 
 
     //ldi Case 3:
     // defparam PC.INIT_VAL = 32'b010; //ldi R1, $75 
 
     //ldi Case 4:
-//     defparam PC.INIT_VAL = 32'b011; //ldi R1, $45(R1) 
+    //defparam PC.INIT_VAL = 32'b011; //ldi R1, $45(R1) 
     // defparam R1.INIT_VAL = 32'h00000001; //R1 holds value of 1 for $45(R1) = $45+$1 = $46 = 70 decimal => 100 0110
     
     //st Case 1: st $90, R4
-    // defparam PC.INIT_VAL = 32'b100; //ldi R1, $45(R1) 
-    // defparam R4.INIT_VAL = 32'h94;
+    // defparam PC.INIT_VAL = 32'b100; 
+    // defparam R4.INIT_VAL = 32'h67;
+
+    //st Case 2: st $90(R4), R4
+    // defparam PC.INIT_VAL = 32'b101;  
+    // defparam R4.INIT_VAL = 32'h67;
+
+    //st Case 1: brzr R6, 25
+    defparam PC.INIT_VAL = 32'b1000; 
+    defparam R6.INIT_VAL = 32'h0;
 
     //addi R2, R3, -3
     // defparam PC.INIT_VAL = 32'b110;
+
+    //andi R2, R3, $25
+    // defparam PC.INIT_VAL = 32'b10011;
+    // defparam R3.INIT_VAL = 32'b1;
 
     //ori R2, R3, $25
     // defparam PC.INIT_VAL = 32'b00111;
@@ -136,7 +141,7 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     // defparam PC.INIT_VAL = 32'b10000;
 
     //out
-    defparam PC.INIT_VAL = 32'b10000;
+    // defparam PC.INIT_VAL = 32'b10000;
  
 
     // RAM
@@ -155,9 +160,12 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     .IR(IR_data_out));
     
     //MDR
-    mdr MDR(.MDRdataout(MDR_data_out), .BusMuxOut(MuxOut), .Mdatain(Mdatain), .read_signal(Read), .clk(clk), .clr(clr), .enable(MDR_enable));
-
-    wire [31:0] temp = { 
+    mdr MDR(.MDRdataout(MDR_data_out), .MuxOut(MuxOut), .Mdatain(Mdatain), .read_signal(Read), .clk(clk), .clr(clr), .enable(MDR_enable));
+    
+    // 32:5 Encoder (Goes highest to lowest in descending order) For some reason the the the first three encoders dont work.
+    encoder_32_to_5 BusEncoder(.enc_output(enc_out),
+                              .enc_input(
+                               { 
                                 {8{1'b0}},
                                 C_out,
                                 in_port_out, 
@@ -183,12 +191,10 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
                                 R_outs[2],
                                 R_outs[1],
                                 R_outs[0]
-                                };
-
-    // 32:5 Encoder (Goes highest to lowest in descending order) For some reason the the the first three encoders dont work.
-    encoder_32_to_5 BusEncoder(.enc_output(enc_out),
-                              .enc_input(temp)
+                                }
+                                )
                                 );
+
 
     //Multiplexer Bus Mux 32:1 all of these inputs are the data that will be sent to "MuxOut" based on the "enc_out" selection
     mux_32_to_1 BusMux(MuxOut, 

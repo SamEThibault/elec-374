@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
-module mflo_tb; //Add name of test bench here.
-    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, In_port_out; 
+module brzr_tb; //Add name of test bench here.
+    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, in_port_out; 
     wire [31:0] MDR_data_out;
     reg MDR_out;
     reg MAR_enable, Z_enable, PC_enable, MDR_enable, IR_enable, Y_enable;
@@ -10,7 +10,7 @@ module mflo_tb; //Add name of test bench here.
     wire [31:0] Mdatain;
 
     //Phase 2 Shiz
-    reg con_in, in_port_in, BA_out,Gra, Grb, Grc, out_port_enable, R_in, R_out;
+    reg con_in, in_port_in, BA_out, Gra, Grb, Grc, out_port_enable, R_in, R_out;
     reg RAM_write_enable;
 
     parameter Default = 4'b0000, Reg_load1a = 4'b0001, Reg_load1b = 4'b0010, Reg_load2a = 4'b0011,
@@ -68,10 +68,13 @@ module mflo_tb; //Add name of test bench here.
                 T1 : #40 Present_state = T2;
                 T2 : #40 Present_state = T3;
                 T3 : #40 Present_state = T4;
+                T4 : #40 Present_state = T5;
+                T5 : #40 Present_state = T6;
+                T6 : #40 Present_state = T7;
             endcase
         end
 
-always @(Present_state) // do the required job in each state
+    always @(Present_state) // do the required job in each state
         begin
             case (Present_state) // assert the required signals in each clock cycle
                 Default: begin
@@ -79,46 +82,61 @@ always @(Present_state) // do the required job in each state
                     MAR_enable <= 0; Z_enable <= 0;
                     PC_enable <=0; MDR_enable <= 0; IR_enable= 0; Y_enable= 0;
                     IncPC <= 0; Read <= 0; opcode <= 0;
-                    ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; In_port_out <= 0;
-                    MDR_out <= 0;
+                    //  Mdatain <= 32'h00000000;
+                    ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; in_port_out <= 0;
 
                     // Phase 2 Initialization process for signals
-                    Gra <= 0; Grb<= 0; Grc<=0; BA_out <=0; RAM_write_enable <=0; out_port_enable <=0; 
-                    in_port_in <=0; con_in<=0; R_out <= 0; R_in <=0;
+                    Gra <= 0; Grb<= 0; Grc<=0; BA_out <=0; RAM_write_enable <=0; out_port_enable <=0; in_port_in <=0; con_in<=0; R_out <= 0; R_in <=0;
+                    MDR_out <= 0;
                 end
-                // ----------------------------------- T0 INSTRUCTION FETCH ----------------------------------- // 
+                // ----------------------------------- T0 INSTRUCTION FETCH ----------------------------------- //
+                //3 Rising edges, 4 clock cycles 
                 T0: begin
-                    PC_out <= 1;  
+                     #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  
                 end
-                // ----------------------------------- T1 INSTRUCTION FETCH ----------------------------------- // 
+                // // ----------------------------------- T1 INSTRUCTION FETCH ----------------------------------- // 
                 T1: begin
-                    MAR_enable <= 1; 
-
+					 #10 PC_out <= 0; MAR_enable <= 0; IncPC <= 0; PC_enable <= 0;
                      //Instruction to fetch from RAM to store the data into MDR.
-                    Read <= 1;
-                    MDR_enable <= 1; 
+                    #10 Read <= 1;
+                    #10 MDR_enable <= 1; 
                 end
                 // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
                 T2: begin
-                    PC_enable <= 1;
-                    IncPC <= 1;
-					PC_out <= 0; MAR_enable <= 0; IncPC <= 0; PC_enable <= 0;
-                    MDR_enable <= 0;
-
+                    #10 MDR_enable <= 0; //Keep this commented out 
                     //Puts the RAM memory data into the IR register via the busmuxout
-                    MDR_out <= 1; IR_enable <= 1;
+                    #10 MDR_out <= 1; IR_enable <= 1;
                 end
-            //     // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
+                // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
                 T3: begin
-                    MDR_out <= 0; IR_enable <= 0;
-                    LO_out <= 1;
-                    Gra <= 1; R_in <= 1; 
+                    #10 MDR_out <= 0; IR_enable <= 0;
+
+                    #10 Gra <= 1; R_out <= 1; con_in <=1;
                 end
                 // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
                 T4: begin
-                    // Gra <= 0;
+                    #10 Gra <= 0; R_out <= 0; con_in <= 0;
+
+                    #10 PC_out<= 1; Y_enable <= 1;
+
+                end
+                 // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
+                T5: begin
+                    #10 PC_out<= 0; Y_enable<=0;
+
+
+                    //Here is where we add the current PC value with the immediate value 25 to get 34 = 100010
+                    #10 C_out <= 1; Z_enable <= 1; opcode<= 5'b00011;
+                end
+                 // ----------------------------------- T6 CYCLE OPERATION ----------------------------------- // 
+                T6: begin
+                    #10 C_out <= 0; Z_enable <= 0;
+
+                    //Sending the incremented PC value to the PC register.
+                    #10 ZLow_out <= 1; PC_enable <= 1;
                 end
 
+                
             endcase
         end
 endmodule

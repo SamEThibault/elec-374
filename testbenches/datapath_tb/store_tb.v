@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 module store_tb; //Add name of test bench here.
-    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, In_port_out; 
+    reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, in_port_out; 
     wire [31:0] MDR_data_out;
     reg MDR_out;
     reg MAR_enable, Z_enable, PC_enable, MDR_enable, IR_enable, Y_enable;
@@ -19,7 +19,7 @@ module store_tb; //Add name of test bench here.
     reg [3:0] Present_state = Default;
 
     Datapath DUT(
-	 .PC_out(PC_out),
+.PC_out(PC_out),
      .MDR_data_out(MDR_data_out), 
      .ZHigh_out(ZHigh_out),
 	 .ZLow_out(ZLow_out), 
@@ -27,7 +27,7 @@ module store_tb; //Add name of test bench here.
      .HI_out(HI_out),
      .LO_out(LO_out),
      .C_out(C_out),
-     .In_port_out(In_port_out),
+     .in_port_out(in_port_out),
 	  .MDR_enable(MDR_enable), 
      .MAR_enable(MAR_enable), 
 	  .Z_enable(Z_enable), 
@@ -41,7 +41,6 @@ module store_tb; //Add name of test bench here.
 
      //Phase Two Inputs
      .con_in(con_in),
-     .in_port_in(in_port_in),
      .out_port_enable(out_port_enable),
      .RAM_write_enable(RAM_write_enable),
      .Gra(Gra), 
@@ -51,7 +50,8 @@ module store_tb; //Add name of test bench here.
      .R_out(R_out),
      .BA_out(BA_out),
      .IR_enable(IR_enable),
-     .Mdatain(Mdatain)
+     .Mdatain(Mdatain),
+     .in_port_enable(in_port_enable)
     );
 
     initial
@@ -64,12 +64,6 @@ module store_tb; //Add name of test bench here.
         begin
             case (Present_state)
                 Default : Present_state = T0;
-                // Reg_load1a : Present_state = Reg_load1b;
-                // Reg_load1b : Present_state = Reg_load2a;
-                // Reg_load2a : Present_state = Reg_load2b;
-                // Reg_load2b : Present_state = Reg_load3a;
-                // Reg_load3a : Present_state = Reg_load3b;
-                // Reg_load3b : Present_state = T0;
                 T0 : Present_state = T1;
                 T1 : #40 Present_state = T2;
                 T2 : #40 Present_state = T3;
@@ -89,92 +83,72 @@ module store_tb; //Add name of test bench here.
                     PC_enable <=0; MDR_enable <= 0; IR_enable= 0; Y_enable= 0;
                     IncPC <= 0; Read <= 0; opcode <= 0;
                     //  Mdatain <= 32'h00000000;
-                    ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; In_port_out <= 0;
+                    ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; in_port_out <= 0;
 
                     // Phase 2 Initialization process for signals
                     Gra <= 0; Grb<= 0; Grc<=0; BA_out <=0; RAM_write_enable <=0; out_port_enable <=0; in_port_in <=0; con_in<=0; R_out <= 0; R_in <=0;
+                    MDR_out <= 0;
                 end
-                // // ----------------------------------- LOADING DATA INTO REGISTER R2 ----------------------------------- // 
-                // Reg_load1a: begin 
-                //     // Mdatain <= 32'h00000000; //INPUT
-                //     Read = 0; MDR_enable = 0;
-                //     #10 Read <= 1; MDR_enable <= 1;
-                //     #10 Read <= 0; MDR_enable <= 0;
-                // end
-                // Reg_load1b: begin 
-                //     #10 MDR_out <= 1; 
-                //     #10 MDR_out <= 0; 
-                // end
-                // // ----------------------------------- LOADING DATA INTO REGISTER R3 ----------------------------------- // 
-                // Reg_load2a: begin
-                //     // Mdatain <= 32'h00000000; //INPUT
-                //     #10 Read <= 1; 
-                //     #10 Read <= 0; MDR_enable <= 0;
-                // end
-                // Reg_load2b: begin 
-                //     #10 MDR_out <= 1; 
-                //     #10 MDR_out <= 0; 
-                // end
-                // // ----------------------------------- LOADING DATA INTO REGISTER R1 ----------------------------------- // 
-                // Reg_load3a: begin
-                //     // Mdatain <= 32'h00000000; //INPUT
-                //     #10 Read <= 1; MDR_enable <= 1;
-                //     #10 Read <= 0; MDR_enable <= 0;
-                // end
-                // Reg_load3b: begin 
-                //     #10 MDR_out <= 1; 
-                //     #10 MDR_out <= 0; 
-                // end 
                 // ----------------------------------- T0 INSTRUCTION FETCH ----------------------------------- //
                 //3 Rising edges, 4 clock cycles 
                 T0: begin
-                     C_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  
-					 PC_out <= 0; MAR_enable <= 0; IncPC <= 0; PC_enable <= 0;
+                     #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  
                 end
-                // ----------------------------------- T1 INSTRUCTION FETCH ----------------------------------- // 
+                // // ----------------------------------- T1 INSTRUCTION FETCH ----------------------------------- // 
                 T1: begin
+					 #10 PC_out <= 0; MAR_enable <= 0; IncPC <= 0; PC_enable <= 0;
                      //Instruction to fetch from RAM to store the data into MDR.
-                    Read <= 1;
-                    MDR_enable <= 1; 
+                    #10 Read <= 1;
+                    #10 MDR_enable <= 1; 
                 end
                 // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
                 T2: begin
-                    MDR_enable <= 0; //Keep this commented out 
+                    #10 MDR_enable <= 0; //Keep this commented out 
                     //Puts the RAM memory data into the IR register via the busmuxout
                     #10 MDR_out <= 1; IR_enable <= 1;
-                    #10 MDR_out <= 0; IR_enable <= 0;
                 end
                 // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
                 T3: begin
+                    #10 MDR_out <= 0; IR_enable <= 0;
                     // //Disecting the IR register to grab the Rb register as well as triggering the corresponding register (eg R_out register to send data to the bus)
                     // //Where register Y of the alu would store that value.
-                    // #10 Grb <= 1; BA_out <= 1; Y_enable <= 1; 
-                    // #10 Grb <= 0; BA_out <= 0; Y_enable <= 0;
+                    #10 Grb <= 1; BA_out <= 1; Y_enable <= 1; 
                 end
-                // // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
-                // T4: begin
-                //     //Here is where the immediate value is loaded onto the bus to be ready for the ALU add operation to find the effective address
-                //     //For the case 1: you should see $90 = 1001 0000 = 144 decimal
-                //     #10 C_out<= 1; Z_enable <= 1; opcode <= 5'b00011; //ADD OPCODE
-                //     #10 C_out<= 0; Z_enable <= 0; 
+                // ----------------------------------- T4 CYCLE OPERATION ----------------------------------- // 
+                T4: begin
+                    #10 Grb <= 0; BA_out <= 0; Y_enable <= 0;
+                    //Here is where the immediate value is loaded onto the bus to be ready for the ALU add operation to find the effective address
+                    //For the case 1: you should see $90 = 1001 0000 = 144 decimal
+                    #10 C_out<= 1; Z_enable <= 1; opcode <= 5'b00011; //ADD OPCODE
 
-                // end
-                //  // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
-                // T5: begin
+                end
+                 // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
+                T5: begin
+                    #10 C_out<= 0; Z_enable <= 0; 
 
-                //     // Notes ZLow out is the effective address we are writing to into the RAM.
-                //     // We will store the data in the MDR, and the MDR will write the data to the RAM
-                //     #10 ZLow_out <= 1; Read <=0; MDR_enable <= 1; //Read z_lowout from the bus
-                //     #10 ZLow_out <= 0; MDR_enable <= 0;  
-                // end
-                //  // ----------------------------------- T6 CYCLE OPERATION ----------------------------------- // 
-                // T6: begin
-                //     //Sets RAM to be in Write mode and takes the data from the bus to write to a specific memory location.
-                //     //Case 1: You'll be writing the memory address 117 decimal in RAM
-                //     #10 RAM_write_enable <= 1; MDR_out <= 1;
-                //     #10 RAM_write_enable <= 0; MDR_out <= 0;
-                // end
+                    // Notes ZLow out is the effective address we are writing to into the RAM.
+                    // Use the effective address to index the value in the ram
+                    #10 ZLow_out <= 1; MAR_enable <= 1; 
+                end
+                // //  // ----------------------------------- T6 CYCLE OPERATION ----------------------------------- // 
+                T6: begin
+                    #10 ZLow_out <= 0; MAR_enable <= 0; 
 
+                    //Sets RAM to be in Write mode and takes the data from the bus to write to a specific memory location.
+                    //Case 1: You'll be writing the memory address 117 decimal in RAM
+                    #10 Gra<= 1; BA_out <= 1; Read=0; MDR_enable <= 1;  //Read z_lowout from the bus
+                    
+                end
+                 // ----------------------------------- T7 CYCLE OPERATION ----------------------------------- // 
+                T7: begin
+
+                    #10 Gra<= 0; BA_out <= 0; MDR_enable <= 0;  
+
+                    //Allow ram to write the value into memory
+                    #10 MDR_out<= 1; RAM_write_enable <= 1;                    
+
+                end
+                
             endcase
         end
 endmodule

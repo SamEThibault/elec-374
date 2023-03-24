@@ -1,4 +1,4 @@
-module pc #(parameter INIT_VAL) (output reg[31:0] PC_data_out, input clk, input incPC, input enable, input MuxOut);
+module pc #(parameter INIT_VAL) (output reg[31:0] PC_data_out, input clk, input IncPC, input PC_enable, input [31:0] MuxOut, input con_out);
 // add muxout as a final parameter for jump instructions
 
 initial
@@ -9,10 +9,10 @@ end
 
 always@(posedge clk)
     begin
-        if(incPC == 1 && enable == 1)
+        if(IncPC == 1 && PC_enable == 1)
             PC_data_out <= PC_data_out + 1;
-        else if(enable == 1)
-            PC_data_out <= MuxOut;
+        else if(PC_enable == 1 && con_out  == 1)
+            PC_data_out <= (MuxOut + 1); //C (sign extended + 1)
     end
 
 endmodule
