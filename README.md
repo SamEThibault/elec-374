@@ -124,9 +124,9 @@ Phase 2 To Do:
 
 Remaining Instructions:
 
-- ld     
-- ldi   
-- st    
+- ld    - 
+- ldi   -
+- st    -
 - addi  
 - andi
 - ori
