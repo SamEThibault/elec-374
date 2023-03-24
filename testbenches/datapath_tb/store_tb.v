@@ -1,12 +1,13 @@
 `timescale 1ns/10ps
 module store_tb; //Add name of test bench here.
     reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, In_port_out; 
-    reg [31:0] MDR_out;
+    wire [31:0] MDR_data_out;
+    reg MDR_out;
     reg MAR_enable, Z_enable, PC_enable, MDR_enable, IR_enable, Y_enable;
     reg IncPC, Read;
     reg [4:0] opcode;
     reg Clock, clr;
-    reg [31:0] Mdatain;
+    wire [31:0] Mdatain;
 
     //Phase 2 Shiz
     reg con_in, in_port_in, BA_out,Gra, Grb, Grc, out_port_enable, R_in, R_out;
@@ -18,7 +19,8 @@ module store_tb; //Add name of test bench here.
     reg [3:0] Present_state = Default;
 
     Datapath DUT(
-	 .PC_out(PC_out), 
+	 .PC_out(PC_out),
+     .MDR_data_out(MDR_data_out), 
      .ZHigh_out(ZHigh_out),
 	 .ZLow_out(ZLow_out), 
 	 .MDR_out(MDR_out),
@@ -48,7 +50,8 @@ module store_tb; //Add name of test bench here.
      .R_in(R_in),
      .R_out(R_out),
      .BA_out(BA_out),
-     .IR_enable(IR_enable)
+     .IR_enable(IR_enable),
+     .Mdatain(Mdatain)
     );
 
     initial
@@ -68,12 +71,12 @@ module store_tb; //Add name of test bench here.
                 // Reg_load3a : Present_state = Reg_load3b;
                 // Reg_load3b : Present_state = T0;
                 T0 : Present_state = T1;
-                T1 : Present_state = T2;
-                T2 : Present_state = T3;
-                T3 : Present_state = T4;
-                T4 : Present_state = T5;
-                T5 : Present_state = T6;
-                T6 : Present_state = T7;
+                T1 : #40 Present_state = T2;
+                T2 : #40 Present_state = T3;
+                T3 : #40 Present_state = T4;
+                T4 : #40 Present_state = T5;
+                T5 : #40 Present_state = T6;
+                T6 : #40 Present_state = T7;
             endcase
         end
 
@@ -81,11 +84,11 @@ module store_tb; //Add name of test bench here.
         begin
             case (Present_state) // assert the required signals in each clock cycle
                 Default: begin
-                    PC_out <= 0; ZLow_out <= 0; MDR_out <= 0; clr<=0;
+                    PC_out <= 0; ZLow_out <= 0; clr<=0;
                     MAR_enable <= 0; Z_enable <= 0;
                     PC_enable <=0; MDR_enable <= 0; IR_enable= 0; Y_enable= 0;
                     IncPC <= 0; Read <= 0; opcode <= 0;
-                     Mdatain <= 32'h00000000;
+                    //  Mdatain <= 32'h00000000;
                     ZHigh_out <= 0; HI_out <= 0; LO_out <= 0; C_out <= 0; In_port_out <= 0;
 
                     // Phase 2 Initialization process for signals
@@ -122,23 +125,24 @@ module store_tb; //Add name of test bench here.
                 //     #10 MDR_out <= 1; 
                 //     #10 MDR_out <= 0; 
                 // end 
-                // ----------------------------------- T0 INSTRUCTION FETCH ----------------------------------- // 
+                // ----------------------------------- T0 INSTRUCTION FETCH ----------------------------------- //
+                //3 Rising edges, 4 clock cycles 
                 T0: begin
-                    #10 PC_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  
-					#10 PC_out <= 0; MAR_enable <= 0; IncPC <= 0; PC_enable <= 0;
+                     C_out <= 1; MAR_enable <= 1; IncPC <= 1; PC_enable <= 1;  
+					 PC_out <= 0; MAR_enable <= 0; IncPC <= 0; PC_enable <= 0;
                 end
                 // ----------------------------------- T1 INSTRUCTION FETCH ----------------------------------- // 
                 T1: begin
                      //Instruction to fetch from RAM to store the data into MDR.
-                    #10 Read <= 1;
-                    #10 MDR_enable <= 1; 
-                    #10 MDR_enable <= 0; //Keep this commented out 
+                    Read <= 1;
+                    MDR_enable <= 1; 
                 end
                 // ----------------------------------- T2 INSTRUCTION FETCH ----------------------------------- // 
                 T2: begin
+                    MDR_enable <= 0; //Keep this commented out 
                     //Puts the RAM memory data into the IR register via the busmuxout
-                    // #10 MDR_out <= 1; IR_enable <= 1;
-                    // #10 MDR_out <= 0; IR_enable <= 0;
+                    #10 MDR_out <= 1; IR_enable <= 1;
+                    #10 MDR_out <= 0; IR_enable <= 0;
                 end
                 // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
                 T3: begin

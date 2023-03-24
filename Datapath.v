@@ -1,7 +1,8 @@
 module Datapath(
+output [31:0] Mdatain, MDR_data_out,
 input PC_out, ZHigh_out, ZLow_out, HI_out, LO_out, In_port_out, C_out,
 input MDR_out,MDR_enable, MAR_enable, Z_enable, Y_enable, PC_enable, CON_enable, LO_enable, 
-      HI_enable, clr, clk, InPort, IncPC, Read,
+HI_enable, clr, clk, InPort, IncPC, Read,
 input [4:0] opcode,
 // input R0_out, R1_out, R2_out, R3_out, R4_out, R5_out, R6_out, R7_out, R8_out, R9_out, 
 //       R10_out, R11_out, R12_out, R13_out, R14_out, R15_out,
@@ -16,8 +17,8 @@ input Gra, Grb, Grc, R_in, R_out, BA_out
 
 
 
+// wire[31:0] Mdatain;
 
-wire[31:0] Mdatain;
 
     // General Purpose Registers
     wire [31:0] R0_data_out;
@@ -45,7 +46,6 @@ wire[31:0] Mdatain;
     wire [31:0] PC_data_out;
     wire [31:0] IR_data_out;
     wire [31:0] MAR_data_out;
-    wire [31:0] MDR_data_out;
     wire [31:0] ZLow_data_out;
     wire [31:0] ZHigh_data_out;
     wire [31:0] In_port_data_out;
@@ -106,7 +106,6 @@ wire[31:0] Mdatain;
     wire [31:0] out_port_out;       // "to output unit"
     reg_32_bit out_port(out_port_out, BusMuxOut, clk, clr, out_port_enable);  
 
-    
     //ld Case 1:
     //defparam PC.INIT_VAL = 32'b000; //ld instruction
     //defparam PC.INIT_VAL = 32'b000; //ld R1, $75
@@ -128,7 +127,7 @@ wire[31:0] Mdatain;
     defparam R4.INIT_VAL = 32'h94;
 
     //addi R2, R3, -3
-    defparam PC.INIT_VAL = 32'b110;
+    // defparam PC.INIT_VAL = 32'b110;
 
     // RAM
     ram RAM(.RAM_data_out(Mdatain), .RAM_data_in(MDR_data_out), .address(MAR_data_out[8:0]), .clk(clk), .write_enable(RAM_write_enable), .read_enable(Read));
