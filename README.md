@@ -124,22 +124,22 @@ Phase 2 To Do:
 
 Remaining Instructions:
 
-- ld    -
-- ldi   -
-- st    -
-- addi  -
-- andi  -
-- ori   -
+- ld -
+- ldi -
+- st -
+- addi -
+- andi -
+- ori -
 - brzr
 - brnz
 - brmi
 - brpl
-- jr
+- jr -
 - jal
-- mfhi  -
-- mflo  -
-- out   -
-- in    -
+- mfhi -
+- mflo -
+- out -
+- in -
 
 Phase 2 Docs
 

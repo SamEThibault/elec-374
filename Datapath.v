@@ -139,8 +139,8 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     // defparam R6.INIT_VAL = 32'h80000000;
 
     //jr R2
-    // defparam PC.INIT_VAL = 32'b1100; 
-    // defparam R2.INIT_VAL = 32'hF;
+    defparam PC.INIT_VAL = 32'b1100; 
+    defparam R2.INIT_VAL = 32'hF;
 
     //jal
     // defparam PC.INIT_VAL = 32'b1101; 
@@ -158,7 +158,7 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     // defparam R3.INIT_VAL = 32'b1;
 
     // in
-    defparam PC.INIT_VAL = 32'b10000;
+    // defparam PC.INIT_VAL = 32'b10000;
 
     //out
     // defparam R2.INIT_VAL = 32'hFFFFFFFF;
