@@ -4,7 +4,20 @@ module alu(
 	input wire [31:0] Rb,
 	input wire [4:0] opcode
 );
-	parameter Addition = 5'b00011, Subtraction = 5'b00100, Multiplication = 5'b01111, Division = 5'b10000, Shift_right = 5'b00111, Shift_left = 5'b01001, Rotate_right = 5'b01010, Rotate_left = 5'b01011, And = 5'b00101, Or = 5'b00110, Negate = 5'b10001, Not = 5'b10010,  Shift_right_arithmetic=5'b01000;
+	parameter 
+	Addition = 5'b00011, 
+	Subtraction = 5'b00100, 
+	Multiplication = 5'b01110, 
+	Division = 5'b01111, 
+	Shift_right = 5'b00101, 
+	Shift_left = 5'b00110, 
+	Rotate_right = 5'b00111, 
+	Rotate_left = 5'b01000, 
+	And = 5'b01001, 
+	Or = 5'b01010, 
+	Negate = 5'b10000, 
+	Not = 5'b10001,  
+	Shift_right_arithmetic=5'b01000;
 	
     //Operation Outputs
 	wire [31:0] IncPC_out, shr_out, shl_out, shra_out, or_out, and_out, neg_out, not_out, add_sum, add_cout, sub_sum, sub_cout, rol_out, ror_out, mul_out_hi, mul_out_lo;

@@ -1,17 +1,18 @@
 module Datapath(
-output [31:0] Mdatain, MDR_data_out,
-input PC_out, ZHigh_out, ZLow_out, HI_out, LO_out, C_out,
-input MDR_out,MDR_enable, MAR_enable, Z_enable, Y_enable, PC_enable, LO_enable, 
-HI_enable, clr, clk, InPort, IncPC, Read,
-input [4:0] opcode,
+    input clk, stop, reset, 
+    input wire [31:0] in_port_data_in,
 
-// Phase 2 Inputs/Outputs
-input con_in, out_port_enable, RAM_write_enable, IR_enable,  
-input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
+    output wire [4:0] opcode,
+    output wire [31:0] out_port_data_out, MuxOut,
 );
 
+    wire [31:0] Mdatain, MDR_data_out;
 
-
+    wire PC_out, ZHigh_out, ZLow_out, HI_out, LO_out, C_out, MDR_out,
+        MDR_enable, MAR_enable, Z_enable, Y_enable, PC_enable, LO_enable,
+        con_in, out_port_enable, RAM_write_enable, IR_enable, Gra, Grb, 
+        Grc, R_in, R_out, BA_out, in_port_out, in_port_enable,
+        HI_enable, clr, clk, InPort, IncPC, Read, Run;
 
     // General Purpose Registers
     wire [31:0] R0_data_out;
@@ -34,7 +35,6 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     //Special Registers
     wire [31:0] HI_data_out;
     wire [31:0] LO_data_out;
-    wire [31:0] MuxOut;
     wire [31:0] Y_data_out;
     wire [31:0] PC_data_out;
     wire [31:0] IR_data_out;
@@ -85,17 +85,13 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     // PC
     pc PC(.PC_data_out(PC_data_out), .clk(clk), .IncPC(IncPC), .PC_enable(PC_enable), .MuxOut(MuxOut), .con_out(con_out)); //ld R1, $75
 
+//     ------------------------------------------ PHASE 2 SHIZ ------------------------------------------  //
 
     // CON FF 
     con_ff CON_FF(con_out, IR_data_out[20:19], MuxOut, con_in);
 
-//     ------------------------------------------ PHASE 2 SHIZ ------------------------------------------  //
-    
-    // In/Out Ports cct
-    wire [31:0] out_port_data_out;
-    wire [31:0] in_port_in = 32'hFFFFFFFF;
-    
-    reg_32_bit in_port(in_port_data_out, in_port_in, clk, clr, in_port_enable);
+    // In/Out port cct
+    reg_32_bit in_port(in_port_data_out, in_port_data_in, clk, clr, in_port_enable);
     reg_32_bit out_port(out_port_data_out, MuxOut, clk, clr, out_port_enable);  
 
     //ld Case 1:
@@ -115,16 +111,16 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     // defparam R1.INIT_VAL = 32'h00000001; //R1 holds value of 1 for $45(R1) = $45+$1 = $46 = 70 decimal => 100 0110
     
     //st Case 1: st $90, R4
-    defparam PC.INIT_VAL = 32'b100; 
-    defparam R4.INIT_VAL = 32'h67;
+    // defparam PC.INIT_VAL = 32'b100; 
+    // defparam R4.INIT_VAL = 32'h67;
 
     //st Case 2: st $90(R4), R4
     // defparam PC.INIT_VAL = 32'b101;  
     // defparam R4.INIT_VAL = 32'h67;
 
     //Case 1: brzr R6, 25
-    defparam PC.INIT_VAL = 32'b1000; 
-    defparam R6.INIT_VAL = 32'h0;
+    // defparam PC.INIT_VAL = 32'b1000; 
+    // defparam R6.INIT_VAL = 32'h0;
 
     //Case 2: brnz R6, 25
     // defparam PC.INIT_VAL = 32'b1001; 
@@ -256,5 +252,41 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
 
     alu alu_instance(C_data_out, Y_data_out, MuxOut, opcode);
 
-              
+    // Phase 3 shizzle
+    control_unit CU(
+        .PC_out(PC_out),
+        .ZHigh_out(ZHigh_out),
+        .MDR_out(MDR_out),
+        .MAR_enable(MAR_enable),
+        .PC_enable(PC_enable),
+        .MDR_enable(MDR_enable),
+        .IR_enable(IR_enable),
+        .Y_enable(Y_enable),
+        .IncPC(IncPC),
+        .Read(Read),
+        .HI_enable(HI_enable),
+        .LO_enable(LO_enable),
+        .HI_out(HI_out),
+        .LO_out(LO_out),
+        .Z_enable(Z_enable),
+        .C_out(C_out),
+        .RAM_write_enable(RAM_write_enable),
+        .Gra(Gra),
+        .Grb(Grb),
+        .Grc(Grc),
+        .R_in(R_in),
+        .R_out(R_out),
+        .BA_out(BA_out),
+        .con_in(con_in),
+        .in_port_enable(in_port_enable),
+        .out_port_enable(out_port_enable),
+        .in_port_out(in_port_out),
+        .Run(Run),
+        .R_enables(R_enables),
+        .IR_data_out(IR_data_out),
+        .clk(clk),
+        .reset(reset),
+        .stop(stop)
+    );
+
 endmodule
