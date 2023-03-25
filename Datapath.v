@@ -115,16 +115,16 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     // defparam R1.INIT_VAL = 32'h00000001; //R1 holds value of 1 for $45(R1) = $45+$1 = $46 = 70 decimal => 100 0110
     
     //st Case 1: st $90, R4
-    // defparam PC.INIT_VAL = 32'b100; 
-    // defparam R4.INIT_VAL = 32'h67;
+    defparam PC.INIT_VAL = 32'b100; 
+    defparam R4.INIT_VAL = 32'h67;
 
     //st Case 2: st $90(R4), R4
     // defparam PC.INIT_VAL = 32'b101;  
     // defparam R4.INIT_VAL = 32'h67;
 
     //Case 1: brzr R6, 25
-    // defparam PC.INIT_VAL = 32'b1000; 
-    // defparam R6.INIT_VAL = 32'h0;
+    defparam PC.INIT_VAL = 32'b1000; 
+    defparam R6.INIT_VAL = 32'h0;
 
     //Case 2: brnz R6, 25
     // defparam PC.INIT_VAL = 32'b1001; 

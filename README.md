@@ -133,9 +133,9 @@ Remaining Instructions:
 - brzr
 - brnz
 - brmi
-- brpl
+- brpl 
 - jr
-- jal
+- jal -
 - mfhi -
 - mflo -
 - out

@@ -122,11 +122,11 @@ module brzr_tb; //Add name of test bench here.
                 end
                  // ----------------------------------- T5 CYCLE OPERATION ----------------------------------- // 
                 T5: begin
-                    #10 PC_out<= 0; Y_enable<=0;
+                    PC_out<= 0; Y_enable<=0;
 
 
                     //Here is where we add the current PC value with the immediate value 25 to get 34 = 100010
-                    #10 C_out <= 1; Z_enable <= 1; opcode<= 5'b00011;
+                    C_out <= 1; Z_enable <= 1; opcode<= 5'b00011;
                 end
                  // ----------------------------------- T6 CYCLE OPERATION ----------------------------------- // 
                 T6: begin

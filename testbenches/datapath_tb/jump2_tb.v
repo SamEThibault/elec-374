@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module jump_tb; //Add name of test bench here.
+module jump2_tb; //Add name of test bench here.
     reg PC_out, ZLow_out, ZHigh_out, HI_out, LO_out, C_out, in_port_out; 
     wire [31:0] MDR_data_out;
     reg MDR_out;
@@ -111,10 +111,10 @@ module jump_tb; //Add name of test bench here.
                 T3: begin
                     #10 MDR_out <= 0; IR_enable <= 0;
 
-                    #10 Gra <= 1; R_out <= 1; PC_enable <=1; 
+                PC_out<=1; Grb<= 1; R_in <=1;
                 end
-                T3: begin
-                    #10 MDR_out <= 0; IR_enable <= 0;
+                T4: begin
+                   PC_out<=0; Grb<= 0; R_in <=0;   
 
                     #10 Gra <= 1; R_out <= 1; PC_enable <=1; 
                 end
