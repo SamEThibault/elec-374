@@ -107,11 +107,11 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     // defparam PC.INIT_VAL = 32'b001; //ld instruction case 2
 
 
-    //ldi Case 3:
+    // ldi Case 3:
     // defparam PC.INIT_VAL = 32'b010; //ldi R1, $75 
 
     //ldi Case 4:
-    //defparam PC.INIT_VAL = 32'b011; //ldi R1, $45(R1) 
+    // defparam PC.INIT_VAL = 32'b011; //ldi R1, $45(R1) 
     // defparam R1.INIT_VAL = 32'h00000001; //R1 holds value of 1 for $45(R1) = $45+$1 = $46 = 70 decimal => 100 0110
     
     //st Case 1: st $90, R4
@@ -139,8 +139,8 @@ input Gra, Grb, Grc, R_in, R_out, BA_out, in_port_out, in_port_enable
     // defparam R6.INIT_VAL = 32'h80000000;
 
     //jr R2
-    defparam PC.INIT_VAL = 32'b1100; 
-    defparam R2.INIT_VAL = 32'hF;
+    // defparam PC.INIT_VAL = 32'b1100; 
+    // defparam R2.INIT_VAL = 32'hF;
 
     //jal
     // defparam PC.INIT_VAL = 32'b1101; 
