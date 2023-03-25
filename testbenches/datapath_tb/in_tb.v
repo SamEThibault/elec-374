@@ -88,10 +88,12 @@ always @(Present_state) // do the required job in each state
                 // ----------------------------------- T0 INSTRUCTION FETCH ----------------------------------- // 
                 T0: begin
                     // PC_enable <= 1; IncPC <= 1;
+                    in_port_enable <= 1;
                     PC_out <= 1; MAR_enable <= 1; 
                 end
                 // ----------------------------------- T1 INSTRUCTION FETCH ----------------------------------- // 
                 T1: begin
+                    in_port_enable <= 0;
                     MAR_enable <= 0; PC_out <= 0;
                     IncPC <= 0; PC_enable <= 0;
 
@@ -109,7 +111,7 @@ always @(Present_state) // do the required job in each state
                 // ----------------------------------- T3 CYCLE OPERATION ----------------------------------- // 
                 T3: begin
                     MDR_out <= 0; IR_enable <= 0;
-                    Gra <= 1; in_port_out <= 1; R_in <= 1; in_port_enable <= 1;
+                    Gra <= 1; in_port_out <= 1; R_in <= 1; 
                 end 
 
             endcase
