@@ -17,7 +17,10 @@ module alu(
 	Or = 5'b01010, 
 	Negate = 5'b10000, 
 	Not = 5'b10001,  
-	Shift_right_arithmetic=5'b01000;
+	Shift_right_arithmetic=5'b01000,
+	load = 5'b00000,
+    loadi = 5'b00001,
+    store = 5'b00010;
 	
     //Operation Outputs
 	wire [31:0] IncPC_out, shr_out, shl_out, shra_out, or_out, and_out, neg_out, not_out, add_sum, add_cout, sub_sum, sub_cout, rol_out, ror_out, mul_out_hi, mul_out_lo;
@@ -104,6 +107,11 @@ module alu(
 				
 				Division: begin
 					Rc[63:0] = div_out[63:0];
+				end
+
+				loadi,load,store: begin
+					Rc[31:0] = add_sum[31:0];
+					Rc[63:32] = 32'd0;
 				end
 
 				default: Rc[63:0] = 0;

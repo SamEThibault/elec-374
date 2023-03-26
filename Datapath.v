@@ -1,9 +1,9 @@
 module Datapath(
-    input clk, stop, reset, 
+    input clk, stop, clr, 
     input wire [31:0] in_port_data_in,
 
-    output wire [4:0] opcode,
-    output wire [31:0] out_port_data_out, MuxOut,
+    // output wire [4:0] opcode,
+    output wire [31:0] out_port_data_out, MuxOut
 );
 
     wire [31:0] Mdatain, MDR_data_out;
@@ -12,7 +12,7 @@ module Datapath(
         MDR_enable, MAR_enable, Z_enable, Y_enable, PC_enable, LO_enable,
         con_in, out_port_enable, RAM_write_enable, IR_enable, Gra, Grb, 
         Grc, R_in, R_out, BA_out, in_port_out, in_port_enable,
-        HI_enable, clr, clk, InPort, IncPC, Read, Run;
+        HI_enable, InPort, IncPC, Read, Run;
 
     // General Purpose Registers
     wire [31:0] R0_data_out;
@@ -82,8 +82,10 @@ module Datapath(
 
     
     wire con_out;
+
     // PC
-    pc PC(.PC_data_out(PC_data_out), .clk(clk), .IncPC(IncPC), .PC_enable(PC_enable), .MuxOut(MuxOut), .con_out(con_out)); //ld R1, $75
+    // pc #(32'h00000000) PC (.PC_data_out(PC_data_out), .clk(clk), .IncPC(IncPC), .PC_enable(PC_enable), .MuxOut(MuxOut), .con_out(con_out)); //ld R1, $75
+    pc #(32'h00000000) PC (.PC_data_out(PC_data_out), .clk(clk), .IncPC(IncPC), .PC_enable(PC_enable), .MuxOut(MuxOut), .con_out(con_out)); //ld R1, $75
 
 //     ------------------------------------------ PHASE 2 SHIZ ------------------------------------------  //
 
@@ -250,12 +252,13 @@ module Datapath(
                        enc_out
                        );
 
-    alu alu_instance(C_data_out, Y_data_out, MuxOut, opcode);
+    alu alu_instance(C_data_out, Y_data_out, MuxOut, IR_data_out[31:27]);
 
     // Phase 3 shizzle
     control_unit CU(
         .PC_out(PC_out),
         .ZHigh_out(ZHigh_out),
+        .ZLow_out(ZLow_out),
         .MDR_out(MDR_out),
         .MAR_enable(MAR_enable),
         .PC_enable(PC_enable),
@@ -274,7 +277,6 @@ module Datapath(
         .Gra(Gra),
         .Grb(Grb),
         .Grc(Grc),
-        .R_in(R_in),
         .R_out(R_out),
         .BA_out(BA_out),
         .con_in(con_in),
@@ -282,10 +284,11 @@ module Datapath(
         .out_port_enable(out_port_enable),
         .in_port_out(in_port_out),
         .Run(Run),
-        .R_enables(R_enables),
+        .R_in(R_in),
+        //.R_enables(R_enables),
         .IR_data_out(IR_data_out),
         .clk(clk),
-        .reset(reset),
+        .clr(cl),
         .stop(stop)
     );
 
