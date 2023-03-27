@@ -91,9 +91,6 @@ module Datapath(
     reg_32_bit MAR(MAR_data_out, MuxOut, clk, clr, MAR_enable);
     z Z_reg(ZHigh_data_out, ZLow_data_out, C_data_out, clk, clr, Z_enable);
 
-    
-
-
     // PC
     pc #(32'h00000000) PC (.PC_data_out(PC_data_out), .clk(clk), .IncPC(IncPC), .PC_enable(PC_enable), .MuxOut(MuxOut), .con_out(con_out)); 
 

@@ -4,7 +4,6 @@ module control_unit_tb;
 reg clk;
 reg clr, stop;
 wire [31:0] in_port_data_in, out_port_data_out, MuxOut;
-// wire [4:0] opcode;
 
 Datapath DUT(
 	.clk(clk),
