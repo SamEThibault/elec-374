@@ -16,10 +16,6 @@ end
 
 always @(posedge clk or posedge clr)
 begin
-    // if (BAout == 1)
-    //     BAout_extended = 32'b0;
-    // else
-    //     BAout_extended = 32'b0;
     
     if (clr == 1)
         q <= 32'h00000000;
@@ -29,9 +25,6 @@ begin
             q <= BusMuxOut & 32'h00000000;
         else
             q <= BusMuxOut & 32'hFFFFFFFF;
-
-        // BA_result = ~(BAout == 1 ? 32'hFFFFFFFF : 32'h00000000);
-        // q <= BusMuxOut & ~(BAout == 1 ? 32'hFFFFFFFF : 32'h00000000);
     end
 end
 
