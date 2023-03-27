@@ -10,17 +10,14 @@ Datapath DUT(
 	.clk(clk),
     .stop(stop),
 	.clr(clr),
-
 	.in_port_data_in(in_port_data_in),
 	.out_port_data_out(out_port_data_out),
-
-	// .opcode(opcode),
 	.MuxOut(MuxOut)
 );
 
 initial
 begin
-	// clr = 0;
+	clr = 0;
     clk = 0;
     forever #10 clk =~ clk;
 end

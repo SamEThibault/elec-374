@@ -1,6 +1,6 @@
 module select_and_encode #(parameter init_val = 0 )(output reg [31:0] C_sign_extended_out, output reg [15:0] R_enables, output reg [15:0] R_outs, input wire Gra, Grb, Grc, R_in, R_out, BA_out, input [31:0] IR);
 
-reg [3:0] decoder_input = 16'b0000000000000000;
+reg [3:0] decoder_input = 4'b0000;
 reg [15:0] decoder_output;
 
 
@@ -8,8 +8,8 @@ reg [15:0] decoder_output;
 
 initial
 begin
-    R_enables = 16'h00000000;
-    R_outs =    16'h00000000;
+    R_enables = 16'h0000;
+    R_outs =    16'h0000;
 end
 
 reg BA_out_or_R_out;
@@ -24,7 +24,7 @@ always@(*)
 begin
     RA_GRA = (IR[26:23] & (Gra? 4'b1111: 4'b0000));
     RB_GRB = (IR[22:19] & (Grb? 4'b1111: 4'b0000));
-    RC_GRC = (IR[18:15] & (Grb? 4'b1111: 4'b0000));
+    RC_GRC = (IR[18:15] & (Grc? 4'b1111: 4'b0000));
     // decoder_input = ((IR[26:23] & (Gra? 4'b1111: 4'b0000)) | (IR[22:19] & (Grb? 4'b1111: 4'b0000)) | (IR[18:15] & (Grc? 4'b1111: 4'b0000)));
     decoder_input = (RA_GRA | RB_GRB | RC_GRC );
 end

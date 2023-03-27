@@ -7,20 +7,24 @@ module alu(
 	parameter 
 	Addition = 5'b00011, 
 	Subtraction = 5'b00100, 
-	Multiplication = 5'b01110, 
-	Division = 5'b01111, 
-	Shift_right = 5'b00101, 
-	Shift_left = 5'b00110, 
-	Rotate_right = 5'b00111, 
-	Rotate_left = 5'b01000, 
-	And = 5'b01001, 
-	Or = 5'b01010, 
-	Negate = 5'b10000, 
-	Not = 5'b10001,  
-	Shift_right_arithmetic=5'b01000,
+	Multiplication = 5'b01111, 
+	Division = 5'b10000, 
+	Shift_right = 5'b00111, 
+	Shift_left = 5'b01001, 
+	Rotate_right = 5'b01010, 
+	Rotate_left = 5'b01011, 
+	And = 5'b00101, 
+	Or = 5'b00110, 
+	Negate = 5'b10001, 
+	Not = 5'b10010,  
+	Shift_right_arithmetic=5'b11111,
 	load = 5'b00000,
     loadi = 5'b00001,
-    store = 5'b00010;
+	br = 5'b10011,
+    store = 5'b00010,
+	addi = 5'b01100,
+	andi = 5'b01101,
+	ori = 5'b01110;
 	
     //Operation Outputs
 	wire [31:0] IncPC_out, shr_out, shl_out, shra_out, or_out, and_out, neg_out, not_out, add_sum, add_cout, sub_sum, sub_cout, rol_out, ror_out, mul_out_hi, mul_out_lo;
@@ -45,7 +49,7 @@ module alu(
 		begin	
 			case (opcode) // assert the required signals in each clock cycle
 				
-				Addition: begin
+				Addition, addi: begin
 					Rc[31:0] = add_sum[31:0];
 					Rc[63:32] = 32'd0;
 				end
@@ -55,12 +59,12 @@ module alu(
 					Rc[63:32] = 32'd0;
 				end
 				
-				Or: begin
+				Or, ori: begin
 					Rc[31:0] = or_out[31:0];
 					Rc[63:32] = 32'd0;
 				end
 				
-				And: begin
+				And, andi: begin
 					Rc[31:0] = and_out[31:0];
 					Rc[63:32] = 32'd0;
 				end
@@ -109,7 +113,7 @@ module alu(
 					Rc[63:0] = div_out[63:0];
 				end
 
-				loadi,load,store: begin
+				loadi,load,store, br: begin
 					Rc[31:0] = add_sum[31:0];
 					Rc[63:32] = 32'd0;
 				end

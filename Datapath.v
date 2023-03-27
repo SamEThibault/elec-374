@@ -12,7 +12,8 @@ module Datapath(
         MDR_enable, MAR_enable, Z_enable, Y_enable, PC_enable, LO_enable,
         con_in, out_port_enable, RAM_write_enable, IR_enable, Gra, Grb, 
         Grc, R_in, R_out, BA_out, in_port_out, in_port_enable,
-        HI_enable, InPort, IncPC, Read, Run;
+        HI_enable, InPort, Read, Run, IncPC;
+
 
     // General Purpose Registers
     wire [31:0] R0_data_out;
@@ -85,7 +86,8 @@ module Datapath(
 
     // PC
     // pc #(32'h00000000) PC (.PC_data_out(PC_data_out), .clk(clk), .IncPC(IncPC), .PC_enable(PC_enable), .MuxOut(MuxOut), .con_out(con_out)); //ld R1, $75
-    pc #(32'h00000000) PC (.PC_data_out(PC_data_out), .clk(clk), .IncPC(IncPC), .PC_enable(PC_enable), .MuxOut(MuxOut), .con_out(con_out)); //ld R1, $75
+
+    pc #(32'h00000000) PC (.PC_data_out(PC_data_out), .clk(clk), .IncPC(IncPC), .PC_enable(PC_enable), .MuxOut(MuxOut), .con_out(con_out)); 
 
 //     ------------------------------------------ PHASE 2 SHIZ ------------------------------------------  //
 

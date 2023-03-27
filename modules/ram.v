@@ -43,23 +43,23 @@ initial begin
 
     // phase 3 program instructions loading
     mem[0] = 32'h08800002; // ldi R1, 2 ; R1 = 2
-    // mem[1] = 32'h08080000; // ldi R0, 0(R1) ; R0 = 2
-    // mem[2] = 32'h01000068; // ld R2, $68 ; R2 = ($68) = $55
-    // mem[3] = 32'h0917FFFC; // ldi R2, -4(R2) ; R2 = $51
-    // mem[4] = 32'h00900001; // ld R1, 1(R2) ; R1 = ($52) = $26
-    // mem[5] = 32'h09800069; // ldi R3, $69 ; R3 = $69
-    // mem[6] = 32'h99980004; // brmi R3, 4 ; continue with the next instruction (will not branch)
-    // mem[7] = 32'h09980002; // ldi R3, 2(R3) ; R3 = $6B
-    // mem[8] = 32'h039FFFFD; // ld R7, -3(R3) ; R7 = ($6B - 3) = $55
-    // mem[9] = 32'hD0000000; // nop
-    // mem[10] = 32'h9B900002; // brpl R7, 2 ; continue with the instruction at “target” (will branch)
-    // mem[11] = 32'h09000005; // (Done manually, might be wrong tho lol) ldi R2, 5(R0) ; this instruction will not execute
-    // mem[12] = 32'h09880002; // ldi R3, 2(R1) ; this instruction will not execute
-    // mem[13] = 32'h19918000; // add R3, R2, R3 ; R3 = $BC
-    // mem[14] = 32'h63B80002; // addi R7, R7, 2 ; R7 = $57
-    // mem[15] = 32'h8BB80000; // neg R7, R7 ; R7 = $FFFFFFA9
-    // mem[16] = 32'h93B80000; // not R7, R7 ; R7 = $56
-    // mem[17] = 32'h6BB8000F; // andi R7, R7, $0F ; R7 = 6
+    mem[1] = 32'h08080000; // ldi R0, 0(R1) ; R0 = 2
+    mem[2] = 32'h01000068; // ld R2, $68 ; R2 = ($68) = $55
+    mem[3] = 32'h0917FFFC; // ldi R2, -4(R2) ; R2 = $51
+    mem[4] = 32'h00900001; // ld R1, 1(R2) ; R1 = ($52) = $26
+    mem[5] = 32'h09800069; // ldi R3, $69 ; R3 = $69
+    mem[6] = 32'h99980004; // brmi R3, 4 ; continue with the next instruction (will not branch)
+    mem[7] = 32'h09980002; // ldi R3, 2(R3) ; R3 = $6B
+    mem[8] = 32'h039FFFFD; // ld R7, -3(R3) ; R7 = ($6B - 3) = $55
+    mem[9] = 32'hD0000000; // nop
+    mem[10] = 32'h9B900002; // brpl R7, 2 ; continue with the instruction at “target” (will branch)
+    mem[11] = 32'h09000005; // (Done manually, might be wrong tho lol) ldi R2, 5(R0) ; this instruction will not execute
+    mem[12] = 32'h09880002; // ldi R3, 2(R1) ; this instruction will not execute
+    mem[13] = 32'h19918000; // add R3, R2, R3 ; R3 = $BC <------- THIS IS TARGET
+    mem[14] = 32'h63B80002; // addi R7, R7, 2 ; R7 = $57
+    mem[15] = 32'h8BB80000; // neg R7, R7 ; R7 = $FFFFFFA9
+    mem[16] = 32'h93B80000; // not R7, R7 ; R7 = $56
+    mem[17] = 32'h6BB8000F; // andi R7, R7, $0F ; R7 = 6
     // mem[18] = 32'h50880000; // ror R1, R1, R0 ; R1 = $80000009
     // mem[19] = 32'h7388001C; // ori R7, R1, $1C ; R7 = $8000001D
     // mem[20] = 32'h43B80000; // shra R7, R7, R0 ; R7 = $E0000007
@@ -89,6 +89,9 @@ initial begin
     // mem[301] = 32'h264D8000; // sub R12, R9, R11 ; R13 = $131, R12 = $1F
     // mem[302] = 32'h26EE0000; // sub R13, R13, R12 ; R13 = $112
     // mem[303] = 32'hA7800000; // jr R15 ; return from procedure
+
+    mem[104] = 32'h00000055;
+    mem[82] = 32'h00000026;
 
     RAM_data_out = init_RAM_data_out;
 
