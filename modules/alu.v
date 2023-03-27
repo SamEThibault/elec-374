@@ -17,14 +17,14 @@ module alu(
 	Or = 5'b00110, 
 	Negate = 5'b10001, 
 	Not = 5'b10010,  
-	Shift_right_arithmetic=5'b11111,
 	load = 5'b00000,
     loadi = 5'b00001,
 	br = 5'b10011,
     store = 5'b00010,
 	addi = 5'b01100,
 	andi = 5'b01101,
-	ori = 5'b01110;
+	ori = 5'b01110,
+	Shift_right_arithmetic = 5'b01000;
 	
     //Operation Outputs
 	wire [31:0] IncPC_out, shr_out, shl_out, shra_out, or_out, and_out, neg_out, not_out, add_sum, add_cout, sub_sum, sub_cout, rol_out, ror_out, mul_out_hi, mul_out_lo;

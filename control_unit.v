@@ -43,19 +43,19 @@ begin
             begin
                 //Getting the opcode
                 case (IR_data_out[31:27]) // inst. decoding based on the opcode to set the next state
-                    5'b00011 : present_state=add3;	
-                    5'b00100 : present_state=sub3;
-                    5'b01111 : present_state=mul3;
-                    5'b10000 : present_state=div3;
-                    5'b00111 : present_state=shr3;
-                    5'b01001 : present_state=shl3;
-                    5'b01010 : present_state=ror3;
-                    5'b01011 : present_state=rol3;
-                    5'b00101 : present_state=and3;
-                    5'b00110 : present_state=or3;
-                    5'b10001 : present_state=neg3;
-                    5'b10010 : present_state=not3;
-                    // 5'b01000 : present_state = shra3; // this is the shra instruction
+                    5'b00011 : present_state = add3;	
+                    5'b00100 : present_state = sub3;
+                    5'b01111 : present_state = mul3;
+                    5'b10000 : present_state = div3;
+                    5'b00111 : present_state = shr3;
+                    5'b01001 : present_state = shl3;
+                    5'b01010 : present_state = ror3;
+                    5'b01011 : present_state = rol3;
+                    5'b00101 : present_state = and3;
+                    5'b00110 : present_state = or3;
+                    5'b10001 : present_state = neg3;
+                    5'b10010 : present_state = not3;
+                    5'b01000 : present_state = shr3; // this is the shra instruction
                     5'b00000 : present_state = ld3;
                     5'b00001: present_state = ldi3;
                     5'b00010 : present_state = st3;
@@ -235,17 +235,17 @@ begin
 		end
 		//***********************************************
 		mul3, div3: begin	
-			MDR_out <= 0; IR_enable <= 0;PC_enable <= 0; IncPC <= 0;
-			Grb <= 1; R_out <= 1; Y_enable <= 1;  
+			MDR_out <= 0; IR_enable <= 0; // PC_enable <= 0; IncPC <= 0;
+			Gra <= 1 ; R_out <= 1; Y_enable <= 1;  
 			
 		end
 		mul4, div4: begin
-			Grb <= 0; R_out <= 0; Y_enable <= 0;
-			Grc<=1; R_out <= 1; Z_enable <= 1; 
+			Gra <= 0; R_out <= 0; Y_enable <= 0;
+			Grb <=1 ; R_out <= 1; Z_enable <= 1; 
 				
 		end
 		mul5, div5: begin
-			Grb<=0; R_out<=0; Z_enable <= 0; Z_enable <= 0;
+			Grb <=0; R_out<=0; Z_enable <= 0; 
 			ZLow_out<=1; LO_enable <= 1;
 				
 		end

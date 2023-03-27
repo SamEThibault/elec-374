@@ -56,7 +56,16 @@ module Datapath(
       wire [15:0] R_outs;
 
     // Instantiating the 16 registers
-    reg0_32_bit R0(R0_data_out, MuxOut, clk, clr, R_enables[0], BA_out);
+    wire [31:0] R0_og_data;
+    wire R0_actual_enable;
+
+    reg_32_bit R0(R0_og_data, MuxOut, clk, clr, R0_actual_enable);
+    assign R0_data_out = R0_og_data & ~{32{BA_out}};
+    assign R0_actual_enable = (R_enables[0] == 1 && BA_out == 1) ? 0 : R_enables[0]; 
+
+    
+
+    //reg0_32_bit R0(R0_data_out, MuxOut, clk, clr, R_enables[0], BA_out);
     reg_32_bit R1(R1_data_out, MuxOut, clk, clr, R_enables[1]);
     reg_32_bit R2(R2_data_out, MuxOut, clk, clr, R_enables[2]);
     reg_32_bit R3(R3_data_out, MuxOut, clk, clr, R_enables[3]);
@@ -73,6 +82,8 @@ module Datapath(
     reg_32_bit R14(R14_data_out, MuxOut, clk, clr, R_enables[14]);
     reg_32_bit R15(R15_data_out, MuxOut, clk, clr, R_enables[15]);
     
+    defparam R15.INIT_VAL = 32'h00000028;
+
     // Instantiating special registers
     reg_32_bit HI(HI_data_out,  MuxOut, clk, clr, HI_enable);
     reg_32_bit LO(LO_data_out, MuxOut, clk, clr, LO_enable);
@@ -294,4 +305,12 @@ module Datapath(
         .stop(stop)
     );
 
+
+always @(BA_out)
+begin
+    if (BA_out == 1)
+    begin
+        
+    end
+end
 endmodule

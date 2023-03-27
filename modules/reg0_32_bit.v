@@ -8,7 +8,7 @@ module reg0_32_bit #(parameter INIT_VAL = 32'h00000000)(
     input wire BAout
     );
 
-// wire [31:0] BAout_extended;
+
 initial 
 begin
     q = INIT_VAL;
@@ -27,5 +27,7 @@ begin
             q <= BusMuxOut & 32'hFFFFFFFF;
     end
 end
+
+assign out = {32{BAout}} & q;
 
 endmodule
