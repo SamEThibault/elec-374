@@ -1,4 +1,4 @@
-// Revised R0
+// Revised R0: OBSOLETE, NOT IN USE
 module reg0_32_bit #(parameter INIT_VAL = 32'h00000000)(
     output reg [31:0] q,
     input wire [31:0] BusMuxOut,

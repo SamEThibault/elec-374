@@ -3,9 +3,7 @@ module control_unit (
     output reg PC_out, ZHigh_out, MDR_out, MAR_enable, PC_enable, MDR_enable, IR_enable, Y_enable, IncPC, Read, 
     HI_enable, LO_enable, HI_out, LO_out, Z_enable, C_out, RAM_write_enable, Gra, Grb, Grc, R_in, R_out, BA_out, 
     con_in, in_port_enable, out_port_enable, in_port_out, Run, ZLow_out, 
-    // output reg [4:0] opcode,
 
-    //input reg [15:0] R_enables,
     input [31:0] IR_data_out,
     input clk, clr, stop
 );
@@ -26,7 +24,7 @@ parameter reset_state = 8'b00000000, fetch0 = 8'b00000001, fetch1 = 8'b00000010,
             jal4 = 8'b01000110, mfhi3 = 8'b01000111, mflo3 = 8'b01001000, in3 = 8'b01001001, out3 = 8'b01001010, nop3 = 8'b01001011, 
             halt3 = 8'b01001100;
 
-reg [7:0] present_state = reset_state; // adjust the bit pattern based on the number of states
+reg [7:0] present_state = reset_state;
 
 
 always @(posedge clk, posedge clr, posedge stop) // finite state machine; if clk or clr rising-edge
@@ -41,8 +39,9 @@ begin
         fetch2 : #40
 
             begin
-                //Getting the opcode
                 case (IR_data_out[31:27]) // inst. decoding based on the opcode to set the next state
+
+					// ALU OPS
                     5'b00011 : present_state = add3;	
                     5'b00100 : present_state = sub3;
                     5'b01111 : present_state = mul3;
@@ -55,13 +54,15 @@ begin
                     5'b00110 : present_state = or3;
                     5'b10001 : present_state = neg3;
                     5'b10010 : present_state = not3;
-                    5'b01000 : present_state = shr3; // this is the shra instruction
-                    5'b00000 : present_state = ld3;
-                    5'b00001: present_state = ldi3;
-                    5'b00010 : present_state = st3;
+                    5'b01000 : present_state = shr3; // this is the shra instruction, same sequence as shr
                     5'b01100 : present_state = addi3;
                     5'b01101 : present_state = andi3;
                     5'b01110 : present_state = ori3;
+
+					// MEM OPS
+                    5'b00000 : present_state = ld3;
+                    5'b00001: present_state = ldi3;
+                    5'b00010 : present_state = st3;
                     5'b10011 : present_state = br3;
                     5'b10100 : present_state = jr3; 
                     5'b10101 : present_state = jal3; 
@@ -74,6 +75,48 @@ begin
                 endcase
             end
 
+			// Go to the reset state after each instruction completes to de-assert all relevant signals
+			// Each state change takes 40ns to allow signals to propagate properly which avoids race condition
+
+			// MEM OPS
+			ld3 : #40 present_state = ld4;
+			ld4 : #40 present_state = ld5;
+			ld5 : #40 present_state = ld6;
+			ld6 : #40 present_state = ld7;
+			ld7 : #40 present_state = reset_state;
+			
+			ldi3 : #40 present_state = ldi4;
+			ldi4 : #40 present_state = ldi5;
+			ldi5 : #60 present_state = reset_state;
+			
+			st3 : #40 present_state = st4;
+			st4 : #40 present_state = st5;
+			st5 : #40 present_state = st6;
+			st6 : #40 present_state = st7;
+			st7 : #40 present_state = reset_state;
+			
+			jal3 : #40 present_state = jal4;
+			jal4 : #40 present_state = reset_state;
+			
+			jr3 : #40 present_state = reset_state;
+			
+			br3 : #40 present_state = br4;
+			br4 : #40 present_state = br5;
+			br5 : #40 present_state = br6;
+			br6 : #40 present_state = br7;
+			br7 : #40 present_state = reset_state;
+			
+			out3 : #40 present_state = reset_state;
+			
+			in3 : #40 present_state = reset_state;
+			
+			mflo3 : #40 present_state = reset_state;
+			
+			mfhi3 : #40 present_state = reset_state;
+
+			nop3 : #40 present_state = reset_state;
+
+			// ALU OPS
 			add3 : #40 present_state = add4;
 			add4 : #40 present_state = add5;
 			add5 : #40 present_state = reset_state;
@@ -125,23 +168,7 @@ begin
 			
 			not3 : #40 present_state = not4;
 			not4 : #40 present_state = reset_state;
-			
-			ld3 : #40 present_state = ld4;
-			ld4 : #40 present_state = ld5;
-			ld5 : #40 present_state = ld6;
-			ld6 : #40 present_state = ld7;
-			ld7 : #40 present_state = reset_state;
-			
-			ldi3 : #40 present_state = ldi4;
-			ldi4 : #40 present_state = ldi5;
-			ldi5 : #60 present_state = reset_state;
-			
-			st3 : #40 present_state = st4;
-			st4 : #40 present_state = st5;
-			st5 : #40 present_state = st6;
-			st6 : #40 present_state = st7;
-			st7 : #40 present_state = reset_state;
-			
+
 			andi3 : #40 present_state = andi4;
 			andi4 : #40 present_state = andi5;
 			andi5 : #40 present_state = reset_state;
@@ -149,39 +176,16 @@ begin
 			ori3 : #40 present_state = ori4;
 			ori4 : #40 present_state = ori5;
 			ori5 : #40 present_state = reset_state;
-			
-			jal3 : #40 present_state = jal4;
-			jal4 : #40 present_state = reset_state;
-			
-			jr3 : #40 present_state = reset_state;
-			
-			br3 : #40 present_state = br4;
-			br4 : #40 present_state = br5;
-			br5 : #40 present_state = br6;
-			br6 : #40 present_state = br7;
-			br7 : #40 present_state = reset_state;
-			
-			out3 : #40 present_state = reset_state;
-			
-			in3 : #40 present_state = reset_state;
-			
-			mflo3 : #40 present_state = reset_state;
-			
-			mfhi3 : #40 present_state = reset_state;
-			
-			nop3 : #40 present_state = reset_state;
     
     endcase
 end
 
 // This block actually does the work that we did in the phase 2 testbenches by asserting signals
-// and all that shiz
+// and all that shizzle
 always @(present_state) // do the job for each state
 begin
     case(present_state)
 		reset_state: begin 
-			// R_enables <= 0;
-			// Run <= 1;
 			Gra <= 0; Grb <= 0; Grc <= 0; R_in <= 0; R_out <= 0; BA_out <= 0; con_in <= 0; 
 			HI_enable <= 0; LO_enable <= 0; HI_out <= 0; LO_out <= 0; 
 			Y_enable <= 0; ZHigh_out <= 0; ZLow_out <= 0; Z_enable <= 0; C_out <= 0;  
@@ -193,7 +197,7 @@ begin
 			PC_out <= 1; MAR_enable <= 1; 
 		end 
 		fetch1: begin
-			PC_out <= 0; MAR_enable <= 0; //PC_enable <= 0; // IncPC <= 0;	
+			PC_out <= 0; MAR_enable <= 0;
 			MDR_enable <= 1; Read<=1; 
 		end 
 		fetch2: begin
@@ -206,7 +210,7 @@ begin
 			#10 PC_enable <= 1; IncPC <= 1;
 			#20 PC_enable <= 0; IncPC <= 0;
 		end 
-		//***********************************************
+		//**************************************************************
 		add3, sub3: begin	
 			MDR_out <= 0; IR_enable <= 0; PC_enable <= 0; IncPC <= 0;
 			Grb <= 1; R_out <= 1; Y_enable <= 1;
@@ -219,7 +223,7 @@ begin
 				Grc<=0; R_out <= 0; Z_enable <= 0;  Z_enable <= 0;
 				ZLow_out <= 1; Gra<=1; R_in<=1;
 		end
-		//***********************************************
+		//**************************************************************
 		or3, and3, shl3, shr3, rol3, ror3: begin	
 			MDR_out <= 0; IR_enable <= 0;PC_enable <= 0; IncPC <= 0;
 			Grb<=1; R_out<=1; Y_enable<=1;
@@ -233,9 +237,9 @@ begin
 			ZLow_out <= 1; Gra<=1; R_in <=1;
 			#30 ZLow_out <= 0; Gra<=1; R_out<=1; R_in<=0;
 		end
-		//***********************************************
+		//**************************************************************
 		mul3, div3: begin	
-			MDR_out <= 0; IR_enable <= 0; // PC_enable <= 0; IncPC <= 0;
+			MDR_out <= 0; IR_enable <= 0;
 			Gra <= 1 ; R_out <= 1; Y_enable <= 1;  
 			
 		end
@@ -253,7 +257,7 @@ begin
 			ZLow_out <= 0; LO_enable <= 0;
 			ZHigh_out <= 1; HI_enable <= 1; 
 		end
-		//***********************************************
+		//**************************************************************
 		not3, neg3: begin	
 			MDR_out <= 0; IR_enable <= 0;PC_enable <= 0; IncPC <= 0;
 			Grb<=1; R_out <= 1;Z_enable <= 1; 
@@ -263,9 +267,9 @@ begin
 			ZLow_out <= 1; Gra<=1; R_in <=1;
 		end
 
-		//***********************************************
+		//**************************************************************
 		andi3: begin
-			MDR_out <= 0; IR_enable <= 0;		PC_enable <= 0; IncPC <= 0;	
+			MDR_out <= 0; IR_enable <= 0; PC_enable <= 0; IncPC <= 0;	
 			Grb<=1;R_out<=1;Y_enable<=1;
 		end
 
@@ -279,9 +283,9 @@ begin
 			ZLow_out <= 1;Gra<=1; R_in <=1;
 			#30 ZLow_out <= 0;Gra<=1;R_out<=1; R_in <=0;
 		end
-		//***********************************************
+		//**************************************************************
 		addi3: begin
-			MDR_out <= 0; IR_enable <= 0;		//PC_enable <= 0; IncPC <= 0;	
+			MDR_out <= 0; IR_enable <= 0;
 			Grb <= 1; R_out <= 1; Y_enable <=1 ;
 		end
 
@@ -295,9 +299,9 @@ begin
 			ZLow_out <= 1;Gra<=1; R_in <=1;
 			#30 ZLow_out <= 0;Gra<=1;R_out<=1; R_in<=0;
 		end
-		//***********************************************
+		//**************************************************************
 		ori3: begin
-			MDR_out <= 0; IR_enable <= 0;	PC_enable <= 0; IncPC <= 0;		
+			MDR_out <= 0; IR_enable <= 0; PC_enable <= 0; IncPC <= 0;		
 			Grb<=1;R_out<=1;Y_enable<=1;
 		end
 
@@ -311,9 +315,9 @@ begin
 			ZLow_out <= 1;Gra<=1; R_in <=1;
 			#30 ZLow_out <= 0;Gra<=1;R_out<=1; R_in <=0;
 		end
-		//***********************************************
+		//**************************************************************
 		ld3: begin
-			MDR_out <= 0; IR_enable <= 0;		//PC_enable <= 0; IncPC <= 0;	
+			MDR_out <= 0; IR_enable <= 0;	
 			Grb<=1; BA_out<=1; Y_enable<=1; R_in <= 1;
 		end
 
@@ -335,11 +339,10 @@ begin
 			#10 Read <= 0; MDR_enable <= 0;
 			MDR_out <= 1; Gra <= 1; R_in <= 1;
 		end
-		//***********************************************
+		//**************************************************************
 
 		ldi3: begin
-			MDR_out <= 0; IR_enable <=0 ; 
-			// PC_enable <= 0; IncPC <= 0;			
+			MDR_out <= 0; IR_enable <=0 ; 		
 			Grb <= 1; BA_out <= 1; Y_enable <= 1; 
 		end
 
@@ -355,7 +358,7 @@ begin
 			#20 ZLow_out <= 0; Gra<=0; R_in <=0; 
 		end
 
-		//***********************************************
+		//**************************************************************
 		st3: begin
 			MDR_out <= 0; IR_enable <= 0; PC_enable <= 0; IncPC <= 0;		
 			Grb<=1;BA_out<=1;Y_enable<=1;
@@ -380,56 +383,56 @@ begin
 			MDR_out <= 1; 
 			#5 RAM_write_enable <= 1; 
 		end
-		//***********************************************
+		//**************************************************************
 		jr3: begin
 			MDR_out <= 0; IR_enable <= 0;	PC_enable <= 0; IncPC <= 0;				
 			Gra<=1;R_out<=1; PC_enable <= 1;
 			#30 PC_enable <= 0;
 		end
-		//***********************************************
+		//**************************************************************
 		jal3: begin
 			MDR_out <= 0; IR_enable <= 0; PC_enable <= 0;IncPC <= 0;	
-			PC_out <= 1;  //R_enables <= 16'h4000; 
+			PC_out <= 1;  
 		end
 
 		jal4: begin
-			  PC_out <= 0;	//R_enables <= 16'h0000;	
+			  PC_out <= 0;
 			Gra <= 1; R_out <= 1; PC_enable <= 1;
 		end
-		//***********************************************
+		//**************************************************************
 		mfhi3: begin
-			MDR_out <= 0; IR_enable <= 0;		PC_enable <= 0; IncPC <= 0;	
+			MDR_out <= 0; IR_enable <= 0; PC_enable <= 0; IncPC <= 0;	
 			Gra<=1; R_in <=1; HI_out<=1;
 			#30 Gra<=0; R_in <=0; HI_out<=0;
 		end
-		//***********************************************
+		//**************************************************************
 
 		mflo3: begin
-			MDR_out <= 0; IR_enable <= 0;		PC_enable <= 0; IncPC <= 0;	
+			MDR_out <= 0; IR_enable <= 0; PC_enable <= 0; IncPC <= 0;	
 			Gra<=1; R_in <=1; LO_out<=1;
 			#30 Gra<=0; R_in <=0; LO_out<=0;
 		end
-		//***********************************************
+		//**************************************************************
 
 		in3: begin
-			MDR_out <= 0; IR_enable <= 0;			PC_enable <= 0; IncPC <= 0;
+			MDR_out <= 0; IR_enable <= 0; PC_enable <= 0; IncPC <= 0;
 			Gra<=1; R_in<=1; in_port_enable <= 1;
 		end
-		// ***********************************************
+		// **************************************************************
 
 		out3: begin
-			MDR_out <= 0; IR_enable <= 0;		PC_enable <= 0; IncPC <= 0;	
+			MDR_out <= 0; IR_enable <= 0; PC_enable <= 0; IncPC <= 0;	
 			Gra<=1;R_out<=1;Y_enable<=1; out_port_enable <= 1;
 		end
 
-		//***********************************************
+		//**************************************************************
 		br3: begin
 			MDR_out <= 0; IR_enable <= 0; IncPC <= 0;		
-			Gra<=1; R_out<=1; con_in <= 1; //PC_enable <= 1;
+			Gra<=1; R_out<=1; con_in <= 1;
 		end
 
 		br4: begin
-			#10 Gra<=0;R_out<=0; //con_in <= 0; //PC_enable <= 0;
+			#10 Gra<=0;R_out<=0;
 				PC_out<=1; Y_enable <= 1;
 		end
 
@@ -445,17 +448,18 @@ begin
 
 		br7: begin
 			ZLow_out<=0; PC_enable<=0; con_in <=0;
-				//PC_out<=1; 
 		end
         
-		//***********************************************
+		//**************************************************************
 		nop3: begin
+			// Do nothing
 		end
-		//***********************************************
+		//**************************************************************
 		halt3: begin
 			Run <= 0;
 		end
 		default: begin 
+			// Do nothing
 		end
 	endcase
 end

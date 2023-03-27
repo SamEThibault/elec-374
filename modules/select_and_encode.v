@@ -3,9 +3,6 @@ module select_and_encode #(parameter init_val = 0 )(output reg [31:0] C_sign_ext
 reg [3:0] decoder_input = 4'b0000;
 reg [15:0] decoder_output;
 
-
-
-
 initial
 begin
     R_enables = 16'h0000;
@@ -14,20 +11,20 @@ end
 
 reg BA_out_or_R_out;
 reg [3:0] RA_GRA, RB_GRB, RC_GRC;
-always@(*)
-begin
- BA_out_or_R_out = (R_out | BA_out); //Needs to be synchronous
-end
 
-// always@(IR[26:23], IR[22:19], IR[18:15])
-always@(*)
-begin
-    RA_GRA = (IR[26:23] & (Gra? 4'b1111: 4'b0000));
-    RB_GRB = (IR[22:19] & (Grb? 4'b1111: 4'b0000));
-    RC_GRC = (IR[18:15] & (Grc? 4'b1111: 4'b0000));
-    // decoder_input = ((IR[26:23] & (Gra? 4'b1111: 4'b0000)) | (IR[22:19] & (Grb? 4'b1111: 4'b0000)) | (IR[18:15] & (Grc? 4'b1111: 4'b0000)));
-    decoder_input = (RA_GRA | RB_GRB | RC_GRC );
-end
+    always@(*)
+    begin
+    BA_out_or_R_out = (R_out | BA_out); //Needs to be synchronous
+    end
+
+    always@(*)
+    begin
+        RA_GRA = (IR[26:23] & (Gra? 4'b1111: 4'b0000));
+        RB_GRB = (IR[22:19] & (Grb? 4'b1111: 4'b0000));
+        RC_GRC = (IR[18:15] & (Grc? 4'b1111: 4'b0000));
+        decoder_input = (RA_GRA | RB_GRB | RC_GRC );
+    end
+
     always@(*) 
     begin
 		case(decoder_input)

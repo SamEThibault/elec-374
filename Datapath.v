@@ -1,8 +1,6 @@
 module Datapath(
     input clk, stop, clr, 
     input wire [31:0] in_port_data_in,
-
-    // output wire [4:0] opcode,
     output wire [31:0] out_port_data_out, MuxOut
 );
 
@@ -59,13 +57,14 @@ module Datapath(
     wire [31:0] R0_og_data;
     wire R0_actual_enable;
 
+    // To enable R0 to hold its previous value all while being able to send out zeros when needed
     reg_32_bit R0(R0_og_data, MuxOut, clk, clr, R0_actual_enable);
+    // If BA_out == 1, send out zeros, else send out q
     assign R0_data_out = R0_og_data & ~{32{BA_out}};
+    // If BA_out == 1, don't send bus data to R0, else, send original signal
     assign R0_actual_enable = (R_enables[0] == 1 && BA_out == 1) ? 0 : R_enables[0]; 
 
     
-
-    //reg0_32_bit R0(R0_data_out, MuxOut, clk, clr, R_enables[0], BA_out);
     reg_32_bit R1(R1_data_out, MuxOut, clk, clr, R_enables[1]);
     reg_32_bit R2(R2_data_out, MuxOut, clk, clr, R_enables[2]);
     reg_32_bit R3(R3_data_out, MuxOut, clk, clr, R_enables[3]);
@@ -93,21 +92,22 @@ module Datapath(
     z Z_reg(ZHigh_data_out, ZLow_data_out, C_data_out, clk, clr, Z_enable);
 
     
-    wire con_out;
+
 
     // PC
-    // pc #(32'h00000000) PC (.PC_data_out(PC_data_out), .clk(clk), .IncPC(IncPC), .PC_enable(PC_enable), .MuxOut(MuxOut), .con_out(con_out)); //ld R1, $75
-
     pc #(32'h00000000) PC (.PC_data_out(PC_data_out), .clk(clk), .IncPC(IncPC), .PC_enable(PC_enable), .MuxOut(MuxOut), .con_out(con_out)); 
 
-//     ------------------------------------------ PHASE 2 SHIZ ------------------------------------------  //
+//     ------------------------------------------ PHASE 2 SHIZZLE ------------------------------------------  //
 
     // CON FF 
+    wire con_out;
     con_ff CON_FF(con_out, IR_data_out[20:19], MuxOut, con_in);
 
     // In/Out port cct
     reg_32_bit in_port(in_port_data_out, in_port_data_in, clk, clr, in_port_enable);
     reg_32_bit out_port(out_port_data_out, MuxOut, clk, clr, out_port_enable);  
+
+    // Hard Coded PC values for P2 tests: (Not needed for P3)
 
     //ld Case 1:
     // defparam PC.INIT_VAL = 32'b000; //ld instruction
@@ -305,12 +305,4 @@ module Datapath(
         .stop(stop)
     );
 
-
-always @(BA_out)
-begin
-    if (BA_out == 1)
-    begin
-        
-    end
-end
 endmodule
